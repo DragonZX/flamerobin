@@ -25,52 +25,19 @@
 
 */
 
-#ifndef FR_DATABASECOLLECTIONS_H
-#define FR_DATABASECOLLECTIONS_H
+#ifndef FR_VIEW_H
+#define FR_VIEW_H
 //-----------------------------------------------------------------------------
-#include "hierarchy/Item.h"
+#include "hierarchy/Relation.h"
 #include "hierarchy/SharedItems.h"
 //-----------------------------------------------------------------------------
-class MetadataItemCollection: public ItemWithChildrenBase
+// View class
+class View : public Relation
 {
-protected:
-    virtual PSharedItem createCollectionItem(const Identifier& identifier) = 0;
 public:
-    void setChildrenIdentifiers(const std::list<Identifier>& identifiers);
-};
-//-----------------------------------------------------------------------------
-class SystemTableCollection: public MetadataItemCollection
-{
-protected:
-    virtual PSharedItem createCollectionItem(const Identifier& identifier);
-public:
-    SystemTableCollection();
+    View(const Identifier& identifier);
 
-    virtual bool isSystem();
-    virtual void loadChildren();
     virtual void accept(ItemVisitor* visitor);
 };
 //-----------------------------------------------------------------------------
-class TableCollection: public MetadataItemCollection
-{
-protected:
-    virtual PSharedItem createCollectionItem(const Identifier& identifier);
-public:
-    TableCollection();
-
-    virtual void loadChildren();
-    virtual void accept(ItemVisitor* visitor);
-};
-//-----------------------------------------------------------------------------
-class ViewCollection: public MetadataItemCollection
-{
-protected:
-    virtual PSharedItem createCollectionItem(const Identifier& identifier);
-public:
-    ViewCollection();
-
-    virtual void loadChildren();
-    virtual void accept(ItemVisitor* visitor);
-};
-//-----------------------------------------------------------------------------
-#endif // FR_DATABASECOLLECTIONS_H
+#endif // FR_VIEW_H

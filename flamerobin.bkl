@@ -246,6 +246,7 @@
         $(SOURCEDIR)/hierarchy/Table.h
         $(SOURCEDIR)/hierarchy/TreeFolder.h
         $(SOURCEDIR)/hierarchy/TreeRoot.h
+        $(SOURCEDIR)/hierarchy/View.h
 
         $(SOURCEDIR)/sql/Identifier.h
         $(SOURCEDIR)/sql/SqlTokenizer.h
@@ -294,6 +295,7 @@
         $(SOURCEDIR)/hierarchy/Table.cpp
         $(SOURCEDIR)/hierarchy/TreeFolder.cpp
         $(SOURCEDIR)/hierarchy/TreeRoot.cpp
+        $(SOURCEDIR)/hierarchy/View.cpp
 
         $(SOURCEDIR)/sql/Identifier.cpp
         $(SOURCEDIR)/sql/SqlTokenizer.cpp

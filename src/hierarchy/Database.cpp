@@ -310,6 +310,9 @@ void Database::createCollections()
 
     tablesM = PSharedTableCollection(new TableCollection());
     tablesM->setParent(me);
+
+    viewsM = PSharedViewCollection(new ViewCollection());
+    viewsM->setParent(me);
 }
 //-----------------------------------------------------------------------------
 void Database::deleteCollections()
@@ -318,5 +321,6 @@ void Database::deleteCollections()
     // reset all shared pointers to collections
     systemTablesM.reset();
     tablesM.reset();
+    viewsM.reset();
 }
 //-----------------------------------------------------------------------------

@@ -574,6 +574,10 @@ SOURCE=.\src\hierarchy\TreeRoot.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\hierarchy\View.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\engine\WorkerThread.cpp
 # End Source File
 # Begin Source File
@@ -691,6 +695,10 @@ SOURCE=.\src\hierarchy\TreeRoot.h
 # Begin Source File
 
 SOURCE=.\src\Version.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\hierarchy\View.h
 # End Source File
 # Begin Source File
 

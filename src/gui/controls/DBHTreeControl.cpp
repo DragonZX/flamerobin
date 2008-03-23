@@ -54,6 +54,7 @@
 #include "hierarchy/Table.h"
 #include "hierarchy/TreeFolder.h"
 #include "hierarchy/TreeRoot.h"
+#include "hierarchy/View.h"
 //-----------------------------------------------------------------------------
 // DBHTreeImageList class
 class DBHTreeImageList: public wxImageList
@@ -147,6 +148,8 @@ public:
     virtual void visit(Table& table);
     virtual void visit(TableCollection& tables);
     virtual void visit(TreeFolder& folder);
+    virtual void visit(View& view);
+    virtual void visit(ViewCollection& views);
 private:
     DBHTreeControl& treeM;
 
@@ -251,6 +254,18 @@ void DBHItemTreeNodeProperties::visit(TreeFolder& folder)
     // even empty folder nodes should have a bold caption
     captionIsBoldM = true;
     imageIndexM = DBHTreeImageList::get().getImageIndex(wxART_FOLDER);
+}
+//-----------------------------------------------------------------------------
+void DBHItemTreeNodeProperties::visit(View& view)
+{
+    visitItem(&view);
+    imageIndexM = DBHTreeImageList::get().getImageIndex(ART_View);
+}
+//-----------------------------------------------------------------------------
+void DBHItemTreeNodeProperties::visit(ViewCollection& views)
+{
+    int img = DBHTreeImageList::get().getImageIndex(ART_Views);
+    visitCollection(&views, _("Views"), img);
 }
 //-----------------------------------------------------------------------------
 // DBHTreeNode class

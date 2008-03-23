@@ -47,5 +47,9 @@ class TableCollection;
 typedef boost::shared_ptr<TableCollection> PSharedTableCollection;
 class SystemTableCollection;
 typedef boost::shared_ptr<SystemTableCollection> PSharedSystemTableCollection;
+class View;
+typedef boost::shared_ptr<View> PSharedView;
+class ViewCollection;
+typedef boost::shared_ptr<ViewCollection> PSharedViewCollection;
 //-----------------------------------------------------------------------------
 #endif // FR_SHAREDITEMS_H

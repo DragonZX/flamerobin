@@ -66,6 +66,7 @@ FLAMEROBIN_OBJECTS =  \
 	flamerobin_Table.o \
 	flamerobin_TreeFolder.o \
 	flamerobin_TreeRoot.o \
+	flamerobin_View.o \
 	flamerobin_Identifier.o \
 	flamerobin_SqlTokenizer.o \
 	$(__FR_PLATFORMSPECIFICSOURCES_OBJECTS) \
@@ -295,6 +296,9 @@ flamerobin_TreeFolder.o: $(srcdir)/src/hierarchy/TreeFolder.cpp $(FLAMEROBIN_ODE
 
 flamerobin_TreeRoot.o: $(srcdir)/src/hierarchy/TreeRoot.cpp $(FLAMEROBIN_ODEP)
 	$(CXXC) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(srcdir)/src/hierarchy/TreeRoot.cpp
+
+flamerobin_View.o: $(srcdir)/src/hierarchy/View.cpp $(FLAMEROBIN_ODEP)
+	$(CXXC) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(srcdir)/src/hierarchy/View.cpp
 
 flamerobin_Identifier.o: $(srcdir)/src/sql/Identifier.cpp $(FLAMEROBIN_ODEP)
 	$(CXXC) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(srcdir)/src/sql/Identifier.cpp

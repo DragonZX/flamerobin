@@ -83,6 +83,7 @@ FLAMEROBIN_OBJECTS =  \
 	vc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_Table.obj \
 	vc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_TreeFolder.obj \
 	vc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_TreeRoot.obj \
+	vc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_View.obj \
 	vc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_Identifier.obj \
 	vc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_SqlTokenizer.obj \
 	vc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_StyleGuideMSW.obj \
@@ -289,6 +290,9 @@ vc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_TreeFolder.obj: .\src\hierarchy\TreeFolder
 	$(CXX) /c /nologo /TP /Fo$@ $(FLAMEROBIN_CXXFLAGS) $**
 
 vc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_TreeRoot.obj: .\src\hierarchy\TreeRoot.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(FLAMEROBIN_CXXFLAGS) $**
+
+vc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_View.obj: .\src\hierarchy\View.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(FLAMEROBIN_CXXFLAGS) $**
 
 vc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_Identifier.obj: .\src\sql\Identifier.cpp

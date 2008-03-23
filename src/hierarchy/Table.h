@@ -36,6 +36,8 @@ class Table : public Relation
 {
 public:
     Table(const Identifier& identifier);
+
+    virtual bool isSystem();
     virtual void accept(ItemVisitor* visitor);
 };
 //-----------------------------------------------------------------------------

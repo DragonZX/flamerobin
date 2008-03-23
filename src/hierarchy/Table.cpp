@@ -45,6 +45,12 @@ Table::Table(const Identifier& identifier)
     setIdentifier(identifier);
 }
 //-----------------------------------------------------------------------------
+bool Table::isSystem()
+{
+    wxString prefix(getName().Mid(0, 4).MakeUpper());
+    return (prefix == wxT("RDB$") || prefix == wxT("MON$"));
+}
+//-----------------------------------------------------------------------------
 void Table::accept(ItemVisitor* visitor)
 {
     wxASSERT(visitor);

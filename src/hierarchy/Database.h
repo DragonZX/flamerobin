@@ -111,6 +111,7 @@ private:
 
     PSharedSystemTableCollection systemTablesM;
     PSharedTableCollection tablesM;
+    PSharedViewCollection viewsM;
 
     void createCollections();
     void deleteCollections();

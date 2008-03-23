@@ -36,54 +36,19 @@
     #include "wx/wx.h"
 #endif
 
-#include "hierarchy/Database.h"
-#include "hierarchy/Item.h"
 #include "hierarchy/ItemVisitor.h"
-#include "hierarchy/Table.h"
-#include "hierarchy/TreeFolder.h"
 #include "hierarchy/View.h"
 //-----------------------------------------------------------------------------
-void ItemVisitor::visit(Item& item)
+View::View(const Identifier& identifier)
+    : Relation()
 {
-    defaultAction(&item);
+    setIdentifier(identifier);
 }
 //-----------------------------------------------------------------------------
-void ItemVisitor::visit(Database& database)
+void View::accept(ItemVisitor* visitor)
 {
-    defaultAction(&database);
-}
-//-----------------------------------------------------------------------------
-void ItemVisitor::visit(SystemTableCollection& tables)
-{
-    defaultAction(&tables);
-}
-//-----------------------------------------------------------------------------
-void ItemVisitor::visit(Table& table)
-{
-    defaultAction(&table);
-}
-//-----------------------------------------------------------------------------
-void ItemVisitor::visit(TableCollection& tables)
-{
-    defaultAction(&tables);
-}
-//-----------------------------------------------------------------------------
-void ItemVisitor::visit(TreeFolder& folder)
-{
-    defaultAction(&folder);
-}
-//-----------------------------------------------------------------------------
-void ItemVisitor::visit(View& view)
-{
-    defaultAction(&view);
-}
-//-----------------------------------------------------------------------------
-void ItemVisitor::visit(ViewCollection& views)
-{
-    defaultAction(&views);
-}
-//-----------------------------------------------------------------------------
-void ItemVisitor::defaultAction(Item*)
-{
+    wxASSERT(visitor);
+    if (visitor)
+        visitor->visit(*this);
 }
 //-----------------------------------------------------------------------------

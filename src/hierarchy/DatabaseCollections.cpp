@@ -41,6 +41,7 @@
 #include "hierarchy/DatabaseCollections.h"
 #include "hierarchy/ItemVisitor.h"
 #include "hierarchy/Table.h"
+#include "hierarchy/View.h"
 //-----------------------------------------------------------------------------
 // MetadataItemCollection base class
 void MetadataItemCollection::setChildrenIdentifiers(
@@ -83,6 +84,11 @@ PSharedItem SystemTableCollection::createCollectionItem(
     PSharedItem table(new Table(identifier));
     table->setParent(shared_from_this());
     return table;
+}
+//-----------------------------------------------------------------------------
+bool SystemTableCollection::isSystem()
+{
+    return true;
 }
 //-----------------------------------------------------------------------------
 void SystemTableCollection::loadChildren()
@@ -151,6 +157,49 @@ void TableCollection::loadChildren()
 }
 //-----------------------------------------------------------------------------
 void TableCollection::accept(ItemVisitor* visitor)
+{
+    wxASSERT(visitor);
+    if (visitor)
+        visitor->visit(*this);
+}
+//-----------------------------------------------------------------------------
+// ViewCollection class
+ViewCollection::ViewCollection()
+{
+    // load children on-demand
+    setChildrenLoaded(false);
+}
+//-----------------------------------------------------------------------------
+PSharedItem ViewCollection::createCollectionItem(const Identifier& identifier)
+{
+    PSharedItem view(new View(identifier));
+    view->setParent(shared_from_this());
+    return view;
+}
+//-----------------------------------------------------------------------------
+void ViewCollection::loadChildren()
+{
+    Database* db = getDatabase();
+    wxCHECK_RET(db,
+        wxT("ViewCollection::loadChildren() called without parent database"));
+    DatabaseConnection* dbc = db->getMetadataConnection();
+    if (dbc)
+    {
+        std::string sql("select r.rdb$relation_name from rdb$relations r "
+            " where (r.RDB$SYSTEM_FLAG = 0 or r.RDB$SYSTEM_FLAG is null) "
+            " and r.RDB$VIEW_SOURCE is not null order by 1");
+        dbc->loadCollection(getHandle(), sql);
+        return;
+    }
+
+    // loading is not possible, so clear children and show empty collection
+    SubjectLocker lock(this);
+    clearChildren();
+    setChildrenLoaded(true);
+    notifyObservers();
+}
+//-----------------------------------------------------------------------------
+void ViewCollection::accept(ItemVisitor* visitor)
 {
     wxASSERT(visitor);
     if (visitor)

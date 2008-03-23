@@ -36,6 +36,8 @@ class SystemTableCollection;
 class Table;
 class TableCollection;
 class TreeFolder;
+class View;
+class ViewCollection;
 //-----------------------------------------------------------------------------
 class ItemVisitor : public Visitor
 {
@@ -44,9 +46,11 @@ public:
 
     virtual void visit(Database& database);
     virtual void visit(SystemTableCollection& tables);
-    virtual void visit(Table&);
+    virtual void visit(Table& table);
     virtual void visit(TableCollection& tables);
     virtual void visit(TreeFolder& folder);
+    virtual void visit(View& view);
+    virtual void visit(ViewCollection& views);
 protected:
     virtual void defaultAction(Item*);
 };
