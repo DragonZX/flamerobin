@@ -1,0 +1,64 @@
+// $Id: flamerobin.rc 1220 2006-09-15 08:17:57Z mghie $
+
+////////////////////////////////////////////////////////////////////////
+// wxWidgets resources
+////////////////////////////////////////////////////////////////////////
+
+// set this to 1 for Visual C++ 2005 
+// (build fails with duplicate manifest resources error)
+// #define wxUSE_NO_MANIFEST 1
+#include "wx/msw/wx.rc"
+
+
+////////////////////////////////////////////////////////////////////////
+// application icon
+////////////////////////////////////////////////////////////////////////
+
+aaaa     ICON "../res/fricon.ico"
+
+
+////////////////////////////////////////////////////////////////////////
+// version information
+////////////////////////////////////////////////////////////////////////
+
+#ifdef _UNICODE
+    #define LANG "04090000"
+#else
+    #define LANG "040904b0"
+#endif
+
+#include "../src/Version.h"
+#define STRINGIZE(x) #x
+#define STR(x)  STRINGIZE(x)
+#define FR_VERSION_STRING STR(FR_VERSION_MAJOR) "." \
+        STR(FR_VERSION_MINOR) "." STR(FR_VERSION_RLS)
+
+1 VERSIONINFO
+    FILEVERSION FR_VERSION_MAJOR,FR_VERSION_MINOR,FR_VERSION_RLS,0
+    PRODUCTVERSION FR_VERSION_MAJOR,FR_VERSION_MINOR,FR_VERSION_RLS,0
+    FILEFLAGSMASK 0x3fL
+    FILEFLAGS 0
+    FILEOS 0x40004L // VOS_NT_WINDOWS32
+    FILETYPE 1 // VFT_APP
+    FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        // US English Ascii
+        BLOCK LANG
+        BEGIN
+            VALUE "Comments", "FlameRobin: Multi platform Database Manager for Firebird Database Server\0"
+            VALUE "CompanyName", "FlameRobin Development Team\0"
+            VALUE "FileDescription", "FlameRobin Database Manager\0"
+            VALUE "FileVersion", "FlameRobin " FR_VERSION_STRING "\0"
+            VALUE "InternalName", "FlameRobin\0"
+            VALUE "LegalCopyright", "Copyright © 2004-2006 FlameRobin Development Team\0"
+            VALUE "LegalTrademarks", "\0"
+            VALUE "OriginalFilename", "flamerobin.exe\0"
+            VALUE "PrivateBuild", "\0"
+            VALUE "ProductName", "FlameRobin Database Manager\0"
+            VALUE "ProductVersion", FR_VERSION_STRING "\0"
+            VALUE "SpecialBuild", "\0"
+        END
+    END
+END

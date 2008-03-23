@@ -1,0 +1,566 @@
+<?xml version="1.0" ?>
+
+<!-- $Id$ -->
+
+<makefile>
+    <using module="datafiles"/>
+
+<!-- necessary if wx-config can not be used -->
+    <option name="WXDIR" category="path" never_empty="1">
+        <values></values>
+        <default-value></default-value>
+    </option>
+
+<!-- this option allows to build the application with either the
+     Static or DLL configuration of wxWidgets -->
+    <option name="USEDLL">
+        <values>0,1</values>
+        <values-description>,DLL</values-description>
+        <default-value>0</default-value>
+    </option>
+    <set var="WXUSINGDLL">
+        <if cond="USEDLL=='1'">WXUSINGDLL</if>
+    </set>
+
+<!-- this option allows to build the application with either the
+     Ansi or Unicode configuration of wxWidgets -->
+    <option name="UNICODE">
+        <values>0,1</values>
+        <values-description>,Unicode</values-description>
+        <default-value>0</default-value>
+    </option>
+    <set var="U_OPT">
+        <if cond="UNICODE=='1'">u</if>
+    </set>
+
+<!-- this option allows to build the application with either the
+     Debug or Release configuration of wxWidgets and IBPP -->
+    <option name="FINAL">
+        <values>0,1</values>
+        <values-description>Debug,Release</values-description>
+        <default-value>0</default-value>
+    </option>
+    <set var="D_OPT">
+        <if cond="FINAL=='0'">d</if>
+    </set>
+    <set var="DEBUGINFO">
+        <if cond="FINAL=='0'">on</if>
+        <if cond="FINAL=='1'">off</if>
+    </set>
+    <set var="OPTIMIZE">
+        <if cond="FINAL=='0'">off</if>
+        <if cond="FINAL=='1'">size</if>
+    </set>
+
+<!-- this option allows to build the application with either the
+     dynamic or static runtime libraries -->
+    <option name="STATICRTL">
+        <values>0,1</values>
+        <values-description>Dynamic,Static</values-description>
+        <default-value>0</default-value>
+    </option>
+    <set var="R_OPT">
+        <if cond="STATICRTL=='1'">s</if>
+    </set>
+    <set var="RTL_TYPE">
+        <if cond="STATICRTL=='0'">dynamic</if>
+        <if cond="STATICRTL=='1'">static</if>
+    </set>
+
+
+    <define-tag name="headers" rules="dll,lib,exe">
+        <if cond="FORMAT=='msvc6prj'">
+            <msvc-project-files>
+                $(value)
+            </msvc-project-files>
+        </if>
+    </define-tag>
+
+
+<!-- stuff common for IBPP library and FlameRobin executable -->
+
+    <template id="fr_common">
+        <runtime-libs>$(RTL_TYPE)</runtime-libs>
+        <threading>multi</threading>
+
+        <debug-info>$(DEBUGINFO)</debug-info>
+        <optimize>$(OPTIMIZE)</optimize>
+
+        <if cond="FORMAT in ['msvc6prj','msvc']">
+            <ldflags>/nologo</ldflags>
+            <ldflags>/subsystem:windows</ldflags>
+            <ldflags>/machine:I386</ldflags>
+        </if>
+
+        <cxx-rtti>on</cxx-rtti>
+        <cxx-exceptions>on</cxx-exceptions>
+        <warnings>max</warnings>
+    </template>
+
+    <set var="BUILDDIR">
+        <if cond="TOOLSET=='win32'">$(COMPILER)$(U_OPT)$(R_OPT)$(D_OPT)</if>
+        <if cond="TOOLSET!='win32'">.</if>
+    </set>
+
+    <set var="SOURCEDIR">src</set>
+    <set var="RESDIR">res</set>
+
+    <!-- IBPP needs one of these defined for the target platform -->
+    <set var="IBPPPLATFORMDEFINE">
+        <if cond="PLATFORM_MACOSX=='1'">IBPP_DARWIN</if>
+        <if cond="PLATFORM_UNIX=='1'">IBPP_LINUX</if>
+        <if cond="PLATFORM_WIN32=='1'">IBPP_WINDOWS</if>
+    </set>
+
+    <set var="FIREBIRDFRAMEWORK">
+        <if cond="PLATFORM_MACOSX=='1'">-framework Firebird</if>  -->
+    </set>
+    <set var="FIREBIRDLIBRARY">
+        <if cond="PLATFORM_UNIX=='1'">fbclient</if>
+        <!-- PLATFORM_WIN32: ibpp library loads firebird DLL dynamically -->
+    </set>
+
+
+<!-- build FlameRobin executable -->
+
+    <template id="wx">
+        <if cond="FORMAT!='autoconf'">
+            <set var="WXDIR">$(DOLLAR)(WXDIR)</set>
+        </if>
+        <if cond="FORMAT=='autoconf'">
+            <define>HAVE_FRCONFIG_H</define>
+        </if>
+
+        <!-- Set debug info here -->
+        <set var="WXDEBUG">
+            <if cond="FINAL=='0'">__WXDEBUG__</if>
+        </set>
+
+        <set var="DEBUGFLAG">
+            <if cond="FINAL=='0'">_DEBUG</if>
+        </set>
+
+        <set var="UNICODE_DEFINE">
+            <if cond="FORMAT!='autoconf' and UNICODE=='1'">_UNICODE</if>
+        </set>
+
+        <define>$(UNICODE_DEFINE)</define>
+        <define>$(WXDEBUG)</define>
+        <define>$(DEBUGFLAG)</define>
+
+        <if cond="FORMAT in ['mingw']">
+            <define>HAVE_W32API_H</define>
+        </if>
+
+        <if cond="FORMAT in ['borland','mingw','msvc6prj','msvc']">
+            <define>_WINDOWS</define>
+            <define>__WINDOWS__</define>
+            <define>WINVER=0x400</define>
+            <define>WIN32</define>
+            <define>__WIN32__</define>
+            <define>__WIN95__</define>
+            <define>STRICT</define>
+
+            <define>__WXMSW__</define>
+            <define>wxUSE_GUI=1</define>
+            <define>WIN32_LEAN_AND_MEAN</define>
+
+            <set var="WX_PORT">wxmsw</set>
+<!-- set this to 29 for wxWidgets CVS HEAD -->
+            <set var="WX_VERSION">28</set>
+
+            <set var="WX_LIB_DIR" make_var="1">
+                <if cond="USEDLL=='1'">$(WXDIR)/lib/$(COMPILER)_dll</if>
+                <if cond="USEDLL=='0'">$(WXDIR)/lib/$(COMPILER)_lib</if>
+            </set>
+
+            <include>$(WX_LIB_DIR)/msw$(U_OPT)$(D_OPT)</include>
+            <include>$(WXDIR)/contrib/include</include>
+            <include>$(WXDIR)/include</include>
+
+            <lib-path>$(WX_LIB_DIR)</lib-path>
+
+            <!-- another nice thing that wx-config will take care of -->
+            <sys-lib>$(WX_PORT)$(WX_VERSION)$(U_OPT)$(D_OPT)_stc</sys-lib>
+            <sys-lib>$(WX_PORT)$(WX_VERSION)$(U_OPT)$(D_OPT)_html</sys-lib>
+            <sys-lib>$(WX_PORT)$(WX_VERSION)$(U_OPT)$(D_OPT)_adv</sys-lib>
+            <sys-lib>$(WX_PORT)$(WX_VERSION)$(U_OPT)$(D_OPT)_core</sys-lib>
+            <sys-lib>wxbase$(WX_VERSION)$(U_OPT)$(D_OPT)_xml</sys-lib>
+            <sys-lib>wxbase$(WX_VERSION)$(U_OPT)$(D_OPT)</sys-lib>
+            <if cond="WX_VERSION>='29'">
+                <sys-lib>wxscintilla$(D_OPT)</sys-lib>
+            </if>
+            <sys-lib>wxexpat$(D_OPT)</sys-lib>
+            <sys-lib>wxtiff$(D_OPT)</sys-lib>
+            <sys-lib>wxjpeg$(D_OPT)</sys-lib>
+            <sys-lib>wxpng$(D_OPT)</sys-lib>
+            <sys-lib>wxzlib$(D_OPT)</sys-lib>
+
+            <sys-lib>kernel32</sys-lib>
+            <sys-lib>user32</sys-lib>
+            <sys-lib>gdi32</sys-lib>
+            <sys-lib>winspool</sys-lib>
+            <sys-lib>comdlg32</sys-lib>
+            <sys-lib>advapi32</sys-lib>
+            <sys-lib>shell32</sys-lib>
+            <sys-lib>ole32</sys-lib>
+            <sys-lib>oleaut32</sys-lib>
+            <sys-lib>uuid</sys-lib>
+            <sys-lib>comctl32</sys-lib>
+            <sys-lib>rpcrt4</sys-lib>
+            <sys-lib>wsock32</sys-lib>
+        </if>
+    </template>
+
+    <set var="FR_HEADERFILES">
+        $(SOURCEDIR)/Application.h
+        $(SOURCEDIR)/Version.h
+
+        $(SOURCEDIR)/config/Config.h
+
+        $(SOURCEDIR)/core/ArtProvider.h
+        $(SOURCEDIR)/core/CommandIds.h
+        $(SOURCEDIR)/core/FRError.h
+        $(SOURCEDIR)/core/Observer.h
+        $(SOURCEDIR)/core/StringUtils.h
+        $(SOURCEDIR)/core/Subject.h
+        $(SOURCEDIR)/core/Visitor.h
+
+        $(SOURCEDIR)/engine/DatabaseConnection.h
+        $(SOURCEDIR)/engine/WorkerThread.h
+
+        $(SOURCEDIR)/gui/BaseFrame.h
+        $(SOURCEDIR)/gui/FrameManager.h
+        $(SOURCEDIR)/gui/MainFrame.h
+        $(SOURCEDIR)/gui/StyleGuide.h
+
+        $(SOURCEDIR)/gui/controls/DBHTreeControl.h
+        $(SOURCEDIR)/gui/controls/DBHTreeControlContextMenuCreator.h
+
+        $(SOURCEDIR)/hierarchy/Database.h
+        $(SOURCEDIR)/hierarchy/DatabaseCollections.h
+        $(SOURCEDIR)/hierarchy/Item.h
+        $(SOURCEDIR)/hierarchy/ItemVisitor.h
+        $(SOURCEDIR)/hierarchy/Relation.h
+        $(SOURCEDIR)/hierarchy/SharedItems.h
+        $(SOURCEDIR)/hierarchy/Table.h
+        $(SOURCEDIR)/hierarchy/TreeFolder.h
+        $(SOURCEDIR)/hierarchy/TreeRoot.h
+
+        $(SOURCEDIR)/sql/Identifier.h
+        $(SOURCEDIR)/sql/SqlTokenizer.h
+    </set>
+
+    <set var="FR_PLATFORMSPECIFICSOURCES">
+        <if cond="PLATFORM_UNIX=='1'">
+            $(SOURCEDIR)/gui/gtk/StyleGuideGTK.cpp
+        </if>
+        <if cond="PLATFORM_MACOSX=='1'">
+            $(SOURCEDIR)/gui/mac/StyleGuideMAC.cpp
+        </if>
+        <if cond="PLATFORM_WIN32=='1'">
+            $(SOURCEDIR)/gui/msw/StyleGuideMSW.cpp
+        </if>
+    </set>
+
+    <set var="FR_SOURCEFILES">
+        $(SOURCEDIR)/Application.cpp
+        $(SOURCEDIR)/PCH.cpp
+
+        $(SOURCEDIR)/config/Config.cpp
+
+        $(SOURCEDIR)/core/ArtProvider.cpp
+        $(SOURCEDIR)/core/FRError.cpp
+        $(SOURCEDIR)/core/Observer.cpp
+        $(SOURCEDIR)/core/StringUtils.cpp
+        $(SOURCEDIR)/core/Subject.cpp
+
+        $(SOURCEDIR)/engine/DatabaseConnection.cpp
+        $(SOURCEDIR)/engine/WorkerThread.cpp
+
+        $(SOURCEDIR)/gui/BaseFrame.cpp
+        $(SOURCEDIR)/gui/FrameManager.cpp
+        $(SOURCEDIR)/gui/MainFrame.cpp
+        $(SOURCEDIR)/gui/StyleGuide.cpp
+
+        $(SOURCEDIR)/gui/controls/DBHTreeControl.cpp
+        $(SOURCEDIR)/gui/controls/DBHTreeControlContextMenuCreator.cpp
+
+        $(SOURCEDIR)/hierarchy/Database.cpp
+        $(SOURCEDIR)/hierarchy/DatabaseCollections.cpp
+        $(SOURCEDIR)/hierarchy/Item.cpp
+        $(SOURCEDIR)/hierarchy/ItemVisitor.cpp
+        $(SOURCEDIR)/hierarchy/Relation.cpp
+        $(SOURCEDIR)/hierarchy/Table.cpp
+        $(SOURCEDIR)/hierarchy/TreeFolder.cpp
+        $(SOURCEDIR)/hierarchy/TreeRoot.cpp
+
+        $(SOURCEDIR)/sql/Identifier.cpp
+        $(SOURCEDIR)/sql/SqlTokenizer.cpp
+
+        $(FR_PLATFORMSPECIFICSOURCES)
+    </set>
+
+    <set var="CONFIGOPTIONSDIR">
+        <if cond="FORMAT=='autoconf'">$(DOLLAR)(srcdir)/conf-defs</if>
+        <if cond="FORMAT!='autoconf'">conf-defs</if>
+    </set>
+    <set var="CONFIGOPTIONSFILES">
+        fr_settings.confdef
+        db_settings.confdef
+    </set>
+
+    <set var="HTMLDOCSDIR">
+        <if cond="FORMAT=='autoconf'">$(DOLLAR)(srcdir)/docs</if>
+        <if cond="FORMAT!='autoconf'">docs</if>
+    </set>
+    <set var="HTMLDOCFILES">
+        fr_license.html
+        fr_manual.html
+        fr_whatsnew.html
+        html.css
+    </set>
+
+    <set var="HTMLTEMPLATEDIR">
+        <if cond="FORMAT=='autoconf'">$(DOLLAR)(srcdir)/html-templates</if>
+        <if cond="FORMAT!='autoconf'">html-templates</if>
+    </set>
+    <set var="HTMLTEMPLATEFILES">
+        ALLloading.html
+        DATABASE.html
+        DDL.html
+        DOMAIN.html
+        EXCEPTION.html
+        FUNCTION.html
+        GENERATOR.html
+        PROCEDURE.html
+        PROCEDUREprivileges.html
+        ROLE.html
+        ROLEprivileges.html
+        SERVER.html
+        TABLE.html
+        TABLEconstraints.html
+        TABLEtriggers.html
+        TABLEindices.html
+        TABLEprivileges.html
+        TRIGGER.html
+        VIEW.html
+        VIEWprivileges.html
+        VIEWtriggers.html
+        dependencies.html
+        header.html
+        compute.png
+        drop.png
+        ok.png
+        ok2.png
+        redx.png
+        view.png
+    </set>
+
+    <set var="RESOURCEDIR">
+        <if cond="FORMAT=='autoconf'">$(DOLLAR)(srcdir)/res</if>
+        <if cond="FORMAT!='autoconf'">res</if>
+    </set>
+
+
+    <define-tag name="mac-app-bundle" rules="exe">
+        <!-- bundle directory: -->
+        <set var="BUNDLE">FlameRobin.app/Contents</set>
+        <set var="BUNDLE_TGT">$(BUNDLE)/PkgInfo</set>
+        <set var="BUNDLE_TGT_REF">
+            <if cond="PLATFORM_MACOSX=='1'">$(BUNDLE)/PkgInfo</if>
+        </set>
+
+        <set var="BUNDLE_PLIST_IN">$(DOLLAR)(srcdir)/res/flamerobin.Info.plist.in</set>
+        <set var="BUNDLE_ICONS">$(DOLLAR)(srcdir)/res/flamerobin.icns</set>
+
+        <add-target target="$(BUNDLE_TGT)" type="action"/>
+        <modify-target target="$(BUNDLE_TGT)">
+            <!-- required data: -->
+            <depends>$(id)</depends>
+            <depends-on-file>$(BUNDLE_PLIST_IN)</depends-on-file>
+            <depends-on-file>$(BUNDLE_ICONS)</depends-on-file>
+
+            <command>
+                <!-- create the directories: -->
+                mkdir -p $(BUNDLE)
+                mkdir -p $(BUNDLE)/MacOS
+                mkdir -p $(BUNDLE)/Resources
+                mkdir -p $(BUNDLE)/SharedSupport
+                mkdir -p $(BUNDLE)/SharedSupport/conf-defs
+                mkdir -p $(BUNDLE)/SharedSupport/docs
+                mkdir -p $(BUNDLE)/SharedSupport/html-templates
+
+                <!-- PkgInfo: -->
+                echo -n "APPL????" >$(BUNDLE)/PkgInfo
+
+                <!-- make a hardlink to the binary: -->
+                ln -f $(ref("__targetdir",id))$(ref("__targetname",id)) $(BUNDLE)/MacOS/$(id)
+
+                <!-- replace version number and year in Info.plist file -->
+                sed -e "s/VERSION/`cat $(srcdir)/src/frversion.h | \
+                                   awk '/FR_VERSION_MAJOR/ {ma = $$3} \
+                                        /FR_VERSION_MINOR/ {mi = $$3} \
+                                        /FR_VERSION_RLS/ {rls = $$3} \
+                                        END {printf "%d.%d.%d", ma, mi, rls}'`/" \
+                    -e "s/YEAR/`date '+%Y'`/" $(BUNDLE_PLIST_IN) > $(BUNDLE)/Info.plist
+
+                <!-- and copy resources and icons -->
+                cp -f $(BUNDLE_ICONS) $(BUNDLE)/Resources
+                cp -R $(DOLLAR)(srcdir)/conf-defs/* $(BUNDLE)/SharedSupport/conf-defs
+                cp -R $(DOLLAR)(srcdir)/docs/* $(BUNDLE)/SharedSupport/docs
+                cp -R $(DOLLAR)(srcdir)/html-templates/* $(BUNDLE)/SharedSupport/html-templates
+            </command>
+        </modify-target>
+
+        <!-- add pseudo target id_bundle: -->
+        <add-target target="$(id)_bundle" type="phony"
+                    cond="PLATFORM_MACOSX=='1'"/>
+        <modify-target target="$(id)_bundle">
+            <dependency-of>all</dependency-of>
+            <depends>$(BUNDLE_TGT_REF)</depends>
+        </modify-target>
+
+        <!-- "make clean" should delete the bundle: -->
+        <modify-target target="clean">
+            <command>rm -rf FlameRobin.app</command>
+        </modify-target>
+    </define-tag>
+
+    <exe id="flamerobin" template="fr_common,wx">
+        <app-type>gui</app-type>
+
+        <depends>ibpp</depends>
+
+        <headers>$(FR_HEADERFILES)</headers>
+        <sources>$(FR_SOURCEFILES)</sources>
+
+        <!-- the precompiled header file is created in $(BUILDDIR), when
+             the first source file is compiled - all other source files
+             only *use* the PCH file -->
+        <precomp-headers-header>wx/wxprec.h</precomp-headers-header>
+        <precomp-headers>on</precomp-headers>
+        <precomp-headers-file>$(id)</precomp-headers-file>
+        <precomp-headers-gen>$(SOURCEDIR)/PCH.cpp</precomp-headers-gen>
+
+        <define>$(IBPPPLATFORMDEFINE)</define>
+        <if cond="FORMAT=='autoconf'">
+            <include>.</include>
+            <include>$(DOLLAR)(srcdir)/src</include>
+            <include>$(DOLLAR)(srcdir)/src/ibpp</include>
+            <include>$(DOLLAR)(srcdir)/res</include>
+            <set var="__win32rc_flags" append="1">@WX_INCLUDES@</set>
+        </if>
+        <if cond="FORMAT!='autoconf'">
+            <include>$(DOLLAR)(BOOST_ROOT)</include>
+            <include>./src</include>
+            <include>./src/ibpp</include>
+            <include>./res</include>
+        </if>
+
+        <win32-res>$(RESDIR)/flamerobin.rc</win32-res>
+        <library>ibpp</library>
+        <ldlibs>$(FIREBIRDFRAMEWORK)</ldlibs>
+        <sys-lib>$(FIREBIRDLIBRARY)</sys-lib>
+
+        <if cond="FORMAT=='autoconf'">
+            <mac-app-bundle>$(id)</mac-app-bundle>
+        </if>
+    </exe>
+
+
+<!-- install FlameRobin executable -->
+
+    <if cond="FORMAT=='autoconf'">
+        <script-files>
+            <srcdir>$(BUILDDIR)</srcdir>
+            <files>flamerobin$(EXEEXT)</files>
+            <install-to>$(BINDIR)</install-to>
+        </script-files>
+
+        <data-files>
+            <srcdir>$(CONFIGOPTIONSDIR)</srcdir>
+            <files>$(CONFIGOPTIONSFILES)</files>
+            <install-to>$(DATADIR)/flamerobin/conf-defs</install-to>
+        </data-files>
+        <data-files>
+            <srcdir>$(HTMLDOCSDIR)</srcdir>
+            <files>$(HTMLDOCFILES)</files>
+            <install-to>$(DATADIR)/flamerobin/docs</install-to>
+        </data-files>
+        <data-files>
+            <srcdir>$(HTMLDOCSDIR)</srcdir>
+            <files>flamerobin.1</files>
+            <install-to>@mandir@/man1</install-to>
+        </data-files>
+        <data-files>
+            <srcdir>$(HTMLTEMPLATEDIR)</srcdir>
+            <files>$(HTMLTEMPLATEFILES)</files>
+            <install-to>$(DATADIR)/flamerobin/html-templates</install-to>
+        </data-files>
+        <data-files>
+            <srcdir>$(RESOURCEDIR)</srcdir>
+            <files>flamerobin.desktop</files>
+            <install-to>$(DATADIR)/applications</install-to>
+        </data-files>
+        <data-files>
+            <srcdir>$(RESOURCEDIR)</srcdir>
+            <files>flamerobin.png</files>
+            <install-to>$(DATADIR)/pixmaps</install-to>
+        </data-files>
+    </if>
+
+
+<!-- build IBPP library -->
+
+    <set var="IBPP_HEADERFILES">
+        $(SOURCEDIR)/ibpp/_ibpp.h
+        $(SOURCEDIR)/ibpp/ibase.h
+        $(SOURCEDIR)/ibpp/iberror.h
+        $(SOURCEDIR)/ibpp/ibpp.h
+    </set>
+
+    <set var="IBPP_SOURCEFILES">
+        $(SOURCEDIR)/ibpp/_dpb.cpp
+        $(SOURCEDIR)/ibpp/_ibpp.cpp
+        $(SOURCEDIR)/ibpp/_ibs.cpp
+        $(SOURCEDIR)/ibpp/_rb.cpp
+        $(SOURCEDIR)/ibpp/_spb.cpp
+        $(SOURCEDIR)/ibpp/_tpb.cpp
+        $(SOURCEDIR)/ibpp/array.cpp
+        $(SOURCEDIR)/ibpp/blob.cpp
+        $(SOURCEDIR)/ibpp/database.cpp
+        $(SOURCEDIR)/ibpp/date.cpp
+        $(SOURCEDIR)/ibpp/dbkey.cpp
+        $(SOURCEDIR)/ibpp/events.cpp
+        $(SOURCEDIR)/ibpp/exception.cpp
+        $(SOURCEDIR)/ibpp/row.cpp
+        $(SOURCEDIR)/ibpp/service.cpp
+        $(SOURCEDIR)/ibpp/statement.cpp
+        $(SOURCEDIR)/ibpp/time.cpp
+        $(SOURCEDIR)/ibpp/transaction.cpp
+        $(SOURCEDIR)/ibpp/user.cpp
+    </set>
+
+    <lib id="ibpp" template="fr_common">
+        <headers>$(IBPP_HEADERFILES)</headers>
+        <sources>$(IBPP_SOURCEFILES)</sources>
+
+        <!-- the precompiled header file is created in $(BUILDDIR), when
+             the first source file is compiled - all other source files
+             only *use* the PCH file -->
+        <precomp-headers-header>_ibpp.h</precomp-headers-header>
+        <precomp-headers>on</precomp-headers>
+        <precomp-headers-file>$(id)</precomp-headers-file>
+        <precomp-headers-gen>$(SOURCEDIR)/ibpp/_ibpp.cpp</precomp-headers-gen>
+
+        <define>$(IBPPPLATFORMDEFINE)</define>
+        <if cond="FORMAT=='autoconf'">
+            <include>$(DOLLAR)(srcdir)/src/ibpp</include>
+        </if>
+        <if cond="FORMAT!='autoconf'">
+            <include>./src/ibpp</include>
+        </if>
+    </lib>
+
+</makefile>
