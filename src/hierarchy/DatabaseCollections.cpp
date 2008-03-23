@@ -65,10 +65,10 @@ void MetadataItemCollection::setChildrenIdentifiers(
     }
     if (changed)
     {
-
-        setChildrenLoaded(true);
-        notifyObservers();
+// TODO: remove children that are no longer in identifiers
     };
+    setChildrenLoaded(true);
+    notifyObservers();
 }
 //-----------------------------------------------------------------------------
 // SystemTableCollection class
