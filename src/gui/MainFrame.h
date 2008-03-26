@@ -33,11 +33,8 @@
 #include "gui/BaseFrame.h"
 #include "gui/controls/DBHTreeControl.h"
 #include "hierarchy/SharedItems.h"
-//-----------------------------------------------------------------------------
-class ItemCommands : public wxEvtHandler
-{
-// TODO
-};
+
+class ItemCommands;
 //-----------------------------------------------------------------------------
 class MainFrame : public BaseFrame
 {
@@ -57,9 +54,9 @@ private:
     wxPanel* parentPanelM;
     DBHTreeControl* dbhTreeM;
 
-    PSharedItem selectedItemM;
     ItemCommands* selectedItemCommandsM;
     void setSelectedItem(PSharedItem selectedItem);
+    Database* getSelectedDatabase();
 
     void connectEventHandlers();
     void createControls();

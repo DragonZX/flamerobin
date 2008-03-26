@@ -44,6 +44,9 @@ FLAMEROBIN_CXXFLAGS = $(__flamerobin_PCH_INC) -DHAVE_FRCONFIG_H \
 FLAMEROBIN_OBJECTS =  \
 	flamerobin_Application.o \
 	flamerobin_PCH.o \
+	flamerobin_DatabaseCommands.o \
+	flamerobin_ItemCommands.o \
+	flamerobin_TableCommands.o \
 	flamerobin_Config.o \
 	flamerobin_ArtProvider.o \
 	flamerobin_FRError.o \
@@ -230,6 +233,15 @@ flamerobin_Application.o: $(srcdir)/src/Application.cpp $(FLAMEROBIN_ODEP)
 
 flamerobin_PCH.o: $(srcdir)/src/PCH.cpp $(FLAMEROBIN_ODEP)
 	$(CXXC) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(srcdir)/src/PCH.cpp
+
+flamerobin_DatabaseCommands.o: $(srcdir)/src/commands/DatabaseCommands.cpp $(FLAMEROBIN_ODEP)
+	$(CXXC) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(srcdir)/src/commands/DatabaseCommands.cpp
+
+flamerobin_ItemCommands.o: $(srcdir)/src/commands/ItemCommands.cpp $(FLAMEROBIN_ODEP)
+	$(CXXC) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(srcdir)/src/commands/ItemCommands.cpp
+
+flamerobin_TableCommands.o: $(srcdir)/src/commands/TableCommands.cpp $(FLAMEROBIN_ODEP)
+	$(CXXC) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(srcdir)/src/commands/TableCommands.cpp
 
 flamerobin_Config.o: $(srcdir)/src/config/Config.cpp $(FLAMEROBIN_ODEP)
 	$(CXXC) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(srcdir)/src/config/Config.cpp

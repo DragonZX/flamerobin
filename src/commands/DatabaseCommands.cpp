@@ -36,44 +36,46 @@
     #include "wx/wx.h"
 #endif
 
+#include "commands/ItemCommands.h"
 #include "core/CommandIds.h"
 #include "hierarchy/Database.h"
-#include "gui/controls/DBHTreeControlContextMenuCreator.h"
 //-----------------------------------------------------------------------------
-DBHTreeControlContextMenuCreator::DBHTreeControlContextMenuCreator(
-        wxMenu& menu)
-    : ItemVisitor(), menuM(menu)
+// DatabaseCommands class
+class DatabaseCommands : public ItemCommands
 {
-}
-//-----------------------------------------------------------------------------
-void DBHTreeControlContextMenuCreator::visit(Database& database)
-{
-/*
-    if (!database.isConnected())
-    {
-        menuM.Append(CmdDatabase_Connect, _("&Connect"));
-        menuM.Append(CmdDatabase_ConnectAs, _("Connect &as..."));
-    }
-    else
-    {
-        menuM.Append(CmdDatabase_Disconnect, _("&Disconnect"));
-        menuM.Append(CmdDatabase_Reconnect, _("Reconnec&t"));
-    }
-*/
-    menuM.Append(CmdDatabase_Connect, _("&Connect"));
-    menuM.Append(CmdDatabase_ConnectAs, _("Connect &as..."));
-    menuM.Append(CmdDatabase_Disconnect, _("&Disconnect"));
-    menuM.Append(CmdDatabase_Reconnect, _("Reconnec&t"));
+private:
+    Database* databaseM;
 
-    menuM.AppendSeparator();
-    menuM.Append(CmdDatabase_ExecuteStatement, _("&Execute SQL statements"));
+    void OnConnectDatabase(wxCommandEvent& event);
+    void OnUpdateConnectDatabase(wxUpdateUIEvent& event);
+
+    DECLARE_EVENT_TABLE()
+public:
+    DatabaseCommands(PSharedItem item);
+};
+//-----------------------------------------------------------------------------
+DatabaseCommands::DatabaseCommands(PSharedItem item)
+    : ItemCommands(item), databaseM(0)
+{
+    databaseM = dynamic_cast<Database*>(item.get());
+    wxASSERT(databaseM);
 }
 //-----------------------------------------------------------------------------
-void DBHTreeControlContextMenuCreator::defaultAction(Item* /*item*/)
+BEGIN_EVENT_TABLE(DatabaseCommands, ItemCommands)
+    EVT_MENU(CmdDatabase_Connect, DatabaseCommands::OnConnectDatabase)
+    EVT_UPDATE_UI(CmdDatabase_Connect, DatabaseCommands::OnUpdateConnectDatabase)
+END_EVENT_TABLE()
+//-----------------------------------------------------------------------------
+void DatabaseCommands::OnConnectDatabase(wxCommandEvent& /*event*/)
 {
-    menuM.Append(wxID_ABOUT, _("&About FlameRobin..."));
-    menuM.Append(wxID_PREFERENCES, _("&Preferences..."));
-    menuM.AppendSeparator();
-    menuM.Append(wxID_EXIT, _("&Quit"));
+    if (databaseM)
+        databaseM->connect();
 }
+//-----------------------------------------------------------------------------
+void DatabaseCommands::OnUpdateConnectDatabase(wxUpdateUIEvent& event)
+{
+    event.Enable(databaseM && databaseM->isDisconnected());
+}
+//-----------------------------------------------------------------------------
+static ItemCommandsFactoryImpl<Database, DatabaseCommands> databaseCommandsFactory;
 //-----------------------------------------------------------------------------

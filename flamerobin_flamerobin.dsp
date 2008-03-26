@@ -500,6 +500,10 @@ SOURCE=.\src\hierarchy\DatabaseCollections.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\commands\DatabaseCommands.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\engine\DatabaseConnection.cpp
 # End Source File
 # Begin Source File
@@ -517,6 +521,10 @@ SOURCE=.\src\sql\Identifier.cpp
 # Begin Source File
 
 SOURCE=.\src\hierarchy\Item.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\commands\ItemCommands.cpp
 # End Source File
 # Begin Source File
 
@@ -563,6 +571,10 @@ SOURCE=.\src\core\Subject.cpp
 # Begin Source File
 
 SOURCE=.\src\hierarchy\Table.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\commands\TableCommands.cpp
 # End Source File
 # Begin Source File
 
@@ -643,6 +655,10 @@ SOURCE=.\src\sql\Identifier.h
 # Begin Source File
 
 SOURCE=.\src\hierarchy\Item.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\commands\ItemCommands.h
 # End Source File
 # Begin Source File
 

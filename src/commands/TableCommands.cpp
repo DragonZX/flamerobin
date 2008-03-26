@@ -25,34 +25,36 @@
 
 */
 
-#ifndef FR_ITEMVISITOR_H
-#define FR_ITEMVISITOR_H
-//-----------------------------------------------------------------------------
-#include "core/Visitor.h"
-//-----------------------------------------------------------------------------
-class Database;
-class Item;
-class SystemTableCollection;
-class Table;
-class TableCollection;
-class TreeFolder;
-class View;
-class ViewCollection;
-//-----------------------------------------------------------------------------
-class ItemVisitor : public Visitor
-{
-public:
-    virtual void visit(Item& item);
+// For compilers that support precompilation, includes "wx/wx.h".
+#include "wx/wxprec.h"
 
-    virtual void visit(Database& database);
-    virtual void visit(SystemTableCollection& tables);
-    virtual void visit(Table& table);
-    virtual void visit(TableCollection& tables);
-    virtual void visit(TreeFolder& folder);
-    virtual void visit(View& view);
-    virtual void visit(ViewCollection& views);
-protected:
-    virtual void defaultAction(Item* item);
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
+
+#ifndef WX_PRECOMP
+    #include "wx/wx.h"
+#endif
+
+#include "commands/ItemCommands.h"
+#include "core/CommandIds.h"
+#include "hierarchy/Table.h"
+//-----------------------------------------------------------------------------
+// TableCommands class
+class TableCommands : public ItemCommands
+{
+private:
+    Table* tableM;
+public:
+    TableCommands(PSharedItem item);
 };
 //-----------------------------------------------------------------------------
-#endif // FR_ITEMVISITOR_H
+TableCommands::TableCommands(PSharedItem item)
+    : ItemCommands(item), tableM(0)
+{
+    tableM = dynamic_cast<Table*>(item.get());
+    wxASSERT(tableM);
+}
+//-----------------------------------------------------------------------------
+static ItemCommandsFactoryImpl<Table, TableCommands> tableCommandsFactory;
+//-----------------------------------------------------------------------------

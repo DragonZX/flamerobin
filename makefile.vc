@@ -61,6 +61,9 @@ FLAMEROBIN_CXXFLAGS = /M$(__RTL_TYPE)$(__DEBUGINFO_0) /DWIN32 $(__DEBUGINFO) \
 FLAMEROBIN_OBJECTS =  \
 	vc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_Application.obj \
 	vc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_PCH.obj \
+	vc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_DatabaseCommands.obj \
+	vc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_ItemCommands.obj \
+	vc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_TableCommands.obj \
 	vc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_Config.obj \
 	vc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_ArtProvider.obj \
 	vc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_FRError.obj \
@@ -225,6 +228,15 @@ vc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_Application.obj: .\src\Application.cpp
 
 vc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_PCH.obj: .\src\PCH.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(FLAMEROBIN_CXXFLAGS) /Ycwx/wxprec.h $**
+
+vc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_DatabaseCommands.obj: .\src\commands\DatabaseCommands.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(FLAMEROBIN_CXXFLAGS) $**
+
+vc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_ItemCommands.obj: .\src\commands\ItemCommands.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(FLAMEROBIN_CXXFLAGS) $**
+
+vc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_TableCommands.obj: .\src\commands\TableCommands.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(FLAMEROBIN_CXXFLAGS) $**
 
 vc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_Config.obj: .\src\config\Config.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(FLAMEROBIN_CXXFLAGS) $**

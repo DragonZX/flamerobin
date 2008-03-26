@@ -54,6 +54,9 @@ FLAMEROBIN_CXXFLAGS = -mthreads $(__DEBUGINFO) $(__OPTIMIZE) -W -Wall \
 FLAMEROBIN_OBJECTS =  \
 	gcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_Application.o \
 	gcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_PCH.o \
+	gcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_DatabaseCommands.o \
+	gcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_ItemCommands.o \
+	gcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_TableCommands.o \
 	gcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_Config.o \
 	gcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_ArtProvider.o \
 	gcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_FRError.o \
@@ -185,6 +188,15 @@ gcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_Application.o: ./src/Application.cpp
 	$(CXX) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(CPPDEPS) $<
 
 gcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_PCH.o: ./src/PCH.cpp
+	$(CXX) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(CPPDEPS) $<
+
+gcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_DatabaseCommands.o: ./src/commands/DatabaseCommands.cpp
+	$(CXX) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(CPPDEPS) $<
+
+gcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_ItemCommands.o: ./src/commands/ItemCommands.cpp
+	$(CXX) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(CPPDEPS) $<
+
+gcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_TableCommands.o: ./src/commands/TableCommands.cpp
 	$(CXX) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(CPPDEPS) $<
 
 gcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_Config.o: ./src/config/Config.cpp

@@ -38,6 +38,8 @@
     #include "wx/wx.h"
 #endif
 
+#include "commands/ItemCommands.h"
+
 #include "core/ArtProvider.h"
 
 #include "gui/MainFrame.h"
@@ -68,7 +70,10 @@ MainFrame::~MainFrame()
 //-----------------------------------------------------------------------------
 void MainFrame::setSelectedItem(PSharedItem selectedItem)
 {
-    if (selectedItemM != selectedItem)
+    PSharedItem lastSelectedItem;
+    if (selectedItemCommandsM)
+        lastSelectedItem = selectedItemCommandsM->getItem();
+    if (lastSelectedItem != selectedItem)
     {
         // delete event handler for previously selected item
         if (selectedItemCommandsM)
@@ -78,20 +83,24 @@ void MainFrame::setSelectedItem(PSharedItem selectedItem)
             delete selectedItemCommandsM;
             selectedItemCommandsM = 0;
         }
-        selectedItemM = selectedItem;
         // create and push event handler for newly selected item
         if (selectedItem)
         {
-
-/* TODO: create real ItemCommands instance from selectedItem
-*/
-            selectedItemCommandsM = new ItemCommands;
-
+            selectedItemCommandsM =
+                ItemCommands::createItemCommands(selectedItem);
             if (selectedItemCommandsM)
                 PushEventHandler(selectedItemCommandsM);
         }
         updateStatusBar();
     }
+}
+//-----------------------------------------------------------------------------
+Database* MainFrame::getSelectedDatabase()
+{
+    PSharedItem selectedItem;
+    if (selectedItemCommandsM)
+        selectedItem = selectedItemCommandsM->getItem();
+    return (selectedItem) ? selectedItem->getDatabase() : 0;
 }
 //-----------------------------------------------------------------------------
 void MainFrame::connectEventHandlers()
@@ -138,7 +147,7 @@ void MainFrame::updateStatusBar()
     wxStatusBar* sbar = GetStatusBar();
     if (sbar)
     {
-        Database* database = (selectedItemM) ? selectedItemM->getDatabase() : 0;
+        Database* database = getSelectedDatabase();
         if (database)
         {
             DatabaseCredentials dbc(database->getCredentials());

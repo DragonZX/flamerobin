@@ -216,6 +216,8 @@
         $(SOURCEDIR)/Application.h
         $(SOURCEDIR)/Version.h
 
+        $(SOURCEDIR)/commands/ItemCommands.h
+
         $(SOURCEDIR)/config/Config.h
 
         $(SOURCEDIR)/core/ArtProvider.h
@@ -267,6 +269,10 @@
     <set var="FR_SOURCEFILES">
         $(SOURCEDIR)/Application.cpp
         $(SOURCEDIR)/PCH.cpp
+
+        $(SOURCEDIR)/commands/DatabaseCommands.cpp
+        $(SOURCEDIR)/commands/ItemCommands.cpp
+        $(SOURCEDIR)/commands/TableCommands.cpp
 
         $(SOURCEDIR)/config/Config.cpp
 

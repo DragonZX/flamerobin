@@ -25,55 +25,63 @@
 
 */
 
-// For compilers that support precompilation, includes "wx/wx.h".
-#include "wx/wxprec.h"
-
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
-
-#ifndef WX_PRECOMP
-    #include "wx/wx.h"
-#endif
-
-#include "core/CommandIds.h"
-#include "hierarchy/Database.h"
-#include "gui/controls/DBHTreeControlContextMenuCreator.h"
+#ifndef FR_ITEMCOMMANDS_H
+#define FR_ITEMCOMMANDS_H
 //-----------------------------------------------------------------------------
-DBHTreeControlContextMenuCreator::DBHTreeControlContextMenuCreator(
-        wxMenu& menu)
-    : ItemVisitor(), menuM(menu)
-{
-}
+#include <wx/event.h>
+
+#include <map>
+
+#include "hierarchy/SharedItems.h"
 //-----------------------------------------------------------------------------
-void DBHTreeControlContextMenuCreator::visit(Database& database)
+class ItemCommands;
+
+class ItemCommandsFactory
 {
-/*
-    if (!database.isConnected())
+protected:
+    virtual ~ItemCommandsFactory() {};
+public:
+    virtual ItemCommands* createItemCommands(PSharedItem item) = 0;
+};
+//-----------------------------------------------------------------------------
+template<class T, class TC>
+class ItemCommandsFactoryImpl : public ItemCommandsFactory
+{
+public:
+public:
+    ItemCommandsFactoryImpl() : ItemCommandsFactory()
     {
-        menuM.Append(CmdDatabase_Connect, _("&Connect"));
-        menuM.Append(CmdDatabase_ConnectAs, _("Connect &as..."));
-    }
-    else
+        ItemCommands::registerFactory(typeid(T), this);
+    };
+    virtual ~ItemCommandsFactoryImpl()
     {
-        menuM.Append(CmdDatabase_Disconnect, _("&Disconnect"));
-        menuM.Append(CmdDatabase_Reconnect, _("Reconnec&t"));
-    }
-*/
-    menuM.Append(CmdDatabase_Connect, _("&Connect"));
-    menuM.Append(CmdDatabase_ConnectAs, _("Connect &as..."));
-    menuM.Append(CmdDatabase_Disconnect, _("&Disconnect"));
-    menuM.Append(CmdDatabase_Reconnect, _("Reconnec&t"));
-
-    menuM.AppendSeparator();
-    menuM.Append(CmdDatabase_ExecuteStatement, _("&Execute SQL statements"));
-}
+        ItemCommands::unregisterFactory(typeid(T), this);
+    };
+    virtual ItemCommands* createItemCommands(PSharedItem item)
+    {
+        return new TC(item);
+    };
+};
 //-----------------------------------------------------------------------------
-void DBHTreeControlContextMenuCreator::defaultAction(Item* /*item*/)
+class ItemCommands : public wxEvtHandler
 {
-    menuM.Append(wxID_ABOUT, _("&About FlameRobin..."));
-    menuM.Append(wxID_PREFERENCES, _("&Preferences..."));
-    menuM.AppendSeparator();
-    menuM.Append(wxID_EXIT, _("&Quit"));
-}
+private:
+    typedef std::map<void*, ItemCommandsFactory*> TypeInfoFactoryMap;
+    typedef TypeInfoFactoryMap::value_type TypeInfoFactoryPair;
+    static TypeInfoFactoryMap& getFactories();
+
+    PSharedItem itemM;
+protected:
+    ItemCommands(PSharedItem item);
+
+public:
+    static bool registerFactory(const type_info& info,
+        ItemCommandsFactory* factory);
+    static bool unregisterFactory(const type_info& info,
+        ItemCommandsFactory* factory);
+    static ItemCommands* createItemCommands(PSharedItem item);
+
+    PSharedItem getItem();
+};
 //-----------------------------------------------------------------------------
+#endif // FR_ITEMCOMMANDS_H
