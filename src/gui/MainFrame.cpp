@@ -43,19 +43,15 @@
 #include "gui/MainFrame.h"
 #include "gui/controls/DBHTreeControl.h"
 
+#include "hierarchy/Database.h"
 #include "hierarchy/TreeFolder.h"
 #include "hierarchy/TreeRoot.h"
 //-----------------------------------------------------------------------------
 // MainFrame class
 MainFrame::MainFrame(wxWindow* parent, int id, PSharedItem treeRootItem)
-    : BaseFrame(parent, id, _("FlameRobin Database Admin"))
+    : BaseFrame(parent, id, _("FlameRobin Database Admin")),
+        selectedItemCommandsM(0)
 {
-#if wxCHECK_VERSION(2, 8, 0)
-    wxArtProvider::Push(new ArtProvider);
-#else
-    wxArtProvider::PushProvider(new ArtProvider);
-#endif
-
     createMenu();
     createControls();
     layoutControls();
@@ -65,10 +61,48 @@ MainFrame::MainFrame(wxWindow* parent, int id, PSharedItem treeRootItem)
     dbhTreeM->createRootNode(treeRootItem);
 }
 //-----------------------------------------------------------------------------
+MainFrame::~MainFrame()
+{
+    setSelectedItem(PSharedItem());
+}
+//-----------------------------------------------------------------------------
+void MainFrame::setSelectedItem(PSharedItem selectedItem)
+{
+    if (selectedItemM != selectedItem)
+    {
+        // delete event handler for previously selected item
+        if (selectedItemCommandsM)
+        {
+            wxEvtHandler* handler = PopEventHandler();
+            wxASSERT(handler == selectedItemCommandsM);
+            delete selectedItemCommandsM;
+            selectedItemCommandsM = 0;
+        }
+        selectedItemM = selectedItem;
+        // create and push event handler for newly selected item
+        if (selectedItem)
+        {
+
+/* TODO: create real ItemCommands instance from selectedItem
+*/
+            selectedItemCommandsM = new ItemCommands;
+
+            if (selectedItemCommandsM)
+                PushEventHandler(selectedItemCommandsM);
+        }
+        updateStatusBar();
+    }
+}
+//-----------------------------------------------------------------------------
 void MainFrame::connectEventHandlers()
 {
+    // global menu item handlers
     Connect(wxID_EXIT, wxEVT_COMMAND_MENU_SELECTED,
         wxCommandEventHandler(MainFrame::OnMenuExitApp));
+
+    // tree view handlers
+    Connect(dbhTreeM->GetId(), wxEVT_COMMAND_TREE_SEL_CHANGED,
+        wxTreeEventHandler(MainFrame::OnTreeSelectionChanged));
 }
 //-----------------------------------------------------------------------------
 void MainFrame::createControls()
@@ -77,6 +111,7 @@ void MainFrame::createControls()
     dbhTreeM = new DBHTreeControl(parentPanelM, wxID_ANY);
 
     CreateStatusBar();
+    updateStatusBar();
 }
 //-----------------------------------------------------------------------------
 void MainFrame::createMenu()
@@ -98,6 +133,25 @@ void MainFrame::setProperties()
     SetIcon(wxArtProvider::GetIcon(ART_FlameRobin, wxART_FRAME_ICON));
 }
 //-----------------------------------------------------------------------------
+void MainFrame::updateStatusBar()
+{
+    wxStatusBar* sbar = GetStatusBar();
+    if (sbar)
+    {
+        Database* database = (selectedItemM) ? selectedItemM->getDatabase() : 0;
+        if (database)
+        {
+            DatabaseCredentials dbc(database->getCredentials());
+            wxString s = dbc.getUsername() + wxT("@")
+                + database->getConnectionString()
+                + wxT(" (") + dbc.getCharset() + wxT(")");
+            sbar->SetStatusText(s);
+        }
+        else
+            sbar->SetStatusText(_("[No database selected]"));
+    }
+}
+//-----------------------------------------------------------------------------
 const wxRect MainFrame::getDefaultRect() const
 {
     return wxRect(wxDefaultCoord, wxDefaultCoord, 260, 400);
@@ -117,5 +171,10 @@ bool MainFrame::openUnregisteredDatabase(const wxString& /*dbpath*/)
 void MainFrame::OnMenuExitApp(wxCommandEvent& /*event*/)
 {
     Close();
+}
+//-----------------------------------------------------------------------------
+void MainFrame::OnTreeSelectionChanged(wxTreeEvent& event)
+{
+    setSelectedItem(dbhTreeM->getItemFromId(event.GetItem()));
 }
 //-----------------------------------------------------------------------------

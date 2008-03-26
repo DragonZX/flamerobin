@@ -45,6 +45,7 @@
 
 #include "Application.h"
 #include "config/Config.h"
+#include "core/ArtProvider.h"
 #include "core/FRError.h"
 #include "core/StringUtils.h"
 #include "gui/MainFrame.h"
@@ -89,6 +90,11 @@ bool Application::OnInit()
     checkEnvironment();
     parseCommandLine();
 
+#if wxCHECK_VERSION(2, 8, 0)
+    wxArtProvider::Push(new ArtProvider);
+#else
+    wxArtProvider::PushProvider(new ArtProvider);
+#endif
     wxImage::AddHandler(new wxPNGHandler);
 
     // first frame shows complete DBH, starting with global root node

@@ -34,13 +34,19 @@
 #include "gui/controls/DBHTreeControl.h"
 #include "hierarchy/SharedItems.h"
 //-----------------------------------------------------------------------------
-class MainFrame: public BaseFrame
+class ItemCommands : public wxEvtHandler
+{
+// TODO
+};
+//-----------------------------------------------------------------------------
+class MainFrame : public BaseFrame
 {
 public:
     // the treeRootItem parameter could be used to open secondary instances
     // of MainFrame for working with only a part of the hierarchy (like a
     // single database)
     MainFrame(wxWindow* parent, int id, PSharedItem treeRootItem);
+    ~MainFrame();
 
     bool openUnregisteredDatabase(const wxString& dbpath);
 
@@ -51,15 +57,21 @@ private:
     wxPanel* parentPanelM;
     DBHTreeControl* dbhTreeM;
 
+    PSharedItem selectedItemM;
+    ItemCommands* selectedItemCommandsM;
+    void setSelectedItem(PSharedItem selectedItem);
+
     void connectEventHandlers();
     void createControls();
     void createMenu();
     void layoutControls();
     void setProperties();
+    void updateStatusBar();
 
 private:
     // event handler methods
     void OnMenuExitApp(wxCommandEvent& event);
+    void OnTreeSelectionChanged(wxTreeEvent& event);
 };
 //-----------------------------------------------------------------------------
 #endif // FR_MAINFRAME_H
