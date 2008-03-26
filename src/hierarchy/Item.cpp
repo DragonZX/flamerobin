@@ -64,6 +64,7 @@ Item::~Item()
 /*static*/
 bool Item::findFromHandle(Handle handle, Item** item)
 {
+    wxASSERT(wxIsMainThread());
     ItemHandleMap::iterator it = itemHandles.find(handle);
     if (it == itemHandles.end())
     {
@@ -77,6 +78,7 @@ bool Item::findFromHandle(Handle handle, Item** item)
 /*static*/
 Item* Item::getFromHandle(Handle handle)
 {
+    wxASSERT(wxIsMainThread());
     ItemHandleMap::iterator it = itemHandles.find(handle);
     return (it != itemHandles.end()) ? it->second : 0;
 }
