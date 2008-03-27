@@ -56,5 +56,5 @@ TableCommands::TableCommands(PSharedItem item)
     wxASSERT(tableM);
 }
 //-----------------------------------------------------------------------------
-static ItemCommandsFactoryImpl<Table, TableCommands> tableCommandsFactory;
+static const ItemCommandsFactoryImpl<Table, TableCommands> tableCommandsFactory;
 //-----------------------------------------------------------------------------

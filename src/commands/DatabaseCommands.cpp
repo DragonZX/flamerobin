@@ -48,6 +48,8 @@ private:
 
     void OnConnectDatabase(wxCommandEvent& event);
     void OnUpdateConnectDatabase(wxUpdateUIEvent& event);
+    void OnDisconnectDatabase(wxCommandEvent& event);
+    void OnUpdateDisconnectDatabase(wxUpdateUIEvent& event);
 
     DECLARE_EVENT_TABLE()
 public:
@@ -62,14 +64,25 @@ DatabaseCommands::DatabaseCommands(PSharedItem item)
 }
 //-----------------------------------------------------------------------------
 BEGIN_EVENT_TABLE(DatabaseCommands, ItemCommands)
+    EVT_MENU(CmdObject_DefaultAction, DatabaseCommands::OnConnectDatabase)
     EVT_MENU(CmdDatabase_Connect, DatabaseCommands::OnConnectDatabase)
     EVT_UPDATE_UI(CmdDatabase_Connect, DatabaseCommands::OnUpdateConnectDatabase)
+    EVT_MENU(CmdDatabase_ConnectAs, DatabaseCommands::OnConnectDatabase)
+    EVT_UPDATE_UI(CmdDatabase_ConnectAs, DatabaseCommands::OnUpdateConnectDatabase)
+    EVT_MENU(CmdDatabase_Disconnect, DatabaseCommands::OnDisconnectDatabase)
+    EVT_UPDATE_UI(CmdDatabase_Disconnect, DatabaseCommands::OnUpdateDisconnectDatabase)
 END_EVENT_TABLE()
 //-----------------------------------------------------------------------------
-void DatabaseCommands::OnConnectDatabase(wxCommandEvent& /*event*/)
+void DatabaseCommands::OnConnectDatabase(wxCommandEvent& event)
 {
-    if (databaseM)
+    if (databaseM && databaseM->isDisconnected())
+    {
+        if (event.GetId() == CmdDatabase_ConnectAs)
+        {
+// TODO: prepare temporary connection credentials for "Connect as..."
+        }
         databaseM->connect();
+    }
 }
 //-----------------------------------------------------------------------------
 void DatabaseCommands::OnUpdateConnectDatabase(wxUpdateUIEvent& event)
@@ -77,5 +90,16 @@ void DatabaseCommands::OnUpdateConnectDatabase(wxUpdateUIEvent& event)
     event.Enable(databaseM && databaseM->isDisconnected());
 }
 //-----------------------------------------------------------------------------
-static ItemCommandsFactoryImpl<Database, DatabaseCommands> databaseCommandsFactory;
+void DatabaseCommands::OnDisconnectDatabase(wxCommandEvent& /*event*/)
+{
+    if (databaseM && databaseM->isConnected())
+        databaseM->disconnect();
+}
+//-----------------------------------------------------------------------------
+void DatabaseCommands::OnUpdateDisconnectDatabase(wxUpdateUIEvent& event)
+{
+    event.Enable(databaseM && databaseM->isConnected());
+}
+//-----------------------------------------------------------------------------
+static const ItemCommandsFactoryImpl<Database, DatabaseCommands> databaseCommandsFactory;
 //-----------------------------------------------------------------------------

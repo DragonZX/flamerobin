@@ -506,13 +506,22 @@ void DBHTreeControl::OnContextMenu(wxContextMenuEvent& event)
         pos = ScreenToClient(pos);
 
     wxTreeItemId id(GetSelection());
-    // if event is initiated by mouse click, then get item under mouse
-    // instead of currently selected or focused item
-    // this way pressing ESC will revert to the old selection
+    // select item under the mouse first, since right-click doesn't change
+    // the selection under GTK
+    // NOTE: removing the SelectItem() call for wxMSW does not work either,
+    // because commands will be enabled for the selected, not for the
+    // highlighted item :-(
     if (!useSelected)
     {
+        const int checkFlags = wxTREE_HITTEST_ONITEMBUTTON
+#ifdef __WXMSW__
+            | wxTREE_HITTEST_ONITEMINDENT | wxTREE_HITTEST_ONITEMRIGHT
+#endif
+            | wxTREE_HITTEST_ONITEMICON | wxTREE_HITTEST_ONITEMLABEL;
         int hitFlags;
         id = HitTest(pos, hitFlags);
+        if (id.IsOk() && (hitFlags & checkFlags))
+            SelectItem(id);
     }
 
     Item* item = 0;
@@ -540,25 +549,10 @@ void DBHTreeControl::OnContextMenu(wxContextMenuEvent& event)
     PopupMenu(&menu, pos);
 }
 //-----------------------------------------------------------------------------
-void DBHTreeControl::OnTreeItemActivated(wxTreeEvent& event)
+void DBHTreeControl::OnTreeItemActivated(wxTreeEvent& /*event*/)
 {
     wxCommandEvent ev(wxEVT_COMMAND_MENU_SELECTED, CmdObject_DefaultAction);
     AddPendingEvent(ev);
-
-    // TODO: remove this, it's only for testing...
-    wxTreeItemId id(event.GetItem());
-    DBHTreeNode* nodeData = DBHTreeNode::getFromTreeData(GetItemData(id));
-    Database* database = 0;
-    if (nodeData)
-        database = dynamic_cast<Database*>(nodeData->getItem().get());
-
-    if (database)
-    {
-        if (database->isDisconnected())
-            database->connect();
-        else
-            database->disconnect();
-    }
 }
 //-----------------------------------------------------------------------------
 void DBHTreeControl::OnTreeItemExpanding(wxTreeEvent& event)
