@@ -37,7 +37,27 @@ class Table : public Relation
 public:
     Table(const Identifier& identifier);
 
+    virtual const wxString getTypeName() const;
     virtual bool isSystem();
+    virtual void accept(ItemVisitor* visitor);
+};
+//-----------------------------------------------------------------------------
+class SystemTableCollection: public MetadataItemCollection
+{
+protected:
+    virtual PSharedItem createCollectionItem(const Identifier& identifier);
+public:
+    virtual bool isSystem();
+    virtual void loadChildren();
+    virtual void accept(ItemVisitor* visitor);
+};
+//-----------------------------------------------------------------------------
+class TableCollection: public MetadataItemCollection
+{
+protected:
+    virtual PSharedItem createCollectionItem(const Identifier& identifier);
+public:
+    virtual void loadChildren();
     virtual void accept(ItemVisitor* visitor);
 };
 //-----------------------------------------------------------------------------

@@ -39,6 +39,7 @@
 #include "sql/Identifier.h"
 //-----------------------------------------------------------------------------
 class ItemVisitor;
+class Relation;
 //-----------------------------------------------------------------------------
 // Item class is the base class for the hierarchy
 // Since we have hierarchy items which are not metadata items (folders,
@@ -58,6 +59,7 @@ public:
     void setParent(PSharedItem parent);
 
     virtual Database* getDatabase();
+    virtual Relation* getRelation();
 
     // access to child items (Composite pattern)
     virtual bool hasChildren() const;
@@ -222,5 +224,13 @@ typedef ItemTemplate<ItemHasChildren, ItemNameIsString> ItemWithChildrenBase;
 typedef ItemTemplate<ItemHasNoChildren, ItemNameIsIdentifier> MetadataItemBase;
 // a base class for metadata objects with children
 typedef ItemTemplate<ItemHasChildren, ItemNameIsIdentifier> MetadataItemWithChildrenBase;
+//-----------------------------------------------------------------------------
+class MetadataItemCollection: public ItemWithChildrenBase
+{
+protected:
+    virtual PSharedItem createCollectionItem(const Identifier& identifier) = 0;
+public:
+    void setChildrenIdentifiers(const std::list<Identifier>& identifiers);
+};
 //-----------------------------------------------------------------------------
 #endif // FR_ITEM_H

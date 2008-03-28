@@ -29,12 +29,19 @@
 #define FR_RELATION_H
 //-----------------------------------------------------------------------------
 #include "hierarchy/Item.h"
+#include "hierarchy/SharedItems.h"
 //-----------------------------------------------------------------------------
-// Relation class
 class Relation : public MetadataItemWithChildrenBase
 {
 public:
+    Relation();
+
+    virtual Relation* getRelation();
+
+    virtual void loadChildren();
     virtual void accept(ItemVisitor* visitor);
+private:
+    PSharedTriggerCollection triggersM;
 };
 //-----------------------------------------------------------------------------
 #endif // FR_RELATION_H

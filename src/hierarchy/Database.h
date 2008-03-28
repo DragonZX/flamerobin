@@ -30,10 +30,24 @@
 //-----------------------------------------------------------------------------
 #include <ibpp.h>
 
-#include "hierarchy/DatabaseCollections.h"
 #include "hierarchy/Item.h"
 
 class DatabaseConnection;
+//-----------------------------------------------------------------------------
+// ServerVersion helper class
+class ServerVersion
+{
+private:
+    wxString versionStringM;
+    std::vector<unsigned> versionNumbersM;
+    inline bool versionIsAtLeast(unsigned major, unsigned minor = 0,
+        unsigned release = 0, unsigned build = 0) const;
+public:
+    void initialize(const wxString& versionString);
+    void reset();
+
+    bool supportsDatabaseTriggers() const { return versionIsAtLeast(2, 1); };
+};
 //-----------------------------------------------------------------------------
 // DatabaseCredentials helper class
 class DatabaseCredentials
@@ -95,6 +109,8 @@ public:
     ConnectionState getConnectionState() const;
     void setConnectionState(ConnectionState state);
 
+    void setServerVersion(const wxString& versionString);
+
     DatabaseConnection* getMetadataConnection();
 
     virtual void accept(ItemVisitor* visitor);
@@ -108,8 +124,10 @@ private:
 
     ConnectionState connectionStateM;
     DatabaseConnection* metadataConnectionM;
+    ServerVersion serverVersionM;
 
     PSharedSystemTableCollection systemTablesM;
+    PSharedTriggerCollection triggersM;
     PSharedTableCollection tablesM;
     PSharedViewCollection viewsM;
 

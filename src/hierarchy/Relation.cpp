@@ -38,6 +38,34 @@
 
 #include "hierarchy/ItemVisitor.h"
 #include "hierarchy/Relation.h"
+#include "hierarchy/Trigger.h"
+//-----------------------------------------------------------------------------
+// Relation class
+Relation::Relation()
+    : MetadataItemWithChildrenBase()
+{
+    // create children on-demand
+    setChildrenLoaded(false);
+}
+//-----------------------------------------------------------------------------
+Relation* Relation::getRelation()
+{
+    return this;
+}
+//-----------------------------------------------------------------------------
+void Relation::loadChildren()
+{
+    if (!hasChildrenLoaded())
+    {
+        PSharedItem me(shared_from_this());
+
+        triggersM = PSharedTriggerCollection(new TriggerCollection());
+        triggersM->setParent(me);
+
+        setChildrenLoaded(true);
+        notifyObservers();
+    }
+}
 //-----------------------------------------------------------------------------
 void Relation::accept(ItemVisitor* visitor)
 {

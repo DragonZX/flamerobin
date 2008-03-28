@@ -106,9 +106,15 @@ void Item::setParent(PSharedItem parent)
 //-----------------------------------------------------------------------------
 Database* Item::getDatabase()
 {
-    PSharedItem parent = getParent();
-    if (parent)
+    if (PSharedItem parent = getParent())
         return parent->getDatabase();
+    return 0;
+}
+//-----------------------------------------------------------------------------
+Relation* Item::getRelation()
+{
+    if (PSharedItem parent = getParent())
+        return parent->getRelation();
     return 0;
 }
 //-----------------------------------------------------------------------------
@@ -255,7 +261,7 @@ void ItemHasNoChildren::unlockChildrenImpl()
 //-----------------------------------------------------------------------------
 ItemHasChildren::ItemHasChildren()
 {
-    childrenLoadedM = true;
+    childrenLoadedM = false;
 }
 //-----------------------------------------------------------------------------
 unsigned ItemHasChildren::getChildrenCountImpl() const
@@ -332,5 +338,33 @@ void ItemHasChildren::unlockChildrenImpl()
     std::vector<PSharedItem>::iterator it;
     for (it = childrenM.begin(); it != childrenM.end(); ++it)
         (*it)->unlockSubject();
+}
+//-----------------------------------------------------------------------------
+// MetadataItemCollection base class
+void MetadataItemCollection::setChildrenIdentifiers(
+    const std::list<Identifier>& identifiers)
+{
+    bool changed = identifiers.size() != getChildrenCount();
+    std::vector<PSharedItem> children;
+
+    SubjectLocker lock(this);
+    for (std::list<Identifier>::const_iterator it = identifiers.begin();
+        it != identifiers.end(); ++it)
+    {
+        const Identifier& id = *it;
+        PSharedItem child = getChild(id.get());
+        if (!child)
+        {
+            child = createCollectionItem(id);
+            changed = true;
+        }
+        children.push_back(child);
+    }
+    if (changed)
+    {
+// TODO: remove children that are no longer in identifiers
+    };
+    setChildrenLoaded(true);
+    notifyObservers();
 }
 //-----------------------------------------------------------------------------

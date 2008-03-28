@@ -31,12 +31,22 @@
 #include "hierarchy/Relation.h"
 #include "hierarchy/SharedItems.h"
 //-----------------------------------------------------------------------------
-// View class
 class View : public Relation
 {
 public:
     View(const Identifier& identifier);
 
+    virtual const wxString getTypeName() const;
+
+    virtual void accept(ItemVisitor* visitor);
+};
+//-----------------------------------------------------------------------------
+class ViewCollection: public MetadataItemCollection
+{
+protected:
+    virtual PSharedItem createCollectionItem(const Identifier& identifier);
+public:
+    virtual void loadChildren();
     virtual void accept(ItemVisitor* visitor);
 };
 //-----------------------------------------------------------------------------

@@ -25,52 +25,28 @@
 
 */
 
-#ifndef FR_DATABASECOLLECTIONS_H
-#define FR_DATABASECOLLECTIONS_H
+#ifndef FR_TRIGGER_H
+#define FR_TRIGGER_H
 //-----------------------------------------------------------------------------
 #include "hierarchy/Item.h"
-#include "hierarchy/SharedItems.h"
 //-----------------------------------------------------------------------------
-class MetadataItemCollection: public ItemWithChildrenBase
+class Trigger : public MetadataItemBase
 {
-protected:
-    virtual PSharedItem createCollectionItem(const Identifier& identifier) = 0;
 public:
-    void setChildrenIdentifiers(const std::list<Identifier>& identifiers);
+    Trigger(const Identifier& identifier);
+
+    virtual const wxString getTypeName() const;
+
+    virtual void accept(ItemVisitor* visitor);
 };
 //-----------------------------------------------------------------------------
-class SystemTableCollection: public MetadataItemCollection
+class TriggerCollection: public MetadataItemCollection
 {
 protected:
     virtual PSharedItem createCollectionItem(const Identifier& identifier);
 public:
-    SystemTableCollection();
-
-    virtual bool isSystem();
     virtual void loadChildren();
     virtual void accept(ItemVisitor* visitor);
 };
 //-----------------------------------------------------------------------------
-class TableCollection: public MetadataItemCollection
-{
-protected:
-    virtual PSharedItem createCollectionItem(const Identifier& identifier);
-public:
-    TableCollection();
-
-    virtual void loadChildren();
-    virtual void accept(ItemVisitor* visitor);
-};
-//-----------------------------------------------------------------------------
-class ViewCollection: public MetadataItemCollection
-{
-protected:
-    virtual PSharedItem createCollectionItem(const Identifier& identifier);
-public:
-    ViewCollection();
-
-    virtual void loadChildren();
-    virtual void accept(ItemVisitor* visitor);
-};
-//-----------------------------------------------------------------------------
-#endif // FR_DATABASECOLLECTIONS_H
+#endif // FR_TRIGGER_H

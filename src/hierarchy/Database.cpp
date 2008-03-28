@@ -36,15 +36,69 @@
     #include "wx/wx.h"
 #endif
 
+#include <wx/regex.h>
+
 #include "core/StringUtils.h"
 
 #include "engine/DatabaseConnection.h"
 
 #include "hierarchy/Database.h"
 #include "hierarchy/ItemVisitor.h"
+#include "hierarchy/Table.h"
 #include "hierarchy/TreeRoot.h"
+#include "hierarchy/Trigger.h"
+#include "hierarchy/View.h"
 //-----------------------------------------------------------------------------
-// DatabaseCredentials
+// ServerVersion class
+void ServerVersion::initialize(const wxString& versionString)
+{
+    if (versionStringM != versionString)
+    {
+        versionStringM = versionString;
+        versionNumbersM.clear();
+
+        if (!versionString.empty())
+        {
+            const wxString FirebirdVersionString = wxT("(.*)") // WI, LI, ...
+                wxT("-V([0-9]+)\\.([0-9]+)\\.([0-9]+)\\.([0-9]+)") // x.y.z.b
+                wxT("[ \t]*(.*)");                             // Firebird x.y
+            wxRegEx re(FirebirdVersionString);
+            if (re.IsValid() && re.Matches(versionString))
+            {
+                wxString match = re.GetMatch(versionString, 1);
+                for (unsigned i = 2; i <= 5; ++i)
+                {
+                    match = re.GetMatch(versionString, i);
+                    unsigned long ver;
+                    if (match.ToULong(&ver))
+                        versionNumbersM.push_back(ver);
+                }
+            }
+        }
+    }
+}
+//-----------------------------------------------------------------------------
+void ServerVersion::reset()
+{
+    versionStringM.clear();
+    versionNumbersM.clear();
+}
+//-----------------------------------------------------------------------------
+inline bool ServerVersion::versionIsAtLeast(unsigned major, unsigned minor,
+    unsigned release, unsigned build) const
+{
+    if (versionNumbersM.size() != 4)
+        return false;
+    if (versionNumbersM[0] != major)
+        return versionNumbersM[0] > major;
+    if (versionNumbersM[1] != minor)
+        return versionNumbersM[1] > minor;
+    if (versionNumbersM[2] != release)
+        return versionNumbersM[2] > release;
+    return versionNumbersM[3] >= build;
+}
+//-----------------------------------------------------------------------------
+// DatabaseCredentials class
 DatabaseCredentials::DatabaseCredentials()
 {
 }
@@ -101,6 +155,7 @@ Database::Database()
         encryptedPasswordM(false), connectionStateM(csDisconnected),
         metadataConnectionM(0)
 {
+    setChildrenLoaded(true);
 }
 //-----------------------------------------------------------------------------
 Database::~Database()
@@ -289,7 +344,10 @@ void Database::setConnectionState(ConnectionState state)
 
         connectionStateM = state;
         if (connectionStateM == csDisconnected)
+        {
             deleteCollections();
+            serverVersionM.reset();
+        }
         else if (connectionStateM == csConnected)
         {
             createCollections();
@@ -297,6 +355,11 @@ void Database::setConnectionState(ConnectionState state)
         }
         notifyObservers();
     }
+}
+//-----------------------------------------------------------------------------
+void Database::setServerVersion(const wxString& versionString)
+{
+    serverVersionM.initialize(versionString);
 }
 //-----------------------------------------------------------------------------
 void Database::createCollections()
@@ -311,6 +374,12 @@ void Database::createCollections()
     tablesM = PSharedTableCollection(new TableCollection());
     tablesM->setParent(me);
 
+    if (serverVersionM.supportsDatabaseTriggers())
+    {
+        triggersM = PSharedTriggerCollection(new TriggerCollection());
+        triggersM->setParent(me);
+    }
+
     viewsM = PSharedViewCollection(new ViewCollection());
     viewsM->setParent(me);
 }
@@ -321,6 +390,7 @@ void Database::deleteCollections()
     // reset all shared pointers to collections
     systemTablesM.reset();
     tablesM.reset();
+    triggersM.reset();
     viewsM.reset();
 }
 //-----------------------------------------------------------------------------

@@ -25,26 +25,36 @@
 
 */
 
-#ifndef FR_TREEFOLDER_H
-#define FR_TREEFOLDER_H
-//-----------------------------------------------------------------------------
-#include <wx/wx.h>
+// For compilers that support precompilation, includes "wx/wx.h".
+#include "wx/wxprec.h"
 
-#include "hierarchy/Item.h"
-#include "hierarchy/SharedItems.h"
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
+
+#ifndef WX_PRECOMP
+    #include "wx/wx.h"
+#endif
+
+#include "commands/ItemCommands.h"
+#include "core/CommandIds.h"
+#include "hierarchy/Trigger.h"
 //-----------------------------------------------------------------------------
-class TreeFolder : public ItemWithChildrenBase
+// TriggerCommands class
+class TriggerCommands : public ItemCommands
 {
-public:
-    TreeFolder();
-
-    virtual const wxString getTypeName() const;
-    virtual const wxString getName() const;
-    void setName(const wxString& name);
-
-    virtual void accept(ItemVisitor* visitor);
 private:
-    wxString nameM;
+    Trigger* triggerM;
+public:
+    TriggerCommands(PSharedItem item);
 };
 //-----------------------------------------------------------------------------
-#endif // FR_TREEFOLDER_H
+TriggerCommands::TriggerCommands(PSharedItem item)
+    : ItemCommands(item), triggerM(0)
+{
+    triggerM = dynamic_cast<Trigger*>(item.get());
+    wxASSERT(triggerM);
+}
+//-----------------------------------------------------------------------------
+static const ItemCommandsFactoryImpl<Trigger, TriggerCommands> triggerCommandsFactory;
+//-----------------------------------------------------------------------------

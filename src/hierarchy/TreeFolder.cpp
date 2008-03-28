@@ -39,6 +39,13 @@
 #include "hierarchy/ItemVisitor.h"
 #include "hierarchy/TreeFolder.h"
 //-----------------------------------------------------------------------------
+// TreeFolder class
+TreeFolder::TreeFolder()
+    : ItemWithChildrenBase()
+{
+    setChildrenLoaded(true);
+}
+//-----------------------------------------------------------------------------
 const wxString TreeFolder::getTypeName() const
 {
     return wxT("FOLDER");

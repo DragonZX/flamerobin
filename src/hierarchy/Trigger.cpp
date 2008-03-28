@@ -36,65 +36,72 @@
     #include "wx/wx.h"
 #endif
 
-#include "hierarchy/Database.h"
-#include "hierarchy/Item.h"
+#include "core/StringUtils.h"
+
+#include "engine/DatabaseConnection.h"
+
 #include "hierarchy/ItemVisitor.h"
-#include "hierarchy/Table.h"
-#include "hierarchy/TreeFolder.h"
+#include "hierarchy/Relation.h"
 #include "hierarchy/Trigger.h"
-#include "hierarchy/View.h"
 //-----------------------------------------------------------------------------
-void ItemVisitor::visit(Item& item)
+// Trigger class
+Trigger::Trigger(const Identifier& identifier)
 {
-    defaultAction(&item);
+    setIdentifier(identifier);
 }
 //-----------------------------------------------------------------------------
-void ItemVisitor::visit(Database& database)
+const wxString Trigger::getTypeName() const
 {
-    defaultAction(&database);
+    return wxT("TRIGGER");
 }
 //-----------------------------------------------------------------------------
-void ItemVisitor::visit(SystemTableCollection& tables)
+void Trigger::accept(ItemVisitor* visitor)
 {
-    defaultAction(&tables);
+    wxASSERT(visitor);
+    if (visitor)
+        visitor->visit(*this);
 }
 //-----------------------------------------------------------------------------
-void ItemVisitor::visit(Table& table)
+// TriggerCollection class
+PSharedItem TriggerCollection::createCollectionItem(const Identifier& identifier)
 {
-    defaultAction(&table);
+    PSharedItem trigger(new Trigger(identifier));
+    trigger->setParent(shared_from_this());
+    return trigger;
 }
 //-----------------------------------------------------------------------------
-void ItemVisitor::visit(TableCollection& tables)
+void TriggerCollection::loadChildren()
 {
-    defaultAction(&tables);
+    Database* db = getDatabase();
+    wxCHECK_RET(db,
+        wxT("TriggerCollection::loadChildren() called without parent database"));
+    DatabaseConnection* dbc = db->getMetadataConnection();
+    if (dbc)
+    {
+        std::string sql("select t.RDB$TRIGGER_NAME from RDB$TRIGGERS t"
+            " where (t.RDB$SYSTEM_FLAG = 0 or t.RDB$SYSTEM_FLAG is null)"
+            " and t.RDB$RELATION_NAME");
+
+        if (Relation* relation = getRelation())
+            sql = sql + " = '" + wx2std(relation->getName()) + "'";
+        else
+            sql = sql + " is null";
+        sql += " order by 1";
+        dbc->loadCollection(getHandle(), sql);
+        return;
+    }
+
+    // loading is not possible, so clear children and show empty collection
+    SubjectLocker lock(this);
+    clearChildren();
+    setChildrenLoaded(true);
+    notifyObservers();
 }
 //-----------------------------------------------------------------------------
-void ItemVisitor::visit(TreeFolder& folder)
+void TriggerCollection::accept(ItemVisitor* visitor)
 {
-    defaultAction(&folder);
-}
-//-----------------------------------------------------------------------------
-void ItemVisitor::visit(Trigger& trigger)
-{
-    defaultAction(&trigger);
-}
-//-----------------------------------------------------------------------------
-void ItemVisitor::visit(TriggerCollection& triggers)
-{
-    defaultAction(&triggers);
-}
-//-----------------------------------------------------------------------------
-void ItemVisitor::visit(View& view)
-{
-    defaultAction(&view);
-}
-//-----------------------------------------------------------------------------
-void ItemVisitor::visit(ViewCollection& views)
-{
-    defaultAction(&views);
-}
-//-----------------------------------------------------------------------------
-void ItemVisitor::defaultAction(Item*)
-{
+    wxASSERT(visitor);
+    if (visitor)
+        visitor->visit(*this);
 }
 //-----------------------------------------------------------------------------

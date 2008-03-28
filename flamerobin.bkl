@@ -190,6 +190,7 @@
             <if cond="WX_VERSION>='29'">
                 <sys-lib>wxscintilla$(D_OPT)</sys-lib>
             </if>
+            <sys-lib>wxregex$(U_OPT)$(D_OPT)</sys-lib>
             <sys-lib>wxexpat$(D_OPT)</sys-lib>
             <sys-lib>wxtiff$(D_OPT)</sys-lib>
             <sys-lib>wxjpeg$(D_OPT)</sys-lib>
@@ -240,7 +241,6 @@
         $(SOURCEDIR)/gui/controls/DBHTreeControlContextMenuCreator.h
 
         $(SOURCEDIR)/hierarchy/Database.h
-        $(SOURCEDIR)/hierarchy/DatabaseCollections.h
         $(SOURCEDIR)/hierarchy/Item.h
         $(SOURCEDIR)/hierarchy/ItemVisitor.h
         $(SOURCEDIR)/hierarchy/Relation.h
@@ -248,6 +248,7 @@
         $(SOURCEDIR)/hierarchy/Table.h
         $(SOURCEDIR)/hierarchy/TreeFolder.h
         $(SOURCEDIR)/hierarchy/TreeRoot.h
+        $(SOURCEDIR)/hierarchy/Trigger.h
         $(SOURCEDIR)/hierarchy/View.h
 
         $(SOURCEDIR)/sql/Identifier.h
@@ -273,6 +274,7 @@
         $(SOURCEDIR)/commands/DatabaseCommands.cpp
         $(SOURCEDIR)/commands/ItemCommands.cpp
         $(SOURCEDIR)/commands/TableCommands.cpp
+        $(SOURCEDIR)/commands/TriggerCommands.cpp
 
         $(SOURCEDIR)/config/Config.cpp
 
@@ -294,13 +296,13 @@
         $(SOURCEDIR)/gui/controls/DBHTreeControlContextMenuCreator.cpp
 
         $(SOURCEDIR)/hierarchy/Database.cpp
-        $(SOURCEDIR)/hierarchy/DatabaseCollections.cpp
         $(SOURCEDIR)/hierarchy/Item.cpp
         $(SOURCEDIR)/hierarchy/ItemVisitor.cpp
         $(SOURCEDIR)/hierarchy/Relation.cpp
         $(SOURCEDIR)/hierarchy/Table.cpp
         $(SOURCEDIR)/hierarchy/TreeFolder.cpp
         $(SOURCEDIR)/hierarchy/TreeRoot.cpp
+        $(SOURCEDIR)/hierarchy/Trigger.cpp
         $(SOURCEDIR)/hierarchy/View.cpp
 
         $(SOURCEDIR)/sql/Identifier.cpp

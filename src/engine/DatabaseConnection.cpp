@@ -150,6 +150,7 @@ private:
     std::string userNameM;
 
     bool connectedM;
+    std::string serverVersionM;
 protected:
     virtual void executeJob(DatabaseConnectionThread* thread);
 public:
@@ -182,6 +183,18 @@ void DatabaseConnectJob::executeJob(DatabaseConnectionThread* thread)
     // set new database if connection successful
     thread->setDatabase(db);
     connectedM = true;
+
+    serverVersionM = "";
+    std::string serverName(connectionStringM);
+    size_t colon = serverName.find_first_of(":");
+    if (colon != std::string::npos)
+    {
+        serverName.resize(colon);
+        IBPP::Service svc = IBPP::ServiceFactory(serverName, userNameM,
+            passwordM);
+        svc->Connect();
+        svc->GetVersion(serverVersionM);
+    }
 }
 //-----------------------------------------------------------------------------
 void DatabaseConnectJob::processResults()
@@ -189,7 +202,10 @@ void DatabaseConnectJob::processResults()
     wxASSERT(wxIsMainThread());
 
     if (connectedM)
+    {
+        getDatabase().setServerVersion(std2wx(serverVersionM));
         getDatabase().setConnectionState(Database::csConnected);
+    }
     else
     {
         getDatabase().setConnectionState(Database::csDisconnected);

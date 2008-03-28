@@ -36,6 +36,8 @@ class SystemTableCollection;
 class Table;
 class TableCollection;
 class TreeFolder;
+class Trigger;
+class TriggerCollection;
 class View;
 class ViewCollection;
 //-----------------------------------------------------------------------------
@@ -49,6 +51,8 @@ public:
     virtual void visit(Table& table);
     virtual void visit(TableCollection& tables);
     virtual void visit(TreeFolder& folder);
+    virtual void visit(Trigger& trigger);
+    virtual void visit(TriggerCollection& triggers);
     virtual void visit(View& view);
     virtual void visit(ViewCollection& views);
 protected:

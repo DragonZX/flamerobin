@@ -36,6 +36,8 @@
     #include "wx/wx.h"
 #endif
 
+#include "engine/DatabaseConnection.h"
+
 #include "hierarchy/ItemVisitor.h"
 #include "hierarchy/Table.h"
 //-----------------------------------------------------------------------------
@@ -45,6 +47,11 @@ Table::Table(const Identifier& identifier)
     setIdentifier(identifier);
 }
 //-----------------------------------------------------------------------------
+const wxString Table::getTypeName() const
+{
+    return wxT("TABLE");
+}
+//-----------------------------------------------------------------------------
 bool Table::isSystem()
 {
     wxString prefix(getName().Mid(0, 4).MakeUpper());
@@ -52,6 +59,86 @@ bool Table::isSystem()
 }
 //-----------------------------------------------------------------------------
 void Table::accept(ItemVisitor* visitor)
+{
+    wxASSERT(visitor);
+    if (visitor)
+        visitor->visit(*this);
+}
+//-----------------------------------------------------------------------------
+// SystemTableCollection class
+PSharedItem SystemTableCollection::createCollectionItem(
+    const Identifier& identifier)
+{
+    PSharedItem table(new Table(identifier));
+    table->setParent(shared_from_this());
+    return table;
+}
+//-----------------------------------------------------------------------------
+bool SystemTableCollection::isSystem()
+{
+    return true;
+}
+//-----------------------------------------------------------------------------
+void SystemTableCollection::loadChildren()
+{
+    Database* db = getDatabase();
+    wxCHECK_RET(db,
+        wxT("SystemTableCollection::loadChildren() called without parent database"));
+    DatabaseConnection* dbc = db->getMetadataConnection();
+    if (dbc)
+    {
+        std::string sql("select r.RDB$RELATION_NAME from RDB$RELATIONS r"
+            " where r.RDB$SYSTEM_FLAG = 1 and r.RDB$VIEW_SOURCE is null"
+            " order by 1");
+        dbc->loadCollection(getHandle(), sql);
+        return;
+    }
+
+    // loading is not possible, so clear children and show empty collection
+    SubjectLocker lock(this);
+    clearChildren();
+    setChildrenLoaded(true);
+    notifyObservers();
+}
+//-----------------------------------------------------------------------------
+void SystemTableCollection::accept(ItemVisitor* visitor)
+{
+    wxASSERT(visitor);
+    if (visitor)
+        visitor->visit(*this);
+}
+//-----------------------------------------------------------------------------
+// TableCollection class
+PSharedItem TableCollection::createCollectionItem(const Identifier& identifier)
+{
+    PSharedItem table(new Table(identifier));
+    table->setParent(shared_from_this());
+    return table;
+}
+//-----------------------------------------------------------------------------
+void TableCollection::loadChildren()
+{
+    Database* db = getDatabase();
+    wxCHECK_RET(db,
+        wxT("TableCollection::loadChildren() called without parent database"));
+    DatabaseConnection* dbc = db->getMetadataConnection();
+    if (dbc)
+    {
+        std::string sql("select r.RDB$RELATION_NAME from RDB$RELATIONS r"
+            " where (r.RDB$SYSTEM_FLAG = 0 or RDB$SYSTEM_FLAG is null)"
+            " and r.RDB$VIEW_SOURCE is null order by 1");
+        dbc->loadCollection(getHandle(), sql);
+        return;
+    }
+
+    // loading is not possible, so clear children and show empty collection
+    SubjectLocker lock(this);
+    clearChildren();
+    setChildrenLoaded(true);
+    notifyObservers();
+}
+//-----------------------------------------------------------------------------
+void TableCollection::accept(ItemVisitor* visitor)
 {
     wxASSERT(visitor);
     if (visitor)

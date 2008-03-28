@@ -54,6 +54,7 @@
 #include "hierarchy/Table.h"
 #include "hierarchy/TreeFolder.h"
 #include "hierarchy/TreeRoot.h"
+#include "hierarchy/Trigger.h"
 #include "hierarchy/View.h"
 //-----------------------------------------------------------------------------
 // DBHTreeImageList class
@@ -148,6 +149,8 @@ public:
     virtual void visit(Table& table);
     virtual void visit(TableCollection& tables);
     virtual void visit(TreeFolder& folder);
+    virtual void visit(Trigger& trigger);
+    virtual void visit(TriggerCollection& triggers);
     virtual void visit(View& view);
     virtual void visit(ViewCollection& views);
 private:
@@ -256,6 +259,18 @@ void DBHItemTreeNodeProperties::visit(TreeFolder& folder)
     imageIndexM = DBHTreeImageList::get().getImageIndex(wxART_FOLDER);
 }
 //-----------------------------------------------------------------------------
+void DBHItemTreeNodeProperties::visit(Trigger& trigger)
+{
+    visitItem(&trigger);
+    imageIndexM = DBHTreeImageList::get().getImageIndex(ART_Trigger);
+}
+//-----------------------------------------------------------------------------
+void DBHItemTreeNodeProperties::visit(TriggerCollection& triggers)
+{
+    int img = DBHTreeImageList::get().getImageIndex(ART_Triggers);
+    visitCollection(&triggers, _("Triggers"), img);
+}
+//-----------------------------------------------------------------------------
 void DBHItemTreeNodeProperties::visit(View& view)
 {
     visitItem(&view);
@@ -280,8 +295,9 @@ public:
     bool getExpandOnUpdate();
     void setExpandOnUpdate(bool expand);
 
-    PSharedItem getItem();
-    void setItem(PSharedItem item);
+    Item* getItem();
+    PSharedItem getSharedItem();
+    void setSharedItem(PSharedItem item);
     virtual void update();
 private:
     DBHTreeControl& treeM;
@@ -316,7 +332,12 @@ void DBHTreeNode::setExpandOnUpdate(bool expand)
     expandOnUpdateM = expand;
 }
 //-----------------------------------------------------------------------------
-PSharedItem DBHTreeNode::getItem()
+Item* DBHTreeNode::getItem()
+{
+    return itemM.get();
+}
+//-----------------------------------------------------------------------------
+PSharedItem DBHTreeNode::getSharedItem()
 {
     return itemM;
 }
@@ -336,7 +357,7 @@ wxTreeItemId DBHTreeNode::findChildIdForItem(PSharedItem item)
     return wxTreeItemId();
 }
 //-----------------------------------------------------------------------------
-void DBHTreeNode::setItem(PSharedItem item)
+void DBHTreeNode::setSharedItem(PSharedItem item)
 {
     if (itemM != item)
     {
@@ -399,7 +420,7 @@ void DBHTreeNode::update()
                 prevChildId = treeM.PrependItem(id, wxEmptyString);
             treeM.SetItemData(prevChildId, nodeData);
             // this will call update()
-            nodeData->setItem(childItem);
+            nodeData->setSharedItem(childItem);
         }
         else
         {
@@ -463,7 +484,7 @@ void DBHTreeControl::createRootNode(PSharedItem rootItem)
     DBHTreeNode* nodeData = new DBHTreeNode(*this);
     wxTreeItemId id = AppendItem(hiddenRootNodeM, wxEmptyString, -1, -1,
         nodeData);
-    nodeData->setItem(rootItem);
+    nodeData->setSharedItem(rootItem);
 }
 //-----------------------------------------------------------------------------
 PSharedItem DBHTreeControl::getItemFromId(wxTreeItemId id)
@@ -473,7 +494,7 @@ PSharedItem DBHTreeControl::getItemFromId(wxTreeItemId id)
         DBHTreeNode* childNodeData = DBHTreeNode::getFromTreeData(
             GetItemData(id));
         if (childNodeData)
-            return childNodeData->getItem();
+            return childNodeData->getSharedItem();
     }
     return PSharedItem();
 }
@@ -529,7 +550,7 @@ void DBHTreeControl::OnContextMenu(wxContextMenuEvent& event)
     {
         DBHTreeNode* nodeData = DBHTreeNode::getFromTreeData(GetItemData(id));
         if (nodeData)
-            item = nodeData->getItem().get();
+            item = nodeData->getItem();
     }
 
     // compute the menu coordinates if the event does not contain them
@@ -561,7 +582,7 @@ void DBHTreeControl::OnTreeItemExpanding(wxTreeEvent& event)
     DBHTreeNode* nodeData = DBHTreeNode::getFromTreeData(GetItemData(id));
     if (nodeData)
     {
-        PSharedItem item = nodeData->getItem();
+        PSharedItem item = nodeData->getSharedItem();
         // there maybe child nodes that have not been created yet
         if (item && !nodeData->hasLoadedChildren())
         {
