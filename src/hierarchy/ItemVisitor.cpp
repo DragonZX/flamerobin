@@ -37,9 +37,11 @@
 #endif
 
 #include "hierarchy/Database.h"
+#include "hierarchy/Function.h"
 #include "hierarchy/Generator.h"
 #include "hierarchy/Item.h"
 #include "hierarchy/ItemVisitor.h"
+#include "hierarchy/Procedure.h"
 #include "hierarchy/Table.h"
 #include "hierarchy/TreeFolder.h"
 #include "hierarchy/Trigger.h"
@@ -55,6 +57,16 @@ void ItemVisitor::visit(Database& database)
     defaultAction(&database);
 }
 //-----------------------------------------------------------------------------
+void ItemVisitor::visit(Function& function)
+{
+    defaultAction(&function);
+}
+//-----------------------------------------------------------------------------
+void ItemVisitor::visit(FunctionCollection& functions)
+{
+    defaultAction(&functions);
+}
+//-----------------------------------------------------------------------------
 void ItemVisitor::visit(Generator& generator)
 {
     defaultAction(&generator);
@@ -63,6 +75,16 @@ void ItemVisitor::visit(Generator& generator)
 void ItemVisitor::visit(GeneratorCollection& generators)
 {
     defaultAction(&generators);
+}
+//-----------------------------------------------------------------------------
+void ItemVisitor::visit(Procedure& procedure)
+{
+    defaultAction(&procedure);
+}
+//-----------------------------------------------------------------------------
+void ItemVisitor::visit(ProcedureCollection& procedures)
+{
+    defaultAction(&procedures);
 }
 //-----------------------------------------------------------------------------
 void ItemVisitor::visit(SystemTableCollection& tables)

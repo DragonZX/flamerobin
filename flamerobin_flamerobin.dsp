@@ -512,6 +512,14 @@ SOURCE=.\src\gui\FrameManager.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\hierarchy\Function.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\commands\FunctionCommands.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\hierarchy\Generator.cpp
 # End Source File
 # Begin Source File
@@ -547,6 +555,14 @@ SOURCE=.\src\core\Observer.cpp
 SOURCE=.\src\PCH.cpp
 # ADD BASE CPP /Yc"wx/wxprec.h"
 # ADD CPP /Yc"wx/wxprec.h"
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\hierarchy\Procedure.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\commands\ProcedureCommands.cpp
 # End Source File
 # Begin Source File
 
@@ -658,6 +674,10 @@ SOURCE=.\src\gui\FrameManager.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\hierarchy\Function.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\hierarchy\Generator.h
 # End Source File
 # Begin Source File
@@ -683,6 +703,10 @@ SOURCE=.\src\gui\MainFrame.h
 # Begin Source File
 
 SOURCE=.\src\core\Observer.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\hierarchy\Procedure.h
 # End Source File
 # Begin Source File
 

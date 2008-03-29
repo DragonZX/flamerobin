@@ -62,9 +62,9 @@ void Generator::accept(ItemVisitor* visitor)
 // GeneratorCollection class
 PSharedItem GeneratorCollection::createCollectionItem(const Identifier& identifier)
 {
-    PSharedItem trigger(new Generator(identifier));
-    trigger->setParent(shared_from_this());
-    return trigger;
+    PSharedItem generator(new Generator(identifier));
+    generator->setParent(shared_from_this());
+    return generator;
 }
 //-----------------------------------------------------------------------------
 void GeneratorCollection::loadChildren()

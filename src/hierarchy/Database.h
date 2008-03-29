@@ -40,7 +40,7 @@ class ServerVersion
 private:
     wxString versionStringM;
     std::vector<unsigned> versionNumbersM;
-    inline bool versionIsAtLeast(unsigned major, unsigned minor = 0,
+    bool versionIsAtLeast(unsigned major, unsigned minor = 0,
         unsigned release = 0, unsigned build = 0) const;
 public:
     void initialize(const wxString& versionString);
@@ -126,7 +126,9 @@ private:
     DatabaseConnection* metadataConnectionM;
     ServerVersion serverVersionM;
 
+    PSharedFunctionCollection functionsM;
     PSharedGeneratorCollection generatorsM;
+    PSharedProcedureCollection proceduresM;
     PSharedSystemTableCollection systemTablesM;
     PSharedTriggerCollection triggersM;
     PSharedTableCollection tablesM;

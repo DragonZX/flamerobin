@@ -25,63 +25,28 @@
 
 */
 
-#ifndef FR_ITEMCOMMANDS_H
-#define FR_ITEMCOMMANDS_H
+#ifndef FR_FUNCTION_H
+#define FR_FUNCTION_H
 //-----------------------------------------------------------------------------
-#include <wx/event.h>
-
-#include <map>
-
-#include "hierarchy/SharedItems.h"
+#include "hierarchy/Item.h"
 //-----------------------------------------------------------------------------
-class ItemCommands;
+class Function : public MetadataItemBase
+{
+public:
+    Function(const Identifier& identifier);
 
-class ItemCommandsFactory
+    virtual const wxString getTypeName() const;
+
+    virtual void accept(ItemVisitor* visitor);
+};
+//-----------------------------------------------------------------------------
+class FunctionCollection: public MetadataItemCollection
 {
 protected:
-    virtual ~ItemCommandsFactory() {};
+    virtual PSharedItem createCollectionItem(const Identifier& identifier);
 public:
-    virtual ItemCommands* createItemCommands(PSharedItem item) = 0;
+    virtual void loadChildren();
+    virtual void accept(ItemVisitor* visitor);
 };
 //-----------------------------------------------------------------------------
-class ItemCommands : public wxEvtHandler
-{
-private:
-    typedef std::map<void*, ItemCommandsFactory*> TypeInfoFactoryMap;
-    typedef TypeInfoFactoryMap::value_type TypeInfoFactoryPair;
-    static TypeInfoFactoryMap& getFactories();
-
-    PSharedItem itemM;
-protected:
-    ItemCommands(PSharedItem item);
-
-public:
-    static bool registerFactory(const std::type_info& info,
-        ItemCommandsFactory* factory);
-    static bool unregisterFactory(const std::type_info& info,
-        ItemCommandsFactory* factory);
-    static ItemCommands* createItemCommands(PSharedItem item);
-
-    PSharedItem getItem();
-};
-//-----------------------------------------------------------------------------
-template<class T, class TC>
-class ItemCommandsFactoryImpl : public ItemCommandsFactory
-{
-public:
-public:
-    ItemCommandsFactoryImpl() : ItemCommandsFactory()
-    {
-        ItemCommands::registerFactory(typeid(T), this);
-    };
-    virtual ~ItemCommandsFactoryImpl()
-    {
-        ItemCommands::unregisterFactory(typeid(T), this);
-    };
-    virtual ItemCommands* createItemCommands(PSharedItem item)
-    {
-        return new TC(item);
-    };
-};
-//-----------------------------------------------------------------------------
-#endif // FR_ITEMCOMMANDS_H
+#endif // FR_FUNCTION_H

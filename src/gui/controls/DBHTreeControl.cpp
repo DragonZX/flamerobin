@@ -52,8 +52,10 @@
 #include "gui/controls/DBHTreeControlContextMenuCreator.h"
 
 #include "hierarchy/Database.h"
+#include "hierarchy/Function.h"
 #include "hierarchy/Generator.h"
 #include "hierarchy/ItemVisitor.h"
+#include "hierarchy/Procedure.h"
 #include "hierarchy/Table.h"
 #include "hierarchy/TreeFolder.h"
 #include "hierarchy/TreeRoot.h"
@@ -204,9 +206,13 @@ public:
     void updateTreeItem(const wxTreeItemId id);
 
     virtual void visit(Database& database);
+    virtual void visit(Function& function);
+    virtual void visit(FunctionCollection& functions);
     virtual void visit(Generator& generator);
     virtual void visit(GeneratorCollection& generators);
     virtual void visit(Item& item) { visitItem(&item); };
+    virtual void visit(Procedure& procedure);
+    virtual void visit(ProcedureCollection& procedures);
     virtual void visit(SystemTableCollection& tables);
     virtual void visit(Table& table);
     virtual void visit(TableCollection& tables);
@@ -301,6 +307,18 @@ void DBHItemTreeNodeProperties::visit(Database& database)
     childrenLoadedM = true;
 }
 //-----------------------------------------------------------------------------
+void DBHItemTreeNodeProperties::visit(Function& function)
+{
+    visitItem(&function);
+    imageIndexM = DBHTreeImageList::get().getImageIndex(ART_Function);
+}
+//-----------------------------------------------------------------------------
+void DBHItemTreeNodeProperties::visit(FunctionCollection& functions)
+{
+    int img = DBHTreeImageList::get().getImageIndex(ART_Functions);
+    visitCollection(&functions, _("Functions"), img);
+}
+//-----------------------------------------------------------------------------
 void DBHItemTreeNodeProperties::visit(Generator& generator)
 {
     visitItem(&generator);
@@ -311,6 +329,18 @@ void DBHItemTreeNodeProperties::visit(GeneratorCollection& generators)
 {
     int img = DBHTreeImageList::get().getImageIndex(ART_Generators);
     visitCollection(&generators, _("Generators"), img);
+}
+//-----------------------------------------------------------------------------
+void DBHItemTreeNodeProperties::visit(Procedure& procedure)
+{
+    visitItem(&procedure);
+    imageIndexM = DBHTreeImageList::get().getImageIndex(ART_Procedure);
+}
+//-----------------------------------------------------------------------------
+void DBHItemTreeNodeProperties::visit(ProcedureCollection& procedures)
+{
+    int img = DBHTreeImageList::get().getImageIndex(ART_Procedures);
+    visitCollection(&procedures, _("Procedures"), img);
 }
 //-----------------------------------------------------------------------------
 void DBHItemTreeNodeProperties::visit(SystemTableCollection& tables)

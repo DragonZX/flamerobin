@@ -36,67 +36,63 @@
     #include "wx/wx.h"
 #endif
 
-#include "commands/ItemCommands.h"
+#include "engine/DatabaseConnection.h"
 
-#include "hierarchy/Database.h"
-#include "hierarchy/Table.h"
+#include "hierarchy/Procedure.h"
+#include "hierarchy/ItemVisitor.h"
 //-----------------------------------------------------------------------------
+// Procedure class
+Procedure::Procedure(const Identifier& identifier)
+{
+    setIdentifier(identifier);
+}
+//-----------------------------------------------------------------------------
+const wxString Procedure::getTypeName() const
+{
+    return wxT("PROCEDURE");
+}
+//-----------------------------------------------------------------------------
+void Procedure::accept(ItemVisitor* visitor)
+{
+    wxASSERT(visitor);
+    if (visitor)
+        visitor->visit(*this);
+}
+//-----------------------------------------------------------------------------
+// ProcedureCollection class
+PSharedItem ProcedureCollection::createCollectionItem(const Identifier& identifier)
+{
+    PSharedItem procedure(new Procedure(identifier));
+    procedure->setParent(shared_from_this());
+    return procedure;
+}
+//-----------------------------------------------------------------------------
+void ProcedureCollection::loadChildren()
+{
+    Database* db = getDatabase();
+    wxCHECK_RET(db,
+        wxT("ProcedureCollection::loadChildren() called without parent database"));
+    DatabaseConnection* dbc = db->getMetadataConnection();
+    if (dbc)
+    {
+        std::string sql("select p.RDB$PROCEDURE_NAME from RDB$PROCEDURES p"
+            " where p.RDB$SYSTEM_FLAG = 0 or p.RDB$SYSTEM_FLAG is null"
+            " order by 1");
+        dbc->loadCollection(getHandle(), sql);
+        return;
+    }
 
-//-----------------------------------------------------------------------------
-/*static*/
-ItemCommands::TypeInfoFactoryMap& ItemCommands::getFactories()
-{
-    static ItemCommands::TypeInfoFactoryMap factories;
-    return factories;
+    // loading is not possible, so clear children and show empty collection
+    SubjectLocker lock(this);
+    clearChildren();
+    setChildrenLoaded(true);
+    notifyObservers();
 }
 //-----------------------------------------------------------------------------
-/*static*/
-bool ItemCommands::registerFactory(const std::type_info& info,
-    ItemCommandsFactory* factory)
+void ProcedureCollection::accept(ItemVisitor* visitor)
 {
-    if (!factory)
-        return false;
-    TypeInfoFactoryMap& factories(getFactories());
-    if (factories.find((void*)&info) != factories.end())
-        return false;
-    factories.insert(TypeInfoFactoryPair((void*)&info, factory));
-    return true;
-}
-//-----------------------------------------------------------------------------
-/*static*/
-bool ItemCommands::unregisterFactory(const std::type_info& info,
-    ItemCommandsFactory* factory)
-{
-    if (!factory)
-        return false;
-    TypeInfoFactoryMap& factories(getFactories());
-    if (factories.find((void*)&info) == factories.end())
-        return false;
-    factories.erase((void*)&info);
-    return true;
-}
-//-----------------------------------------------------------------------------
-/*static*/
-ItemCommands* ItemCommands::createItemCommands(PSharedItem item)
-{
-    if (!item)
-        return 0;
-    const std::type_info& info = typeid(*item.get());
-    TypeInfoFactoryMap& factories(getFactories());
-
-    TypeInfoFactoryMap::iterator it = factories.find((void*)&info);
-    if (it != factories.end())
-        return ((*it).second)->createItemCommands(item);
-    return 0;
-}
-//-----------------------------------------------------------------------------
-ItemCommands::ItemCommands(PSharedItem item)
-    : wxEvtHandler(), itemM(item)
-{
-}
-//-----------------------------------------------------------------------------
-PSharedItem ItemCommands::getItem()
-{
-    return itemM;
+    wxASSERT(visitor);
+    if (visitor)
+        visitor->visit(*this);
 }
 //-----------------------------------------------------------------------------

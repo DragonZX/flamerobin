@@ -31,9 +31,13 @@
 #include "core/Visitor.h"
 //-----------------------------------------------------------------------------
 class Database;
+class Function;
+class FunctionCollection;
 class Generator;
 class GeneratorCollection;
 class Item;
+class Procedure;
+class ProcedureCollection;
 class SystemTableCollection;
 class Table;
 class TableCollection;
@@ -49,8 +53,12 @@ public:
     virtual void visit(Item& item);
 
     virtual void visit(Database& database);
+    virtual void visit(Function& function);
+    virtual void visit(FunctionCollection& functions);
     virtual void visit(Generator& generator);
     virtual void visit(GeneratorCollection& generators);
+    virtual void visit(Procedure& procedure);
+    virtual void visit(ProcedureCollection& procedures);
     virtual void visit(SystemTableCollection& tables);
     virtual void visit(Table& table);
     virtual void visit(TableCollection& tables);

@@ -45,8 +45,10 @@ FLAMEROBIN_OBJECTS =  \
 	flamerobin_Application.o \
 	flamerobin_PCH.o \
 	flamerobin_DatabaseCommands.o \
+	flamerobin_FunctionCommands.o \
 	flamerobin_GeneratorCommands.o \
 	flamerobin_ItemCommands.o \
+	flamerobin_ProcedureCommands.o \
 	flamerobin_TableCommands.o \
 	flamerobin_TriggerCommands.o \
 	flamerobin_Config.o \
@@ -64,9 +66,11 @@ FLAMEROBIN_OBJECTS =  \
 	flamerobin_DBHTreeControl.o \
 	flamerobin_DBHTreeControlContextMenuCreator.o \
 	flamerobin_Database.o \
+	flamerobin_Function.o \
 	flamerobin_Generator.o \
 	flamerobin_Item.o \
 	flamerobin_ItemVisitor.o \
+	flamerobin_Procedure.o \
 	flamerobin_Relation.o \
 	flamerobin_Table.o \
 	flamerobin_TreeFolder.o \
@@ -240,11 +244,17 @@ flamerobin_PCH.o: $(srcdir)/src/PCH.cpp $(FLAMEROBIN_ODEP)
 flamerobin_DatabaseCommands.o: $(srcdir)/src/commands/DatabaseCommands.cpp $(FLAMEROBIN_ODEP)
 	$(CXXC) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(srcdir)/src/commands/DatabaseCommands.cpp
 
+flamerobin_FunctionCommands.o: $(srcdir)/src/commands/FunctionCommands.cpp $(FLAMEROBIN_ODEP)
+	$(CXXC) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(srcdir)/src/commands/FunctionCommands.cpp
+
 flamerobin_GeneratorCommands.o: $(srcdir)/src/commands/GeneratorCommands.cpp $(FLAMEROBIN_ODEP)
 	$(CXXC) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(srcdir)/src/commands/GeneratorCommands.cpp
 
 flamerobin_ItemCommands.o: $(srcdir)/src/commands/ItemCommands.cpp $(FLAMEROBIN_ODEP)
 	$(CXXC) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(srcdir)/src/commands/ItemCommands.cpp
+
+flamerobin_ProcedureCommands.o: $(srcdir)/src/commands/ProcedureCommands.cpp $(FLAMEROBIN_ODEP)
+	$(CXXC) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(srcdir)/src/commands/ProcedureCommands.cpp
 
 flamerobin_TableCommands.o: $(srcdir)/src/commands/TableCommands.cpp $(FLAMEROBIN_ODEP)
 	$(CXXC) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(srcdir)/src/commands/TableCommands.cpp
@@ -297,6 +307,9 @@ flamerobin_DBHTreeControlContextMenuCreator.o: $(srcdir)/src/gui/controls/DBHTre
 flamerobin_Database.o: $(srcdir)/src/hierarchy/Database.cpp $(FLAMEROBIN_ODEP)
 	$(CXXC) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(srcdir)/src/hierarchy/Database.cpp
 
+flamerobin_Function.o: $(srcdir)/src/hierarchy/Function.cpp $(FLAMEROBIN_ODEP)
+	$(CXXC) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(srcdir)/src/hierarchy/Function.cpp
+
 flamerobin_Generator.o: $(srcdir)/src/hierarchy/Generator.cpp $(FLAMEROBIN_ODEP)
 	$(CXXC) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(srcdir)/src/hierarchy/Generator.cpp
 
@@ -305,6 +318,9 @@ flamerobin_Item.o: $(srcdir)/src/hierarchy/Item.cpp $(FLAMEROBIN_ODEP)
 
 flamerobin_ItemVisitor.o: $(srcdir)/src/hierarchy/ItemVisitor.cpp $(FLAMEROBIN_ODEP)
 	$(CXXC) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(srcdir)/src/hierarchy/ItemVisitor.cpp
+
+flamerobin_Procedure.o: $(srcdir)/src/hierarchy/Procedure.cpp $(FLAMEROBIN_ODEP)
+	$(CXXC) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(srcdir)/src/hierarchy/Procedure.cpp
 
 flamerobin_Relation.o: $(srcdir)/src/hierarchy/Relation.cpp $(FLAMEROBIN_ODEP)
 	$(CXXC) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(srcdir)/src/hierarchy/Relation.cpp

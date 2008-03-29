@@ -370,4 +370,3 @@ void DatabaseConnection::loadCollection(Item::Handle itemHandle,
         new FetchIdentifiersJob(databaseM, itemHandle, sql, params)));
 }
 //-----------------------------------------------------------------------------
-

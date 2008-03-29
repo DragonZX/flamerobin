@@ -43,8 +43,10 @@
 #include "engine/DatabaseConnection.h"
 
 #include "hierarchy/Database.h"
+#include "hierarchy/Function.h"
 #include "hierarchy/Generator.h"
 #include "hierarchy/ItemVisitor.h"
+#include "hierarchy/Procedure.h"
 #include "hierarchy/Table.h"
 #include "hierarchy/TreeRoot.h"
 #include "hierarchy/Trigger.h"
@@ -85,7 +87,7 @@ void ServerVersion::reset()
     versionNumbersM.clear();
 }
 //-----------------------------------------------------------------------------
-inline bool ServerVersion::versionIsAtLeast(unsigned major, unsigned minor,
+bool ServerVersion::versionIsAtLeast(unsigned major, unsigned minor,
     unsigned release, unsigned build) const
 {
     if (versionNumbersM.size() != 4)
@@ -369,30 +371,45 @@ void Database::createCollections()
     // create shared pointers to collections
     // setParent() will add these to the list of child items
 
+    functionsM = PSharedFunctionCollection(new FunctionCollection());
+    functionsM->setParent(me);
+    functionsM->loadChildren();
+
     generatorsM = PSharedGeneratorCollection(new GeneratorCollection());
     generatorsM->setParent(me);
+    generatorsM->loadChildren();
+
+    proceduresM = PSharedProcedureCollection(new ProcedureCollection());
+    proceduresM->setParent(me);
+    proceduresM->loadChildren();
 
     systemTablesM = PSharedSystemTableCollection(new SystemTableCollection());
     systemTablesM->setParent(me);
+    systemTablesM->loadChildren();
 
     tablesM = PSharedTableCollection(new TableCollection());
     tablesM->setParent(me);
+    tablesM->loadChildren();
 
     if (serverVersionM.supportsDatabaseTriggers())
     {
         triggersM = PSharedTriggerCollection(new TriggerCollection());
         triggersM->setParent(me);
+        triggersM->loadChildren();
     }
 
     viewsM = PSharedViewCollection(new ViewCollection());
     viewsM->setParent(me);
+    viewsM->loadChildren();
 }
 //-----------------------------------------------------------------------------
 void Database::deleteCollections()
 {
     clearChildren();
     // reset all shared pointers to collections
+    functionsM.reset();
     generatorsM.reset();
+    proceduresM.reset();
     systemTablesM.reset();
     tablesM.reset();
     triggersM.reset();
