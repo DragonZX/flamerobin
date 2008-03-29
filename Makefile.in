@@ -65,6 +65,7 @@ FLAMEROBIN_OBJECTS =  \
 	flamerobin_StyleGuide.o \
 	flamerobin_DBHTreeControl.o \
 	flamerobin_DBHTreeControlContextMenuCreator.o \
+	flamerobin_Column.o \
 	flamerobin_Database.o \
 	flamerobin_Function.o \
 	flamerobin_Generator.o \
@@ -303,6 +304,9 @@ flamerobin_DBHTreeControl.o: $(srcdir)/src/gui/controls/DBHTreeControl.cpp $(FLA
 
 flamerobin_DBHTreeControlContextMenuCreator.o: $(srcdir)/src/gui/controls/DBHTreeControlContextMenuCreator.cpp $(FLAMEROBIN_ODEP)
 	$(CXXC) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(srcdir)/src/gui/controls/DBHTreeControlContextMenuCreator.cpp
+
+flamerobin_Column.o: $(srcdir)/src/hierarchy/Column.cpp $(FLAMEROBIN_ODEP)
+	$(CXXC) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(srcdir)/src/hierarchy/Column.cpp
 
 flamerobin_Database.o: $(srcdir)/src/hierarchy/Database.cpp $(FLAMEROBIN_ODEP)
 	$(CXXC) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(srcdir)/src/hierarchy/Database.cpp

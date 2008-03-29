@@ -75,6 +75,7 @@ FLAMEROBIN_OBJECTS =  \
 	gcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_StyleGuide.o \
 	gcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_DBHTreeControl.o \
 	gcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_DBHTreeControlContextMenuCreator.o \
+	gcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_Column.o \
 	gcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_Database.o \
 	gcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_Function.o \
 	gcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_Generator.o \
@@ -258,6 +259,9 @@ gcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_DBHTreeControl.o: ./src/gui/controls/DBHT
 	$(CXX) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(CPPDEPS) $<
 
 gcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_DBHTreeControlContextMenuCreator.o: ./src/gui/controls/DBHTreeControlContextMenuCreator.cpp
+	$(CXX) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(CPPDEPS) $<
+
+gcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_Column.o: ./src/hierarchy/Column.cpp
 	$(CXX) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(CPPDEPS) $<
 
 gcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_Database.o: ./src/hierarchy/Database.cpp

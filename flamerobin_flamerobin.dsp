@@ -480,6 +480,10 @@ SOURCE=.\src\gui\BaseFrame.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\hierarchy\Column.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\config\Config.cpp
 # End Source File
 # Begin Source File
@@ -639,6 +643,10 @@ SOURCE=.\src\core\ArtProvider.h
 # Begin Source File
 
 SOURCE=.\src\gui\BaseFrame.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\hierarchy\Column.h
 # End Source File
 # Begin Source File
 

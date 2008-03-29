@@ -82,6 +82,7 @@ FLAMEROBIN_OBJECTS =  \
 	vc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_StyleGuide.obj \
 	vc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_DBHTreeControl.obj \
 	vc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_DBHTreeControlContextMenuCreator.obj \
+	vc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_Column.obj \
 	vc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_Database.obj \
 	vc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_Function.obj \
 	vc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_Generator.obj \
@@ -297,6 +298,9 @@ vc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_DBHTreeControl.obj: .\src\gui\controls\DBH
 	$(CXX) /c /nologo /TP /Fo$@ $(FLAMEROBIN_CXXFLAGS) $**
 
 vc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_DBHTreeControlContextMenuCreator.obj: .\src\gui\controls\DBHTreeControlContextMenuCreator.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(FLAMEROBIN_CXXFLAGS) $**
+
+vc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_Column.obj: .\src\hierarchy\Column.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(FLAMEROBIN_CXXFLAGS) $**
 
 vc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_Database.obj: .\src\hierarchy\Database.cpp

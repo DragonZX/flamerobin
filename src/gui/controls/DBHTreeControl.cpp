@@ -51,6 +51,7 @@
 #include "gui/controls/DBHTreeControl.h"
 #include "gui/controls/DBHTreeControlContextMenuCreator.h"
 
+#include "hierarchy/Column.h"
 #include "hierarchy/Database.h"
 #include "hierarchy/Function.h"
 #include "hierarchy/Generator.h"
@@ -81,6 +82,7 @@ DBHTreeImageList::DBHTreeImageList()
 {
     addImage(wxART_FOLDER);
     addImage(ART_Object);
+    addImage(ART_Columns);
     addImage(ART_Column);
     addImage(ART_Computed);
     addImage(ART_DatabaseConnected);
@@ -205,6 +207,8 @@ public:
     bool isVisible() { return visibleM; };
     void updateTreeItem(const wxTreeItemId id);
 
+    virtual void visit(Column& column);
+    virtual void visit(ColumnCollection& columns);
     virtual void visit(Database& database);
     virtual void visit(Function& function);
     virtual void visit(FunctionCollection& functions);
@@ -285,6 +289,18 @@ void DBHItemTreeNodeProperties::updateTreeItem(wxTreeItemId id)
     // update tree node image index without flicker
     if (treeM.GetItemImage(id) != imageIndexM)
         treeM.SetItemImage(id, imageIndexM);
+}
+//-----------------------------------------------------------------------------
+void DBHItemTreeNodeProperties::visit(Column& column)
+{
+    visitItem(&column);
+    imageIndexM = DBHTreeImageList::get().getImageIndex(ART_Column);
+}
+//-----------------------------------------------------------------------------
+void DBHItemTreeNodeProperties::visit(ColumnCollection& columns)
+{
+    int img = DBHTreeImageList::get().getImageIndex(ART_Columns);
+    visitCollection(&columns, _("Columns"), img);
 }
 //-----------------------------------------------------------------------------
 void DBHItemTreeNodeProperties::visit(Database& database)

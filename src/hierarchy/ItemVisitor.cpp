@@ -36,6 +36,7 @@
     #include "wx/wx.h"
 #endif
 
+#include "hierarchy/Column.h"
 #include "hierarchy/Database.h"
 #include "hierarchy/Function.h"
 #include "hierarchy/Generator.h"
@@ -50,6 +51,16 @@
 void ItemVisitor::visit(Item& item)
 {
     defaultAction(&item);
+}
+//-----------------------------------------------------------------------------
+void ItemVisitor::visit(Column& column)
+{
+    defaultAction(&column);
+}
+//-----------------------------------------------------------------------------
+void ItemVisitor::visit(ColumnCollection& columns)
+{
+    defaultAction(&columns);
 }
 //-----------------------------------------------------------------------------
 void ItemVisitor::visit(Database& database)

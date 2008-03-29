@@ -30,6 +30,8 @@
 //-----------------------------------------------------------------------------
 #include "core/Visitor.h"
 //-----------------------------------------------------------------------------
+class Column;
+class ColumnCollection;
 class Database;
 class Function;
 class FunctionCollection;
@@ -52,6 +54,8 @@ class ItemVisitor : public Visitor
 public:
     virtual void visit(Item& item);
 
+    virtual void visit(Column& column);
+    virtual void visit(ColumnCollection& columns);
     virtual void visit(Database& database);
     virtual void visit(Function& function);
     virtual void visit(FunctionCollection& functions);

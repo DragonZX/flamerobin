@@ -240,6 +240,7 @@
         $(SOURCEDIR)/gui/controls/DBHTreeControl.h
         $(SOURCEDIR)/gui/controls/DBHTreeControlContextMenuCreator.h
 
+        $(SOURCEDIR)/hierarchy/Column.h
         $(SOURCEDIR)/hierarchy/Database.h
         $(SOURCEDIR)/hierarchy/Function.h
         $(SOURCEDIR)/hierarchy/Generator.h
@@ -301,6 +302,7 @@
         $(SOURCEDIR)/gui/controls/DBHTreeControl.cpp
         $(SOURCEDIR)/gui/controls/DBHTreeControlContextMenuCreator.cpp
 
+        $(SOURCEDIR)/hierarchy/Column.cpp
         $(SOURCEDIR)/hierarchy/Database.cpp
         $(SOURCEDIR)/hierarchy/Function.cpp
         $(SOURCEDIR)/hierarchy/Generator.cpp

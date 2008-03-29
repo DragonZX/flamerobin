@@ -35,6 +35,7 @@
 
 #define ART_Backup                  wxART_MAKE_ART_ID(ART_Backup)
 #define ART_Column                  wxART_MAKE_ART_ID(ART_Column)
+#define ART_Columns                 wxART_MAKE_ART_ID(ART_Columns)
 #define ART_Computed                wxART_MAKE_ART_ID(ART_Computed)
 #define ART_DatabaseConnected       wxART_MAKE_ART_ID(ART_DatabaseConnected)
 #define ART_DatabaseDisconnected    wxART_MAKE_ART_ID(ART_DatabaseDisconnected)

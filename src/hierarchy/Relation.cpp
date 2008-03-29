@@ -36,18 +36,12 @@
     #include "wx/wx.h"
 #endif
 
+#include "hierarchy/Column.h"
 #include "hierarchy/ItemVisitor.h"
 #include "hierarchy/Relation.h"
 #include "hierarchy/Trigger.h"
 //-----------------------------------------------------------------------------
 // Relation class
-Relation::Relation()
-    : MetadataItemWithChildrenBase()
-{
-    // create children on-demand
-    setChildrenLoaded(false);
-}
-//-----------------------------------------------------------------------------
 Relation* Relation::getRelation()
 {
     return this;
@@ -59,8 +53,13 @@ void Relation::loadChildren()
     {
         PSharedItem me(shared_from_this());
 
+        columnsM = PSharedColumnCollection(new ColumnCollection());
+        columnsM->setParent(me);
+        columnsM->loadChildren();
+
         triggersM = PSharedTriggerCollection(new TriggerCollection());
         triggersM->setParent(me);
+        triggersM->loadChildren();
 
         setChildrenLoaded(true);
         notifyObservers();

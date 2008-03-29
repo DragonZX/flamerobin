@@ -25,22 +25,28 @@
 
 */
 
-#ifndef FR_RELATION_H
-#define FR_RELATION_H
+#ifndef FR_COLUMN_H
+#define FR_COLUMN_H
 //-----------------------------------------------------------------------------
 #include "hierarchy/Item.h"
-#include "hierarchy/SharedItems.h"
 //-----------------------------------------------------------------------------
-class Relation : public MetadataItemWithChildrenBase
+class Column : public MetadataItemBase
 {
 public:
-    virtual Relation* getRelation();
+    Column(const Identifier& identifier);
 
-    virtual void loadChildren();
+    virtual const wxString getTypeName() const;
+
     virtual void accept(ItemVisitor* visitor);
-private:
-    PSharedColumnCollection columnsM;
-    PSharedTriggerCollection triggersM;
 };
 //-----------------------------------------------------------------------------
-#endif // FR_RELATION_H
+class ColumnCollection: public MetadataItemCollection
+{
+protected:
+    virtual PSharedItem createCollectionItem(const Identifier& identifier);
+public:
+    virtual void loadChildren();
+    virtual void accept(ItemVisitor* visitor);
+};
+//-----------------------------------------------------------------------------
+#endif // FR_COLUMN_H

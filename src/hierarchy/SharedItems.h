@@ -41,6 +41,10 @@ typedef boost::shared_ptr<TreeRoot> PSharedTreeRoot;
 class Database;
 typedef boost::shared_ptr<Database> PSharedDatabase;
 
+class Column;
+typedef boost::shared_ptr<Column> PSharedColumn;
+class ColumnCollection;
+typedef boost::shared_ptr<ColumnCollection> PSharedColumnCollection;
 class Function;
 typedef boost::shared_ptr<Function> PSharedFunction;
 class FunctionCollection;
