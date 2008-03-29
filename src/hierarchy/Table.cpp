@@ -87,6 +87,7 @@ void SystemTableCollection::loadChildren()
     DatabaseConnection* dbc = db->getMetadataConnection();
     if (dbc)
     {
+        setLoadChildrenState(lcsLoading);
         std::string sql("select r.RDB$RELATION_NAME from RDB$RELATIONS r"
             " where r.RDB$SYSTEM_FLAG = 1 and r.RDB$VIEW_SOURCE is null"
             " order by 1");
@@ -97,7 +98,7 @@ void SystemTableCollection::loadChildren()
     // loading is not possible, so clear children and show empty collection
     SubjectLocker lock(this);
     clearChildren();
-    setChildrenLoaded(true);
+    setLoadChildrenState(lcsLoaded);
     notifyObservers();
 }
 //-----------------------------------------------------------------------------
@@ -124,6 +125,7 @@ void TableCollection::loadChildren()
     DatabaseConnection* dbc = db->getMetadataConnection();
     if (dbc)
     {
+        setLoadChildrenState(lcsLoading);
         std::string sql("select r.RDB$RELATION_NAME from RDB$RELATIONS r"
             " where (r.RDB$SYSTEM_FLAG = 0 or RDB$SYSTEM_FLAG is null)"
             " and r.RDB$VIEW_SOURCE is null order by 1");
@@ -134,7 +136,7 @@ void TableCollection::loadChildren()
     // loading is not possible, so clear children and show empty collection
     SubjectLocker lock(this);
     clearChildren();
-    setChildrenLoaded(true);
+    setLoadChildrenState(lcsLoaded);
     notifyObservers();
 }
 //-----------------------------------------------------------------------------

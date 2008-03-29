@@ -158,7 +158,7 @@ Database::Database()
         encryptedPasswordM(false), connectionStateM(csDisconnected),
         metadataConnectionM(0)
 {
-    setChildrenLoaded(true);
+    setLoadChildrenState(lcsLoaded);
 }
 //-----------------------------------------------------------------------------
 Database::~Database()

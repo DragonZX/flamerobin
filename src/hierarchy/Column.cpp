@@ -78,6 +78,7 @@ void ColumnCollection::loadChildren()
     DatabaseConnection* dbc = db->getMetadataConnection();
     if (dbc)
     {
+        setLoadChildrenState(lcsLoading);
         std::string sql("select rf.RDB$FIELD_NAME, rf.RDB$NULL_FLAG,"
             " rf.RDB$FIELD_SOURCE, c.RDB$COLLATION_NAME,"
             " f.RDB$COMPUTED_SOURCE, rf.RDB$DEFAULT_SOURCE"
@@ -100,7 +101,7 @@ void ColumnCollection::loadChildren()
     // loading is not possible, so clear children and show empty collection
     SubjectLocker lock(this);
     clearChildren();
-    setChildrenLoaded(true);
+    setLoadChildrenState(lcsLoaded);
     notifyObservers();
 }
 //-----------------------------------------------------------------------------

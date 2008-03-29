@@ -75,6 +75,7 @@ void GeneratorCollection::loadChildren()
     DatabaseConnection* dbc = db->getMetadataConnection();
     if (dbc)
     {
+        setLoadChildrenState(lcsLoading);
         std::string sql("select g.RDB$GENERATOR_NAME from RDB$GENERATORS g"
             " where g.RDB$SYSTEM_FLAG = 0 or g.RDB$SYSTEM_FLAG is null"
             " order by 1");
@@ -85,7 +86,7 @@ void GeneratorCollection::loadChildren()
     // loading is not possible, so clear children and show empty collection
     SubjectLocker lock(this);
     clearChildren();
-    setChildrenLoaded(true);
+    setLoadChildrenState(lcsLoaded);
     notifyObservers();
 }
 //-----------------------------------------------------------------------------

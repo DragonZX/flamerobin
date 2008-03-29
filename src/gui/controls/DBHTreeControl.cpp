@@ -74,7 +74,6 @@ public:
 
     static DBHTreeImageList& get();
     int getImageIndex(const wxArtID& id);
-//    int getImageIndex(NodeType type);
 };
 //-----------------------------------------------------------------------------
 DBHTreeImageList::DBHTreeImageList()
@@ -203,7 +202,7 @@ public:
     DBHItemTreeNodeProperties(DBHTreeControl& tree);
 
     bool getSortChildren() { return sortChildrenM; };
-    bool hasLoadedChildren() { return childrenLoadedM; };
+    bool hasNotLoadedChildren() { return childrenNotLoadedM; };
     bool isVisible() { return visibleM; };
     void updateTreeItem(const wxTreeItemId id);
 
@@ -232,7 +231,7 @@ private:
     bool captionIsBoldM;
     wxString captionM;
     int imageIndexM;
-    bool childrenLoadedM;
+    bool childrenNotLoadedM;
     bool sortChildrenM;
 
     void visitCollection(Item* item, const wxString& caption, int imageIndex);
@@ -252,20 +251,29 @@ void DBHItemTreeNodeProperties::visitCollection(Item* item,
     wxASSERT(item);
     visibleM = true;
     unsigned n = item->getChildrenCount();
+    Item::LoadChildrenState state = item->getLoadChildrenState();
     captionIsBoldM = n > 0;
-    captionM = (n) ? caption + wxString::Format(wxT(" (%u)"), n) : caption;
+    captionM = caption;
+    if (state == Item::lcsLoading)
+        captionM = captionM + _(" (expanding...)");
+    else if (n > 0)
+        captionM = caption + wxString::Format(wxT(" (%u)"), n);
     imageIndexM = imageIndex;
-    childrenLoadedM = item->hasChildrenLoaded();
+    childrenNotLoadedM = (state == Item::lcsNotLoaded);
 }
 //-----------------------------------------------------------------------------
 void DBHItemTreeNodeProperties::visitItem(Item* item)
 {
     wxASSERT(item);
+    Item::LoadChildrenState state = item->getLoadChildrenState();
     visibleM = true;
     captionIsBoldM = item->hasChildren();
-    captionM = item->getName();
+    if (state == Item::lcsLoading)
+        captionM = item->getName() + _(" (expanding...)");
+    else
+        captionM = item->getName();
     imageIndexM = -1;
-    childrenLoadedM = item->hasChildrenLoaded();
+    childrenNotLoadedM = (state == Item::lcsNotLoaded);
 }
 //-----------------------------------------------------------------------------
 void DBHItemTreeNodeProperties::reset()
@@ -274,7 +282,7 @@ void DBHItemTreeNodeProperties::reset()
     captionIsBoldM = false;
     captionM.clear();
     imageIndexM = -1;
-    childrenLoadedM = false;
+    childrenNotLoadedM = true;
     sortChildrenM = false;
 }
 //-----------------------------------------------------------------------------
@@ -320,7 +328,7 @@ void DBHItemTreeNodeProperties::visit(Database& database)
     wxArtID id = (database.isConnected() ?
         ART_DatabaseConnected : ART_DatabaseDisconnected);
     imageIndexM = DBHTreeImageList::get().getImageIndex(id);
-    childrenLoadedM = true;
+    childrenNotLoadedM = false;
 }
 //-----------------------------------------------------------------------------
 void DBHItemTreeNodeProperties::visit(Function& function)
@@ -447,7 +455,7 @@ DBHTreeNode* DBHTreeNode::getFromTreeData(wxTreeItemData* data)
 //-----------------------------------------------------------------------------
 bool DBHTreeNode::hasLoadedChildren()
 {
-    return itemM && itemM->hasChildrenLoaded();
+    return itemM && (itemM->getLoadChildrenState() == Item::lcsLoaded);
 }
 //-----------------------------------------------------------------------------
 bool DBHTreeNode::getExpandOnUpdate()
@@ -516,7 +524,7 @@ void DBHTreeNode::update()
 
     // show [+] if node is collapsed but could have children
     // for implementation see also EVT_TREE_ITEM_EXPANDING event handler
-    if (!nodeProps.hasLoadedChildren())
+    if (nodeProps.hasNotLoadedChildren())
     {
         treeM.Collapse(id);
         treeM.SetItemHasChildren(id);
@@ -571,11 +579,11 @@ void DBHTreeNode::update()
         treeM.SortChildren(id);
 
     // show the [+] marker when there are (or could be) children
+    Item::LoadChildrenState state = itemM->getLoadChildrenState();
     treeM.SetItemHasChildren(id,
-        itemM->hasChildren() || !itemM->hasChildrenLoaded());
-
+        itemM->hasChildren() || (state == Item::lcsNotLoaded));
     // expand tree node after background data loading
-    if (getExpandOnUpdate())
+    if (getExpandOnUpdate() && state == Item::lcsLoaded)
     {
         if (itemM->getChildrenCount())
             treeM.Expand(id);
@@ -717,8 +725,6 @@ void DBHTreeControl::OnTreeItemExpanding(wxTreeEvent& event)
         // there maybe child nodes that have not been created yet
         if (item && !nodeData->hasLoadedChildren())
         {
-            SetItemText(id, GetItemText(id) + _(" (expanding...)"));
-            SetItemHasChildren(id, false);
             nodeData->setExpandOnUpdate(true);
             item->loadChildren();
         }

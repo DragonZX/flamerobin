@@ -75,6 +75,7 @@ void ProcedureCollection::loadChildren()
     DatabaseConnection* dbc = db->getMetadataConnection();
     if (dbc)
     {
+        setLoadChildrenState(lcsLoading);
         std::string sql("select p.RDB$PROCEDURE_NAME from RDB$PROCEDURES p"
             " where p.RDB$SYSTEM_FLAG = 0 or p.RDB$SYSTEM_FLAG is null"
             " order by 1");
@@ -85,7 +86,7 @@ void ProcedureCollection::loadChildren()
     // loading is not possible, so clear children and show empty collection
     SubjectLocker lock(this);
     clearChildren();
-    setChildrenLoaded(true);
+    setLoadChildrenState(lcsLoaded);
     notifyObservers();
 }
 //-----------------------------------------------------------------------------

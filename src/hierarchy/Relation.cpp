@@ -49,19 +49,19 @@ Relation* Relation::getRelation()
 //-----------------------------------------------------------------------------
 void Relation::loadChildren()
 {
-    if (!hasChildrenLoaded())
+    if (getLoadChildrenState() != lcsLoaded)
     {
         PSharedItem me(shared_from_this());
 
         columnsM = PSharedColumnCollection(new ColumnCollection());
         columnsM->setParent(me);
-        columnsM->loadChildren();
+//        columnsM->loadChildren();
 
         triggersM = PSharedTriggerCollection(new TriggerCollection());
         triggersM->setParent(me);
-        triggersM->loadChildren();
+//        triggersM->loadChildren();
 
-        setChildrenLoaded(true);
+        setLoadChildrenState(lcsLoaded);
         notifyObservers();
     }
 }

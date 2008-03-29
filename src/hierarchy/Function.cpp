@@ -75,6 +75,7 @@ void FunctionCollection::loadChildren()
     DatabaseConnection* dbc = db->getMetadataConnection();
     if (dbc)
     {
+        setLoadChildrenState(lcsLoading);
         std::string sql("select f.RDB$FUNCTION_NAME from RDB$FUNCTIONS f"
             " where f.RDB$SYSTEM_FLAG = 0 or f.RDB$SYSTEM_FLAG is null"
             " order by 1");
@@ -85,7 +86,7 @@ void FunctionCollection::loadChildren()
     // loading is not possible, so clear children and show empty collection
     SubjectLocker lock(this);
     clearChildren();
-    setChildrenLoaded(true);
+    setLoadChildrenState(lcsLoaded);
     notifyObservers();
 }
 //-----------------------------------------------------------------------------

@@ -136,11 +136,6 @@ PSharedItem Item::getChild(unsigned /*index*/) const
     return PSharedItem();
 }
 //-----------------------------------------------------------------------------
-bool Item::hasChildrenLoaded() const
-{
-    return true;
-}
-//-----------------------------------------------------------------------------
 void Item::loadChildren()
 {
 }
@@ -234,9 +229,13 @@ PSharedItem ItemHasNoChildren::getChildImpl(const wxString& /*name*/) const
     return PSharedItem();
 }
 //-----------------------------------------------------------------------------
-bool ItemHasNoChildren::hasChildrenLoadedImpl() const
+Item::LoadChildrenState ItemHasNoChildren::getLoadChildrenStateImpl() const
 {
-    return true;
+    return Item::lcsLoaded;
+}
+//-----------------------------------------------------------------------------
+void ItemHasNoChildren::setLoadChildrenStateImpl(Item::LoadChildrenState)
+{
 }
 //-----------------------------------------------------------------------------
 bool ItemHasNoChildren::addChildImpl(PSharedItem child)
@@ -261,7 +260,7 @@ void ItemHasNoChildren::unlockChildrenImpl()
 //-----------------------------------------------------------------------------
 ItemHasChildren::ItemHasChildren()
 {
-    childrenLoadedM = false;
+    loadChildrenStateM = Item::lcsNotLoaded;
 }
 //-----------------------------------------------------------------------------
 unsigned ItemHasChildren::getChildrenCountImpl() const
@@ -288,14 +287,14 @@ PSharedItem ItemHasChildren::getChildImpl(const wxString& name) const
     return PSharedItem();
 }
 //-----------------------------------------------------------------------------
-bool ItemHasChildren::hasChildrenLoadedImpl() const
+Item::LoadChildrenState ItemHasChildren::getLoadChildrenStateImpl() const
 {
-    return childrenLoadedM;
+    return loadChildrenStateM;
 }
 //-----------------------------------------------------------------------------
-void ItemHasChildren::setChildrenLoaded(bool value)
+void ItemHasChildren::setLoadChildrenStateImpl(Item::LoadChildrenState state)
 {
-    childrenLoadedM = value;
+    loadChildrenStateM = state;
 }
 //-----------------------------------------------------------------------------
 bool ItemHasChildren::clearChildren()
@@ -364,7 +363,7 @@ void MetadataItemCollection::setChildrenIdentifiers(
     {
 // TODO: remove children that are no longer in identifiers
     };
-    setChildrenLoaded(true);
+    setLoadChildrenState(Item::lcsLoaded);
     notifyObservers();
 }
 //-----------------------------------------------------------------------------

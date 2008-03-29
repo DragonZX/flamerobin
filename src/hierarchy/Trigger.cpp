@@ -78,6 +78,7 @@ void TriggerCollection::loadChildren()
     DatabaseConnection* dbc = db->getMetadataConnection();
     if (dbc)
     {
+        setLoadChildrenState(lcsLoading);
         std::string sql("select t.RDB$TRIGGER_NAME from RDB$TRIGGERS t"
             " where (t.RDB$SYSTEM_FLAG = 0 or t.RDB$SYSTEM_FLAG is null)"
             " and t.RDB$RELATION_NAME");
@@ -100,7 +101,7 @@ void TriggerCollection::loadChildren()
     // loading is not possible, so clear children and show empty collection
     SubjectLocker lock(this);
     clearChildren();
-    setChildrenLoaded(true);
+    setLoadChildrenState(lcsLoaded);
     notifyObservers();
 }
 //-----------------------------------------------------------------------------

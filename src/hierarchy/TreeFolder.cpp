@@ -43,7 +43,7 @@
 TreeFolder::TreeFolder()
     : ItemWithChildrenBase()
 {
-    setChildrenLoaded(true);
+    setLoadChildrenState(lcsLoaded);
 }
 //-----------------------------------------------------------------------------
 const wxString TreeFolder::getTypeName() const

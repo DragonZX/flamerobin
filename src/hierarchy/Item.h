@@ -65,7 +65,10 @@ public:
     virtual bool hasChildren() const;
     virtual unsigned getChildrenCount() const = 0;
     virtual PSharedItem getChild(unsigned index) const = 0;
-    virtual bool hasChildrenLoaded() const = 0;
+
+    enum LoadChildrenState { lcsNotLoaded, lcsLoading, lcsLoaded };
+    virtual LoadChildrenState getLoadChildrenState() const = 0;
+    virtual void setLoadChildrenState(Item::LoadChildrenState state) = 0;
     virtual void loadChildren();
 
     // returns the name of the item
@@ -123,6 +126,14 @@ protected:
         notifyObservers();
         return true;
     }
+    void setLoadChildrenState(Item::LoadChildrenState state)
+    {
+        if (ItemHasChildrenPolicy::getLoadChildrenStateImpl() != state)
+        {
+            ItemHasChildrenPolicy::setLoadChildrenStateImpl(state);
+            notifyObservers();
+        }
+    };
 public:
     virtual void lockSubject()
     {
@@ -149,9 +160,9 @@ public:
     {
         return ItemHasChildrenPolicy::getChildImpl(name);
     };
-    virtual bool hasChildrenLoaded() const
+    virtual LoadChildrenState getLoadChildrenState() const
     {
-        return ItemHasChildrenPolicy::hasChildrenLoadedImpl();
+        return ItemHasChildrenPolicy::getLoadChildrenStateImpl();
     };
 
     virtual const wxString getName() const
@@ -186,7 +197,8 @@ protected:
     unsigned getChildrenCountImpl() const;
     PSharedItem getChildImpl(unsigned index) const;
     PSharedItem getChildImpl(const wxString& name) const;
-    bool hasChildrenLoadedImpl() const;
+    Item::LoadChildrenState getLoadChildrenStateImpl() const;
+    void setLoadChildrenStateImpl(Item::LoadChildrenState state);
 
     bool addChildImpl(PSharedItem child);
     bool removeChildImpl(PSharedItem child);
@@ -205,8 +217,8 @@ protected:
     unsigned getChildrenCountImpl() const;
     PSharedItem getChildImpl(unsigned index) const;
     PSharedItem getChildImpl(const wxString& name) const;
-    bool hasChildrenLoadedImpl() const;
-    void setChildrenLoaded(bool value);
+    Item::LoadChildrenState getLoadChildrenStateImpl() const;
+    void setLoadChildrenStateImpl(Item::LoadChildrenState state);
 
     bool addChildImpl(PSharedItem child);
     bool removeChildImpl(PSharedItem child);
@@ -215,7 +227,7 @@ protected:
     void unlockChildrenImpl();
 private:
     std::vector<PSharedItem> childrenM;
-    bool childrenLoadedM;
+    Item::LoadChildrenState loadChildrenStateM;
 };
 //-----------------------------------------------------------------------------
 // a base class for folders, databases and servers
