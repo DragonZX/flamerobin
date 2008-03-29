@@ -241,6 +241,7 @@
         $(SOURCEDIR)/gui/controls/DBHTreeControlContextMenuCreator.h
 
         $(SOURCEDIR)/hierarchy/Database.h
+        $(SOURCEDIR)/hierarchy/Generator.h
         $(SOURCEDIR)/hierarchy/Item.h
         $(SOURCEDIR)/hierarchy/ItemVisitor.h
         $(SOURCEDIR)/hierarchy/Relation.h
@@ -272,6 +273,7 @@
         $(SOURCEDIR)/PCH.cpp
 
         $(SOURCEDIR)/commands/DatabaseCommands.cpp
+        $(SOURCEDIR)/commands/GeneratorCommands.cpp
         $(SOURCEDIR)/commands/ItemCommands.cpp
         $(SOURCEDIR)/commands/TableCommands.cpp
         $(SOURCEDIR)/commands/TriggerCommands.cpp
@@ -296,6 +298,7 @@
         $(SOURCEDIR)/gui/controls/DBHTreeControlContextMenuCreator.cpp
 
         $(SOURCEDIR)/hierarchy/Database.cpp
+        $(SOURCEDIR)/hierarchy/Generator.cpp
         $(SOURCEDIR)/hierarchy/Item.cpp
         $(SOURCEDIR)/hierarchy/ItemVisitor.cpp
         $(SOURCEDIR)/hierarchy/Relation.cpp

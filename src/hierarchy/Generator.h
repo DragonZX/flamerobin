@@ -25,42 +25,28 @@
 
 */
 
-#ifndef FR_ITEMVISITOR_H
-#define FR_ITEMVISITOR_H
+#ifndef FR_GENERATOR_H
+#define FR_GENERATOR_H
 //-----------------------------------------------------------------------------
-#include "core/Visitor.h"
+#include "hierarchy/Item.h"
 //-----------------------------------------------------------------------------
-class Database;
-class Generator;
-class GeneratorCollection;
-class Item;
-class SystemTableCollection;
-class Table;
-class TableCollection;
-class TreeFolder;
-class Trigger;
-class TriggerCollection;
-class View;
-class ViewCollection;
-//-----------------------------------------------------------------------------
-class ItemVisitor : public Visitor
+class Generator : public MetadataItemBase
 {
 public:
-    virtual void visit(Item& item);
+    Generator(const Identifier& identifier);
 
-    virtual void visit(Database& database);
-    virtual void visit(Generator& generator);
-    virtual void visit(GeneratorCollection& generators);
-    virtual void visit(SystemTableCollection& tables);
-    virtual void visit(Table& table);
-    virtual void visit(TableCollection& tables);
-    virtual void visit(TreeFolder& folder);
-    virtual void visit(Trigger& trigger);
-    virtual void visit(TriggerCollection& triggers);
-    virtual void visit(View& view);
-    virtual void visit(ViewCollection& views);
-protected:
-    virtual void defaultAction(Item* item);
+    virtual const wxString getTypeName() const;
+
+    virtual void accept(ItemVisitor* visitor);
 };
 //-----------------------------------------------------------------------------
-#endif // FR_ITEMVISITOR_H
+class GeneratorCollection: public MetadataItemCollection
+{
+protected:
+    virtual PSharedItem createCollectionItem(const Identifier& identifier);
+public:
+    virtual void loadChildren();
+    virtual void accept(ItemVisitor* visitor);
+};
+//-----------------------------------------------------------------------------
+#endif // FR_GENERATOR_H

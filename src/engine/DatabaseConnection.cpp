@@ -95,6 +95,11 @@ Database& DatabaseConnectionThreadJob::getDatabase()
     return databaseM;
 }
 //-----------------------------------------------------------------------------
+bool DatabaseConnectionThreadJob::hasError()
+{
+    return systemErrorM || !exceptionWhatM.empty();
+}
+//-----------------------------------------------------------------------------
 bool DatabaseConnectionThreadJob::canCancelExecution()
 {
     return false;
@@ -260,19 +265,21 @@ class FetchIdentifiersJob: public DatabaseConnectionThreadJob
 private:
     Item::Handle itemHandleM;
     std::string statementM;
+    std::vector<std::string> paramsM;
     std::list<std::string> identifiersM;
 protected:
     virtual void executeJob(DatabaseConnectionThread* thread);
 public:
     FetchIdentifiersJob(Database& database, Item::Handle itemHandle,
-        const std::string& statement);
+        const std::string& statement, const std::vector<std::string>& params);
     virtual void processResults();
 };
 //-----------------------------------------------------------------------------
 FetchIdentifiersJob::FetchIdentifiersJob(Database& database,
-        Item::Handle itemHandle, const std::string& statement)
+        Item::Handle itemHandle, const std::string& statement,
+        const std::vector<std::string>& params)
     : DatabaseConnectionThreadJob(database), itemHandleM(itemHandle),
-        statementM(statement)
+        statementM(statement), paramsM(params)
 {
     wxASSERT(wxIsMainThread());
 }
@@ -286,6 +293,11 @@ void FetchIdentifiersJob::executeJob(DatabaseConnectionThread* thread)
         IBPP::Transaction tr = IBPP::TransactionFactory(db, IBPP::amRead);
         tr->Start();
         IBPP::Statement st = IBPP::StatementFactory(db, tr, statementM);
+        if (paramsM.size())
+        {
+            for (unsigned i = 1; i <= paramsM.size(); ++i)
+                st->Set(i, paramsM[i - 1]);
+        }
         st->Execute();
         while (st->Fetch())
         {
@@ -317,6 +329,9 @@ void FetchIdentifiersJob::processResults()
         if (collection)
             collection->setChildrenIdentifiers(identifiers);
     }
+
+    if (hasError())
+        reportError(_("An error occurred while fetching the list of identifiers!"));
 }
 //-----------------------------------------------------------------------------
 // DatabaseConnection class
@@ -343,7 +358,16 @@ void DatabaseConnection::disconnect()
 void DatabaseConnection::loadCollection(Item::Handle itemHandle,
     const std::string& sql)
 {
+    std::vector<std::string> params;
     queueJob(SharedDBCThreadJob(
-        new FetchIdentifiersJob(databaseM, itemHandle, sql)));
+        new FetchIdentifiersJob(databaseM, itemHandle, sql, params)));
 }
 //-----------------------------------------------------------------------------
+void DatabaseConnection::loadCollection(Item::Handle itemHandle,
+    const std::string& sql, const std::vector<std::string>& params)
+{
+    queueJob(SharedDBCThreadJob(
+        new FetchIdentifiersJob(databaseM, itemHandle, sql, params)));
+}
+//-----------------------------------------------------------------------------
+

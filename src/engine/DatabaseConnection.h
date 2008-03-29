@@ -31,6 +31,7 @@
 #include <wx/string.h>
 
 #include <string>
+#include <vector>
 
 #include <ibpp.h>
 
@@ -49,6 +50,7 @@ private:
 protected:
     std::string exceptionWhatM;
     bool systemErrorM;
+    bool hasError();
 
     Database& getDatabase();
     // This is called in the context of the background thread.
@@ -87,6 +89,8 @@ public:
     void disconnect();
 
     void loadCollection(Item::Handle itemHandle, const std::string& sql);
+    void loadCollection(Item::Handle itemHandle, const std::string& sql,
+        const std::vector<std::string>& params);
 };
 //-----------------------------------------------------------------------------
 #endif // FR_DATABASECONNECTION_H

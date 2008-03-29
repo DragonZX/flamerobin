@@ -126,6 +126,7 @@ private:
     DatabaseConnection* metadataConnectionM;
     ServerVersion serverVersionM;
 
+    PSharedGeneratorCollection generatorsM;
     PSharedSystemTableCollection systemTablesM;
     PSharedTriggerCollection triggersM;
     PSharedTableCollection tablesM;

@@ -41,6 +41,10 @@ typedef boost::shared_ptr<TreeRoot> PSharedTreeRoot;
 class Database;
 typedef boost::shared_ptr<Database> PSharedDatabase;
 
+class Generator;
+typedef boost::shared_ptr<Generator> PSharedGenerator;
+class GeneratorCollection;
+typedef boost::shared_ptr<GeneratorCollection> PSharedGeneratorCollection;
 class Table;
 typedef boost::shared_ptr<Table> PSharedTable;
 class TableCollection;

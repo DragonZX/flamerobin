@@ -29,13 +29,8 @@
 #define FR_DBHTREECONTROLCONTEXTMENUCREATOR_H
 //-----------------------------------------------------------------------------
 #include "hierarchy/ItemVisitor.h"
-//-----------------------------------------------------------------------------
+
 class Database;
-class Item;
-class SystemTableCollection;
-class Table;
-class TableCollection;
-class TreeFolder;
 //-----------------------------------------------------------------------------
 class DBHTreeControlContextMenuCreator : public ItemVisitor
 {

@@ -25,42 +25,36 @@
 
 */
 
-#ifndef FR_ITEMVISITOR_H
-#define FR_ITEMVISITOR_H
-//-----------------------------------------------------------------------------
-#include "core/Visitor.h"
-//-----------------------------------------------------------------------------
-class Database;
-class Generator;
-class GeneratorCollection;
-class Item;
-class SystemTableCollection;
-class Table;
-class TableCollection;
-class TreeFolder;
-class Trigger;
-class TriggerCollection;
-class View;
-class ViewCollection;
-//-----------------------------------------------------------------------------
-class ItemVisitor : public Visitor
-{
-public:
-    virtual void visit(Item& item);
+// For compilers that support precompilation, includes "wx/wx.h".
+#include "wx/wxprec.h"
 
-    virtual void visit(Database& database);
-    virtual void visit(Generator& generator);
-    virtual void visit(GeneratorCollection& generators);
-    virtual void visit(SystemTableCollection& tables);
-    virtual void visit(Table& table);
-    virtual void visit(TableCollection& tables);
-    virtual void visit(TreeFolder& folder);
-    virtual void visit(Trigger& trigger);
-    virtual void visit(TriggerCollection& triggers);
-    virtual void visit(View& view);
-    virtual void visit(ViewCollection& views);
-protected:
-    virtual void defaultAction(Item* item);
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
+
+#ifndef WX_PRECOMP
+    #include "wx/wx.h"
+#endif
+
+#include "commands/ItemCommands.h"
+#include "core/CommandIds.h"
+#include "hierarchy/Function.h"
+//-----------------------------------------------------------------------------
+// FunctionCommands class
+class FunctionCommands : public ItemCommands
+{
+private:
+    Function* functionM;
+public:
+    FunctionCommands(PSharedItem item);
 };
 //-----------------------------------------------------------------------------
-#endif // FR_ITEMVISITOR_H
+FunctionCommands::FunctionCommands(PSharedItem item)
+    : ItemCommands(item), functionM(0)
+{
+    functionM = dynamic_cast<Function*>(item.get());
+    wxASSERT(functionM);
+}
+//-----------------------------------------------------------------------------
+static const ItemCommandsFactoryImpl<Function, FunctionCommands> factory;
+//-----------------------------------------------------------------------------

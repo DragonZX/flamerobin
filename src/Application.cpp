@@ -65,6 +65,11 @@ void parachute()
     exit(1);
 }
 //-----------------------------------------------------------------------------
+bool Application::OnExceptionInMainLoop()
+{
+    return true;
+}
+//-----------------------------------------------------------------------------
 void Application::OnFatalException()
 {
     parachute();
@@ -111,24 +116,18 @@ bool Application::OnInit()
     return true;
 }
 //-----------------------------------------------------------------------------
-int Application::OnRun()
+void Application::HandleEvent(wxEvtHandler* handler, wxEventFunction func,
+    wxEvent& event) const
 {
-    while (true)
+    try
     {
-        try
-        {
-            return wxApp::OnRun();
-        }
-        catch (std::exception& e)
-        {
-            handleException(e);
-        }
+        wxAppConsole::HandleEvent(handler, func, event);
     }
-}
-//-----------------------------------------------------------------------------
-bool Application::OnExceptionInMainLoop()
-{
-    throw;
+    catch (const std::exception& e)
+    {
+        wxMessageBox(std2wx(e.what()), _("Unhandled Error in FlameRobin"),
+            wxOK | wxICON_ERROR, wxGetTopLevelParent(wxGetActiveWindow()));
+    }
 }
 //-----------------------------------------------------------------------------
 void Application::checkEnvironment()

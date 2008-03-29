@@ -43,6 +43,7 @@
 #include "engine/DatabaseConnection.h"
 
 #include "hierarchy/Database.h"
+#include "hierarchy/Generator.h"
 #include "hierarchy/ItemVisitor.h"
 #include "hierarchy/Table.h"
 #include "hierarchy/TreeRoot.h"
@@ -368,6 +369,9 @@ void Database::createCollections()
     // create shared pointers to collections
     // setParent() will add these to the list of child items
 
+    generatorsM = PSharedGeneratorCollection(new GeneratorCollection());
+    generatorsM->setParent(me);
+
     systemTablesM = PSharedSystemTableCollection(new SystemTableCollection());
     systemTablesM->setParent(me);
 
@@ -388,6 +392,7 @@ void Database::deleteCollections()
 {
     clearChildren();
     // reset all shared pointers to collections
+    generatorsM.reset();
     systemTablesM.reset();
     tablesM.reset();
     triggersM.reset();

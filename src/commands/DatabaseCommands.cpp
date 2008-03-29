@@ -101,5 +101,5 @@ void DatabaseCommands::OnUpdateDisconnectDatabase(wxUpdateUIEvent& event)
     event.Enable(databaseM && databaseM->isConnected());
 }
 //-----------------------------------------------------------------------------
-static const ItemCommandsFactoryImpl<Database, DatabaseCommands> databaseCommandsFactory;
+static const ItemCommandsFactoryImpl<Database, DatabaseCommands> factory;
 //-----------------------------------------------------------------------------

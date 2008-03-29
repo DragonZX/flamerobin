@@ -46,11 +46,12 @@ private:
 protected:
     virtual const wxString getConfigurableObjectId() const;
 public:
+    virtual bool OnExceptionInMainLoop();
     virtual int OnExit();
     virtual bool OnInit();
     virtual void OnFatalException();
-    virtual int OnRun();
-    virtual bool OnExceptionInMainLoop();
+    virtual void HandleEvent(wxEvtHandler* handler, wxEventFunction func,
+        wxEvent& event) const;
 };
 //-----------------------------------------------------------------------------
 DECLARE_APP(Application)

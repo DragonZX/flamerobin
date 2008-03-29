@@ -56,5 +56,5 @@ TriggerCommands::TriggerCommands(PSharedItem item)
     wxASSERT(triggerM);
 }
 //-----------------------------------------------------------------------------
-static const ItemCommandsFactoryImpl<Trigger, TriggerCommands> triggerCommandsFactory;
+static const ItemCommandsFactoryImpl<Trigger, TriggerCommands> factory;
 //-----------------------------------------------------------------------------

@@ -83,11 +83,17 @@ void TriggerCollection::loadChildren()
             " and t.RDB$RELATION_NAME");
 
         if (Relation* relation = getRelation())
-            sql = sql + " = '" + wx2std(relation->getName()) + "'";
+        {
+            sql = sql + " = ? order by 1";
+            std::vector<std::string> params;
+            params.push_back(wx2std(relation->getName()));
+            dbc->loadCollection(getHandle(), sql, params);
+        }
         else
-            sql = sql + " is null";
-        sql += " order by 1";
-        dbc->loadCollection(getHandle(), sql);
+        {
+            sql = sql + " is null order by 1";
+            dbc->loadCollection(getHandle(), sql);
+        }
         return;
     }
 

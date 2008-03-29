@@ -36,76 +36,63 @@
     #include "wx/wx.h"
 #endif
 
-#include "hierarchy/Database.h"
+#include "engine/DatabaseConnection.h"
+
 #include "hierarchy/Generator.h"
-#include "hierarchy/Item.h"
 #include "hierarchy/ItemVisitor.h"
-#include "hierarchy/Table.h"
-#include "hierarchy/TreeFolder.h"
-#include "hierarchy/Trigger.h"
-#include "hierarchy/View.h"
 //-----------------------------------------------------------------------------
-void ItemVisitor::visit(Item& item)
+// Generator class
+Generator::Generator(const Identifier& identifier)
 {
-    defaultAction(&item);
+    setIdentifier(identifier);
 }
 //-----------------------------------------------------------------------------
-void ItemVisitor::visit(Database& database)
+const wxString Generator::getTypeName() const
 {
-    defaultAction(&database);
+    return wxT("GENERATOR");
 }
 //-----------------------------------------------------------------------------
-void ItemVisitor::visit(Generator& generator)
+void Generator::accept(ItemVisitor* visitor)
 {
-    defaultAction(&generator);
+    wxASSERT(visitor);
+    if (visitor)
+        visitor->visit(*this);
 }
 //-----------------------------------------------------------------------------
-void ItemVisitor::visit(GeneratorCollection& generators)
+// GeneratorCollection class
+PSharedItem GeneratorCollection::createCollectionItem(const Identifier& identifier)
 {
-    defaultAction(&generators);
+    PSharedItem trigger(new Generator(identifier));
+    trigger->setParent(shared_from_this());
+    return trigger;
 }
 //-----------------------------------------------------------------------------
-void ItemVisitor::visit(SystemTableCollection& tables)
+void GeneratorCollection::loadChildren()
 {
-    defaultAction(&tables);
+    Database* db = getDatabase();
+    wxCHECK_RET(db,
+        wxT("GeneratorCollection::loadChildren() called without parent database"));
+    DatabaseConnection* dbc = db->getMetadataConnection();
+    if (dbc)
+    {
+        std::string sql("select g.RDB$GENERATOR_NAME from RDB$GENERATORS g"
+            " where g.RDB$SYSTEM_FLAG = 0 or g.RDB$SYSTEM_FLAG is null"
+            " order by 1");
+        dbc->loadCollection(getHandle(), sql);
+        return;
+    }
+
+    // loading is not possible, so clear children and show empty collection
+    SubjectLocker lock(this);
+    clearChildren();
+    setChildrenLoaded(true);
+    notifyObservers();
 }
 //-----------------------------------------------------------------------------
-void ItemVisitor::visit(Table& table)
+void GeneratorCollection::accept(ItemVisitor* visitor)
 {
-    defaultAction(&table);
-}
-//-----------------------------------------------------------------------------
-void ItemVisitor::visit(TableCollection& tables)
-{
-    defaultAction(&tables);
-}
-//-----------------------------------------------------------------------------
-void ItemVisitor::visit(TreeFolder& folder)
-{
-    defaultAction(&folder);
-}
-//-----------------------------------------------------------------------------
-void ItemVisitor::visit(Trigger& trigger)
-{
-    defaultAction(&trigger);
-}
-//-----------------------------------------------------------------------------
-void ItemVisitor::visit(TriggerCollection& triggers)
-{
-    defaultAction(&triggers);
-}
-//-----------------------------------------------------------------------------
-void ItemVisitor::visit(View& view)
-{
-    defaultAction(&view);
-}
-//-----------------------------------------------------------------------------
-void ItemVisitor::visit(ViewCollection& views)
-{
-    defaultAction(&views);
-}
-//-----------------------------------------------------------------------------
-void ItemVisitor::defaultAction(Item*)
-{
+    wxASSERT(visitor);
+    if (visitor)
+        visitor->visit(*this);
 }
 //-----------------------------------------------------------------------------

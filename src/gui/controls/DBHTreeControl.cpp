@@ -43,6 +43,8 @@
 #include <map>
 #include <vector>
 
+#include "config/Config.h"
+
 #include "core/ArtProvider.h"
 #include "core/CommandIds.h"
 
@@ -50,6 +52,7 @@
 #include "gui/controls/DBHTreeControlContextMenuCreator.h"
 
 #include "hierarchy/Database.h"
+#include "hierarchy/Generator.h"
 #include "hierarchy/ItemVisitor.h"
 #include "hierarchy/Table.h"
 #include "hierarchy/TreeFolder.h"
@@ -133,17 +136,76 @@ int DBHTreeImageList::getImageIndex(const wxArtID& id)
     return -1;
 }
 //-----------------------------------------------------------------------------
+// DBHTreeConfigCache: class to cache config data for tree control behaviour
+class DBHTreeConfigCache: public ConfigCache
+{
+private:
+    bool allowDragM;
+    bool hideDisconnectedDatabasesM;
+    bool showColumnsM;
+protected:
+    virtual void loadFromConfig();
+public:
+    DBHTreeConfigCache();
+    
+    static DBHTreeConfigCache& get();
+
+    bool allowDnD();
+    bool getHideDisconnectedDatabases();
+    bool getShowColumns();
+};
+//----------------------------------------------------------------------------
+DBHTreeConfigCache::DBHTreeConfigCache()
+    : ConfigCache(config())
+{
+}
+//-----------------------------------------------------------------------------
+DBHTreeConfigCache& DBHTreeConfigCache::get()
+{
+    static DBHTreeConfigCache dndc;
+    return dndc;
+}
+//-----------------------------------------------------------------------------
+void DBHTreeConfigCache::loadFromConfig()
+{
+    allowDragM = config().get(wxT("allowDragAndDrop"), false);
+    hideDisconnectedDatabasesM = config().get(wxT("HideDisconnectedDatabases"),
+        false);
+    showColumnsM = config().get(wxT("ShowColumnsInTree"), true);
+}
+//----------------------------------------------------------------------------
+bool DBHTreeConfigCache::allowDnD()
+{
+    ensureCacheValid();
+    return allowDragM;
+}
+//-----------------------------------------------------------------------------
+bool DBHTreeConfigCache::getHideDisconnectedDatabases()
+{
+    ensureCacheValid();
+    return hideDisconnectedDatabasesM;
+}
+//-----------------------------------------------------------------------------
+bool DBHTreeConfigCache::getShowColumns()
+{
+    ensureCacheValid();
+    return showColumnsM;
+}
+//-----------------------------------------------------------------------------
 // DBHItemTreeNodeProperties class
 class DBHItemTreeNodeProperties : public ItemVisitor
 {
 public:
     DBHItemTreeNodeProperties(DBHTreeControl& tree);
 
+    bool getSortChildren() { return sortChildrenM; };
     bool hasLoadedChildren() { return childrenLoadedM; };
     bool isVisible() { return visibleM; };
     void updateTreeItem(const wxTreeItemId id);
 
     virtual void visit(Database& database);
+    virtual void visit(Generator& generator);
+    virtual void visit(GeneratorCollection& generators);
     virtual void visit(Item& item) { visitItem(&item); };
     virtual void visit(SystemTableCollection& tables);
     virtual void visit(Table& table);
@@ -161,6 +223,7 @@ private:
     wxString captionM;
     int imageIndexM;
     bool childrenLoadedM;
+    bool sortChildrenM;
 
     void visitCollection(Item* item, const wxString& caption, int imageIndex);
     void visitItem(Item* item);
@@ -202,6 +265,7 @@ void DBHItemTreeNodeProperties::reset()
     captionM.clear();
     imageIndexM = -1;
     childrenLoadedM = false;
+    sortChildrenM = false;
 }
 //-----------------------------------------------------------------------------
 void DBHItemTreeNodeProperties::updateTreeItem(wxTreeItemId id)
@@ -219,7 +283,12 @@ void DBHItemTreeNodeProperties::updateTreeItem(wxTreeItemId id)
 //-----------------------------------------------------------------------------
 void DBHItemTreeNodeProperties::visit(Database& database)
 {
-    visibleM = true;
+    // hide disconnected databases
+    visibleM = database.isConnected()
+        || !DBHTreeConfigCache::get().getHideDisconnectedDatabases();
+    if (!visibleM)
+        return;
+
     captionIsBoldM = database.isConnected();
     captionM = database.getName();
     if (database.getConnectionState() == Database::csConnecting)
@@ -230,6 +299,18 @@ void DBHItemTreeNodeProperties::visit(Database& database)
         ART_DatabaseConnected : ART_DatabaseDisconnected);
     imageIndexM = DBHTreeImageList::get().getImageIndex(id);
     childrenLoadedM = true;
+}
+//-----------------------------------------------------------------------------
+void DBHItemTreeNodeProperties::visit(Generator& generator)
+{
+    visitItem(&generator);
+    imageIndexM = DBHTreeImageList::get().getImageIndex(ART_Generator);
+}
+//-----------------------------------------------------------------------------
+void DBHItemTreeNodeProperties::visit(GeneratorCollection& generators)
+{
+    int img = DBHTreeImageList::get().getImageIndex(ART_Generators);
+    visitCollection(&generators, _("Generators"), img);
 }
 //-----------------------------------------------------------------------------
 void DBHItemTreeNodeProperties::visit(SystemTableCollection& tables)
@@ -257,6 +338,7 @@ void DBHItemTreeNodeProperties::visit(TreeFolder& folder)
     // even empty folder nodes should have a bold caption
     captionIsBoldM = true;
     imageIndexM = DBHTreeImageList::get().getImageIndex(wxART_FOLDER);
+    sortChildrenM = true;
 }
 //-----------------------------------------------------------------------------
 void DBHItemTreeNodeProperties::visit(Trigger& trigger)
@@ -438,6 +520,9 @@ void DBHTreeNode::update()
     {
         // TODO: find orphaned child nodes and delete them
     }
+
+    if (nodeProps.getSortChildren())
+        treeM.SortChildren(id);
 
     // show the [+] marker when there are (or could be) children
     treeM.SetItemHasChildren(id,
