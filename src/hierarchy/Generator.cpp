@@ -87,7 +87,6 @@ void GeneratorCollection::loadChildren()
     SubjectLocker lock(this);
     clearChildren();
     setLoadChildrenState(lcsLoaded);
-    notifyObservers();
 }
 //-----------------------------------------------------------------------------
 void GeneratorCollection::accept(ItemVisitor* visitor)

@@ -367,3 +367,36 @@ void MetadataItemCollection::setChildrenIdentifiers(
     notifyObservers();
 }
 //-----------------------------------------------------------------------------
+void MetadataItemCollection::setChildrenIdentifiersData(
+    const std::list<IdentifierAndData>& identAndData)
+{
+    bool changed = identAndData.size() != getChildrenCount();
+    std::vector<PSharedItem> children;
+
+    SubjectLocker lock(this);
+    std::list<IdentifierAndData>::const_iterator it;
+    for (it = identAndData.begin(); it != identAndData.end(); ++it)
+    {
+        const Identifier& id = (*it).identifier;
+        PSharedItem child = getChild(id.get());
+        if (!child)
+        {
+            child = createCollectionItem(id);
+            changed = true;
+        }
+        setCollectionItemData(child, (*it).data);
+        children.push_back(child);
+    }
+    if (changed)
+    {
+// TODO: remove children that are no longer in identifiers
+    };
+    setLoadChildrenState(Item::lcsLoaded);
+    notifyObservers();
+}
+//-----------------------------------------------------------------------------
+void MetadataItemCollection::setCollectionItemData(PSharedItem item,
+    const VectorOfAny& /*data*/)
+{
+}
+//-----------------------------------------------------------------------------

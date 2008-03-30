@@ -87,7 +87,6 @@ void ProcedureCollection::loadChildren()
     SubjectLocker lock(this);
     clearChildren();
     setLoadChildrenState(lcsLoaded);
-    notifyObservers();
 }
 //-----------------------------------------------------------------------------
 void ProcedureCollection::accept(ItemVisitor* visitor)

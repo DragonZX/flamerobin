@@ -29,10 +29,25 @@
 #define FR_COLUMN_H
 //-----------------------------------------------------------------------------
 #include "hierarchy/Item.h"
+
+class ColumnCollection;
 //-----------------------------------------------------------------------------
 class Column : public MetadataItemBase
 {
+private:
+    bool notNullM;
+    wxString fieldSourceM;
+    wxString collationNameM;
+    wxString computedSourceM;
+    wxString defaultSourceM;
+    bool defaultSourceIsNullM;
+
+    void setData(bool notNull, const wxString& fieldSource,
+        const wxString& collationName, const wxString& computedSource,
+        const wxString& defaultSource, bool defaultSourceIsNull);
 public:
+    friend class ColumnCollection;
+
     Column(const Identifier& identifier);
 
     virtual const wxString getTypeName() const;
@@ -44,6 +59,8 @@ class ColumnCollection: public MetadataItemCollection
 {
 protected:
     virtual PSharedItem createCollectionItem(const Identifier& identifier);
+    virtual void setCollectionItemData(PSharedItem item,
+        const VectorOfAny& data);
 public:
     virtual void loadChildren();
     virtual void accept(ItemVisitor* visitor);

@@ -99,7 +99,6 @@ void SystemTableCollection::loadChildren()
     SubjectLocker lock(this);
     clearChildren();
     setLoadChildrenState(lcsLoaded);
-    notifyObservers();
 }
 //-----------------------------------------------------------------------------
 void SystemTableCollection::accept(ItemVisitor* visitor)
@@ -137,7 +136,6 @@ void TableCollection::loadChildren()
     SubjectLocker lock(this);
     clearChildren();
     setLoadChildrenState(lcsLoaded);
-    notifyObservers();
 }
 //-----------------------------------------------------------------------------
 void TableCollection::accept(ItemVisitor* visitor)

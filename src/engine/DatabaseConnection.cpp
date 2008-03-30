@@ -267,13 +267,24 @@ private:
     std::string statementM;
     std::vector<std::string> paramsM;
     std::list<std::string> identifiersM;
+    std::list<VectorOfAny> dataM;
 protected:
     virtual void executeJob(DatabaseConnectionThread* thread);
 public:
     FetchIdentifiersJob(Database& database, Item::Handle itemHandle,
+        const std::string& statement);
+    FetchIdentifiersJob(Database& database, Item::Handle itemHandle,
         const std::string& statement, const std::vector<std::string>& params);
     virtual void processResults();
 };
+//-----------------------------------------------------------------------------
+FetchIdentifiersJob::FetchIdentifiersJob(Database& database,
+        Item::Handle itemHandle, const std::string& statement)
+    : DatabaseConnectionThreadJob(database), itemHandleM(itemHandle),
+        statementM(statement), paramsM()
+{
+    wxASSERT(wxIsMainThread());
+}
 //-----------------------------------------------------------------------------
 FetchIdentifiersJob::FetchIdentifiersJob(Database& database,
         Item::Handle itemHandle, const std::string& statement,
@@ -299,39 +310,99 @@ void FetchIdentifiersJob::executeJob(DatabaseConnectionThread* thread)
                 st->Set(i, paramsM[i - 1]);
         }
         st->Execute();
+        int columns = st->Columns();
         while (st->Fetch())
         {
             std::string name;
-            // do as little as possible here - trailing spaces are not removed
+            // do as little as possible here
+            // trailing spaces are removed when Identifier is created
             if (!st->Get(1, name))
+            {
                 identifiersM.push_back(name);
+
+                if (columns > 1)
+                {
+                    VectorOfAny data;
+                    data.reserve(2 * (columns - 1));
+                    for (int i = 2; i <= columns; ++i)
+                    {
+                        // initialize with defaults for NULL in column
+                        bool isNull;
+                        int n = 0;
+                        std::string s;
+
+                        switch (st->ColumnType(i))
+                        {
+                            case IBPP::sdSmallint:
+                            case IBPP::sdInteger:
+                                isNull = st->Get(i, n);
+                                data.push_back(isNull);
+                                data.push_back(n);
+                                break;
+                            // TODO: handle more data types
+                            default:
+                                isNull = st->Get(i, s);
+                                data.push_back(isNull);
+                                data.push_back(s);
+                                break;
+                        }
+                    }
+                    dataM.push_back(data);
+                }
+            }
         }
     }
 }
 //-----------------------------------------------------------------------------
 void FetchIdentifiersJob::processResults()
 {
-    Item* item = Item::getFromHandle(itemHandleM);
-    if (item)
-    {
-        // build a list of Identifier objects from the strings
-        // the Identifier constructor will strip trailing spaces
-        std::list<Identifier> identifiers;
-        for (std::list<std::string>::iterator it = identifiersM.begin();
-            it != identifiersM.end(); ++it)
-        {
-            Identifier id(std2wx(*it));
-            identifiers.push_back(id);
-        }
-        MetadataItemCollection* collection =
-            dynamic_cast<MetadataItemCollection*>(item);
-        wxASSERT(collection);
-        if (collection)
-            collection->setChildrenIdentifiers(identifiers);
-    }
+    wxASSERT(wxIsMainThread());
 
     if (hasError())
+    {
         reportError(_("An error occurred while fetching the list of identifiers!"));
+        return;
+    }
+
+    Item* item = Item::getFromHandle(itemHandleM);
+    MetadataItemCollection* collection =
+        dynamic_cast<MetadataItemCollection*>(item);
+    wxASSERT(collection);
+    if (collection)
+    {
+        if (dataM.size() && dataM.size() == identifiersM.size())
+        {
+            // build a list of IdentifierAndData structs from the std::strings
+            // and vector<boost::any> objects
+            // the Identifier constructor will strip trailing spaces
+            std::list<MetadataItemCollection::IdentifierAndData> identAndData;
+            std::list<VectorOfAny>::iterator itData = dataM.begin();
+            for (std::list<std::string>::iterator it = identifiersM.begin();
+                it != identifiersM.end(); ++it)
+            {
+                MetadataItemCollection::IdentifierAndData iaa;
+                iaa.identifier.setText(std2wx(*it));
+                iaa.data = *itData;
+                identAndData.push_back(iaa);
+                ++itData;
+            }
+            collection->setChildrenIdentifiersData(identAndData);
+        }
+        else
+        {
+            // build a list of Identifier objects from the strings
+            // the Identifier constructor will strip trailing spaces
+            std::list<Identifier> identifiers;
+            for (std::list<std::string>::iterator it = identifiersM.begin();
+                it != identifiersM.end(); ++it)
+            {
+                Identifier id(std2wx(*it));
+                identifiers.push_back(id);
+            }
+            collection->setChildrenIdentifiers(identifiers);
+        }
+    }
+
 }
 //-----------------------------------------------------------------------------
 // DatabaseConnection class
@@ -358,9 +429,8 @@ void DatabaseConnection::disconnect()
 void DatabaseConnection::loadCollection(Item::Handle itemHandle,
     const std::string& sql)
 {
-    std::vector<std::string> params;
     queueJob(SharedDBCThreadJob(
-        new FetchIdentifiersJob(databaseM, itemHandle, sql, params)));
+        new FetchIdentifiersJob(databaseM, itemHandle, sql)));
 }
 //-----------------------------------------------------------------------------
 void DatabaseConnection::loadCollection(Item::Handle itemHandle,

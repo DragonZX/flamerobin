@@ -87,7 +87,6 @@ void FunctionCollection::loadChildren()
     SubjectLocker lock(this);
     clearChildren();
     setLoadChildrenState(lcsLoaded);
-    notifyObservers();
 }
 //-----------------------------------------------------------------------------
 void FunctionCollection::accept(ItemVisitor* visitor)

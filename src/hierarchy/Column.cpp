@@ -46,8 +46,48 @@
 //-----------------------------------------------------------------------------
 // Column class
 Column::Column(const Identifier& identifier)
+    : MetadataItemBase(), notNullM(false), defaultSourceIsNullM(true)
 {
     setIdentifier(identifier);
+}
+//-----------------------------------------------------------------------------
+void Column::setData(bool notNull, const wxString& fieldSource,
+    const wxString& collationName, const wxString& computedSource,
+    const wxString& defaultSource, bool defaultSourceIsNull)
+{
+    unsigned changes = 0;
+    if (notNullM != notNull)
+    {
+        notNullM = notNull;
+        ++changes;
+    }
+    if (fieldSourceM.Cmp(fieldSource) != 0)
+    {
+        fieldSourceM = fieldSource;
+        ++changes;
+    }
+    if (collationNameM.Cmp(collationName) != 0)
+    {
+        collationNameM = collationName;
+        ++changes;
+    }
+    if (computedSourceM.Cmp(computedSource) != 0)
+    {
+        computedSourceM = computedSource;
+        ++changes;
+    }
+    if (defaultSourceM.Cmp(defaultSource) != 0)
+    {
+        defaultSourceM = defaultSource;
+        ++changes;
+    }
+    if (defaultSourceIsNullM != defaultSourceIsNull)
+    {
+        defaultSourceIsNullM = defaultSourceIsNull;
+        ++changes;
+    }
+    if (changes)
+        notifyObservers();
 }
 //-----------------------------------------------------------------------------
 const wxString Column::getTypeName() const
@@ -68,6 +108,37 @@ PSharedItem ColumnCollection::createCollectionItem(const Identifier& identifier)
     PSharedItem column(new Column(identifier));
     column->setParent(shared_from_this());
     return column;
+}
+//-----------------------------------------------------------------------------
+void ColumnCollection::setCollectionItemData(PSharedItem item,
+    const VectorOfAny& data)
+{
+    Column* column = dynamic_cast<Column*>(item.get());
+    wxCHECK_RET(column,
+        wxT("ColumnCollection::setCollectionItemData() called without column"));
+    // NULL flag, field src, collation name, computed src, default src
+    // for each data item there is a bool first for NULL, then the item value
+    wxASSERT(data.size() == 2 * 5);
+
+    // isNull = boost::any_cast<bool>(data[0]);
+    bool colNotNull = 0 != boost::any_cast<int>(data[1]);
+    // isNull = boost::any_cast<bool>(data[2]);
+    std::string s = boost::any_cast<std::string>(data[3]);
+    wxString fieldSource(std2wx(s));
+    fieldSource.Trim();
+    // isNull = boost::any_cast<bool>(data[4]);
+    s = boost::any_cast<std::string>(data[5]);
+    wxString collationName(std2wx(s));
+    collationName.Trim();
+    // isNull = boost::any_cast<bool>(data[6]);
+    s = boost::any_cast<std::string>(data[7]);
+    wxString computedSource(std2wx(s));
+    bool defaultIsNull = boost::any_cast<bool>(data[8]);
+    s = boost::any_cast<std::string>(data[9]);
+    wxString defaultSource(std2wx(s));
+
+    column->setData(colNotNull, fieldSource, collationName, computedSource,
+        defaultSource, defaultIsNull);
 }
 //-----------------------------------------------------------------------------
 void ColumnCollection::loadChildren()
@@ -93,7 +164,6 @@ void ColumnCollection::loadChildren()
         std::vector<std::string> params;
         if (Relation* relation = getRelation())
             params.push_back(wx2std(relation->getName()));
-// TODO: loadCollection() needs to read and set all fields, not only identifiers...
         dbc->loadCollection(getHandle(), sql, params);
         return;
     }
@@ -102,7 +172,6 @@ void ColumnCollection::loadChildren()
     SubjectLocker lock(this);
     clearChildren();
     setLoadChildrenState(lcsLoaded);
-    notifyObservers();
 }
 //-----------------------------------------------------------------------------
 void ColumnCollection::accept(ItemVisitor* visitor)

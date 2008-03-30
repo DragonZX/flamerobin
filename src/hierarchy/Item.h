@@ -30,7 +30,10 @@
 //-----------------------------------------------------------------------------
 #include <wx/wx.h>
 
+#include <list>
+#include <map>
 #include <vector>
+#include <boost/any.hpp>
 #include <boost/enable_shared_from_this.hpp>
 #include <boost/weak_ptr.hpp>
 
@@ -40,6 +43,8 @@
 //-----------------------------------------------------------------------------
 class ItemVisitor;
 class Relation;
+//-----------------------------------------------------------------------------
+typedef std::vector<boost::any> VectorOfAny;
 //-----------------------------------------------------------------------------
 // Item class is the base class for the hierarchy
 // Since we have hierarchy items which are not metadata items (folders,
@@ -239,10 +244,20 @@ typedef ItemTemplate<ItemHasChildren, ItemNameIsIdentifier> MetadataItemWithChil
 //-----------------------------------------------------------------------------
 class MetadataItemCollection: public ItemWithChildrenBase
 {
+public:
+    typedef struct IdentifierAndData {
+        Identifier identifier;
+        VectorOfAny data;
+    };
 protected:
     virtual PSharedItem createCollectionItem(const Identifier& identifier) = 0;
+    virtual void setCollectionItemData(PSharedItem item,
+        const VectorOfAny& data);
+    void setLoadedWithoutChildren();
 public:
     void setChildrenIdentifiers(const std::list<Identifier>& identifiers);
+    void setChildrenIdentifiersData(
+        const std::list<IdentifierAndData>& identAndData);
 };
 //-----------------------------------------------------------------------------
 #endif // FR_ITEM_H

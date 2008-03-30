@@ -102,7 +102,6 @@ void TriggerCollection::loadChildren()
     SubjectLocker lock(this);
     clearChildren();
     setLoadChildrenState(lcsLoaded);
-    notifyObservers();
 }
 //-----------------------------------------------------------------------------
 void TriggerCollection::accept(ItemVisitor* visitor)
