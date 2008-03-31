@@ -216,6 +216,8 @@ wxBitmap ArtProvider::CreateBitmap(const wxArtID& id,
     {
         if (id == ART_Column)
             return wxBitmap(column_xpm);
+        if (id == ART_Columns)
+            return wxBitmap(column_xpm);
         if (id == ART_CommitTransaction)
             return wxBitmap(ok_xpm);
         if (id == ART_Computed)

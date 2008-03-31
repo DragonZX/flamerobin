@@ -125,6 +125,11 @@ void DBHTreeImageList::addImage(const wxArtID& art)
 {
     wxBitmap bmp(wxArtProvider::GetBitmap(art, wxART_OTHER, wxSize(16, 16)));
     if (!bmp.Ok())
+    {
+        bmp = wxArtProvider::GetBitmap(wxART_MISSING_IMAGE, wxART_OTHER,
+           wxSize(16, 16));
+    }
+    if (!bmp.Ok())
         return;
     wxIcon icon;
     icon.CopyFromBitmap(bmp);
