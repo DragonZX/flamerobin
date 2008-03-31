@@ -340,6 +340,7 @@ void DBHItemTreeNodeProperties::visit(Database& database)
         ART_DatabaseConnected : ART_DatabaseDisconnected);
     imageIndexM = DBHTreeImageList::get().getImageIndex(id);
     childrenNotLoadedM = false;
+    sortChildrenM = true;
 }
 //-----------------------------------------------------------------------------
 void DBHItemTreeNodeProperties::visit(Domain& domain)
@@ -442,7 +443,10 @@ void DBHItemTreeNodeProperties::visit(Trigger& trigger)
 void DBHItemTreeNodeProperties::visit(TriggerCollection& triggers)
 {
     int img = DBHTreeImageList::get().getImageIndex(ART_Triggers);
-    visitCollection(&triggers, _("Triggers"), img);
+    if (triggers.getRelation() != 0)
+        visitCollection(&triggers, _("Triggers"), img);
+    else
+        visitCollection(&triggers, _("Database Triggers"), img);
 }
 //-----------------------------------------------------------------------------
 void DBHItemTreeNodeProperties::visit(View& view)

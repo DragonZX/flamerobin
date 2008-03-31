@@ -49,6 +49,8 @@ class Domain;
 typedef boost::shared_ptr<Domain> PSharedDomain;
 class DomainCollection;
 typedef boost::shared_ptr<DomainCollection> PSharedDomainCollection;
+class SystemDomainCollection;
+typedef boost::shared_ptr<SystemDomainCollection> PSharedSystemDomainCollection;
 class Exception;
 typedef boost::shared_ptr<Exception> PSharedException;
 class ExceptionCollection;

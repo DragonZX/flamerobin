@@ -80,6 +80,11 @@ void ItemVisitor::visit(DomainCollection& domains)
     defaultAction(&domains);
 }
 //-----------------------------------------------------------------------------
+void ItemVisitor::visit(SystemDomainCollection& systemDomains)
+{
+    defaultAction(&systemDomains);
+}
+//-----------------------------------------------------------------------------
 void ItemVisitor::visit(Exception& exception)
 {
     defaultAction(&exception);

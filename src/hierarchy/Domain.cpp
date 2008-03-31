@@ -86,7 +86,8 @@ void DomainCollection::loadChildren()
         setLoadChildrenState(lcsLoading);
         std::string sql("select f.RDB$FIELD_NAME from RDB$FIELDS f"
             " left outer join RDB$TYPES t on f.RDB$FIELD_TYPE = t.RDB$TYPE"
-            " where t.RDB$FIELD_NAME = 'RDB$FIELD_TYPE' order by 1");
+            " where t.RDB$FIELD_NAME = 'RDB$FIELD_TYPE'"
+            " and f.RDB$FIELD_NAME not starting with 'RDB$' order by 1");
         dbc->loadCollection(getHandle(), sql);
         return;
     }
@@ -98,6 +99,45 @@ void DomainCollection::loadChildren()
 }
 //-----------------------------------------------------------------------------
 void DomainCollection::accept(ItemVisitor* visitor)
+{
+    wxASSERT(visitor);
+    if (visitor)
+        visitor->visit(*this);
+}
+//-----------------------------------------------------------------------------
+// SystemDomainCollection class
+PSharedItem SystemDomainCollection::createCollectionItem(
+    const Identifier& identifier)
+{
+    PSharedItem domain(new Domain(identifier));
+    domain->setParent(shared_from_this());
+    return domain;
+}
+//-----------------------------------------------------------------------------
+void SystemDomainCollection::loadChildren()
+{
+    Database* db = getDatabase();
+    wxCHECK_RET(db,
+        wxT("SystemDomainCollection::loadChildren() called without parent database"));
+    DatabaseConnection* dbc = db->getMetadataConnection();
+    if (dbc)
+    {
+        setLoadChildrenState(lcsLoading);
+        std::string sql("select f.RDB$FIELD_NAME from RDB$FIELDS f"
+            " left outer join RDB$TYPES t on f.RDB$FIELD_TYPE = t.RDB$TYPE"
+            " where t.RDB$FIELD_NAME = 'RDB$FIELD_TYPE'"
+            " and f.RDB$FIELD_NAME starting with 'RDB$' order by 1");
+        dbc->loadCollection(getHandle(), sql);
+        return;
+    }
+
+    // loading is not possible, so clear children and show empty collection
+    SubjectLocker lock(this);
+    clearChildren();
+    setLoadChildrenState(lcsLoaded);
+}
+//-----------------------------------------------------------------------------
+void SystemDomainCollection::accept(ItemVisitor* visitor)
 {
     wxASSERT(visitor);
     if (visitor)

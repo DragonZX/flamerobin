@@ -49,4 +49,13 @@ public:
     virtual void accept(ItemVisitor* visitor);
 };
 //-----------------------------------------------------------------------------
+class SystemDomainCollection: public MetadataItemCollection
+{
+protected:
+    virtual PSharedItem createCollectionItem(const Identifier& identifier);
+public:
+    virtual void loadChildren();
+    virtual void accept(ItemVisitor* visitor);
+};
+//-----------------------------------------------------------------------------
 #endif // FR_DOMAIN_H

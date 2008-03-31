@@ -372,14 +372,26 @@ void Database::createCollections()
     PSharedItem me(shared_from_this());
     // create shared pointers to collections
     // setParent() will add these to the list of child items
+    // create (and load) them in order of importance, because captions
+    // may be different in other languages and need to be reordered anyway
+    tablesM = PSharedTableCollection(new TableCollection());
+    tablesM->setParent(me);
+    tablesM->loadChildren();
 
-    domainsM = PSharedDomainCollection(new DomainCollection());
-    domainsM->setParent(me);
-    domainsM->loadChildren();
+    viewsM = PSharedViewCollection(new ViewCollection());
+    viewsM->setParent(me);
+    viewsM->loadChildren();
 
-    exceptionsM = PSharedExceptionCollection(new ExceptionCollection());
-    exceptionsM->setParent(me);
-    exceptionsM->loadChildren();
+    proceduresM = PSharedProcedureCollection(new ProcedureCollection());
+    proceduresM->setParent(me);
+    proceduresM->loadChildren();
+
+    if (serverVersionM.supportsDatabaseTriggers())
+    {
+        triggersM = PSharedTriggerCollection(new TriggerCollection());
+        triggersM->setParent(me);
+        triggersM->loadChildren();
+    }
 
     functionsM = PSharedFunctionCollection(new FunctionCollection());
     functionsM->setParent(me);
@@ -389,28 +401,21 @@ void Database::createCollections()
     generatorsM->setParent(me);
     generatorsM->loadChildren();
 
-    proceduresM = PSharedProcedureCollection(new ProcedureCollection());
-    proceduresM->setParent(me);
-    proceduresM->loadChildren();
+    domainsM = PSharedDomainCollection(new DomainCollection());
+    domainsM->setParent(me);
+    domainsM->loadChildren();
+
+    exceptionsM = PSharedExceptionCollection(new ExceptionCollection());
+    exceptionsM->setParent(me);
+    exceptionsM->loadChildren();
 
     systemTablesM = PSharedSystemTableCollection(new SystemTableCollection());
     systemTablesM->setParent(me);
     systemTablesM->loadChildren();
 
-    tablesM = PSharedTableCollection(new TableCollection());
-    tablesM->setParent(me);
-    tablesM->loadChildren();
-
-    if (serverVersionM.supportsDatabaseTriggers())
-    {
-        triggersM = PSharedTriggerCollection(new TriggerCollection());
-        triggersM->setParent(me);
-        triggersM->loadChildren();
-    }
-
-    viewsM = PSharedViewCollection(new ViewCollection());
-    viewsM->setParent(me);
-    viewsM->loadChildren();
+    systemDomainsM = PSharedSystemDomainCollection(new SystemDomainCollection());
+    systemDomainsM->setParent(me);
+    systemDomainsM->loadChildren();
 }
 //-----------------------------------------------------------------------------
 void Database::deleteCollections()
@@ -422,6 +427,7 @@ void Database::deleteCollections()
     functionsM.reset();
     generatorsM.reset();
     proceduresM.reset();
+    systemDomainsM.reset();
     systemTablesM.reset();
     tablesM.reset();
     triggersM.reset();

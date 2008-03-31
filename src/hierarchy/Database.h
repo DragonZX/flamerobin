@@ -131,6 +131,7 @@ private:
     PSharedFunctionCollection functionsM;
     PSharedGeneratorCollection generatorsM;
     PSharedProcedureCollection proceduresM;
+    PSharedSystemDomainCollection systemDomainsM;
     PSharedSystemTableCollection systemTablesM;
     PSharedTriggerCollection triggersM;
     PSharedTableCollection tablesM;
