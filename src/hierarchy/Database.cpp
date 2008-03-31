@@ -43,6 +43,8 @@
 #include "engine/DatabaseConnection.h"
 
 #include "hierarchy/Database.h"
+#include "hierarchy/Domain.h"
+#include "hierarchy/Exception.h"
 #include "hierarchy/Function.h"
 #include "hierarchy/Generator.h"
 #include "hierarchy/ItemVisitor.h"
@@ -371,6 +373,14 @@ void Database::createCollections()
     // create shared pointers to collections
     // setParent() will add these to the list of child items
 
+    domainsM = PSharedDomainCollection(new DomainCollection());
+    domainsM->setParent(me);
+    domainsM->loadChildren();
+
+    exceptionsM = PSharedExceptionCollection(new ExceptionCollection());
+    exceptionsM->setParent(me);
+    exceptionsM->loadChildren();
+
     functionsM = PSharedFunctionCollection(new FunctionCollection());
     functionsM->setParent(me);
     functionsM->loadChildren();
@@ -407,6 +417,8 @@ void Database::deleteCollections()
 {
     clearChildren();
     // reset all shared pointers to collections
+    domainsM.reset();
+    exceptionsM.reset();
     functionsM.reset();
     generatorsM.reset();
     proceduresM.reset();

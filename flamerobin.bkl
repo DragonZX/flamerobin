@@ -242,6 +242,8 @@
 
         $(SOURCEDIR)/hierarchy/Column.h
         $(SOURCEDIR)/hierarchy/Database.h
+        $(SOURCEDIR)/hierarchy/Domain.h
+        $(SOURCEDIR)/hierarchy/Exception.h
         $(SOURCEDIR)/hierarchy/Function.h
         $(SOURCEDIR)/hierarchy/Generator.h
         $(SOURCEDIR)/hierarchy/Item.h
@@ -304,6 +306,8 @@
 
         $(SOURCEDIR)/hierarchy/Column.cpp
         $(SOURCEDIR)/hierarchy/Database.cpp
+        $(SOURCEDIR)/hierarchy/Domain.cpp
+        $(SOURCEDIR)/hierarchy/Exception.cpp
         $(SOURCEDIR)/hierarchy/Function.cpp
         $(SOURCEDIR)/hierarchy/Generator.cpp
         $(SOURCEDIR)/hierarchy/Item.cpp

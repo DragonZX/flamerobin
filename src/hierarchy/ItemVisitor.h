@@ -33,6 +33,10 @@
 class Column;
 class ColumnCollection;
 class Database;
+class Domain;
+class DomainCollection;
+class Exception;
+class ExceptionCollection;
 class Function;
 class FunctionCollection;
 class Generator;
@@ -57,6 +61,10 @@ public:
     virtual void visit(Column& column);
     virtual void visit(ColumnCollection& columns);
     virtual void visit(Database& database);
+    virtual void visit(Domain& domain);
+    virtual void visit(DomainCollection& domains);
+    virtual void visit(Exception& exception);
+    virtual void visit(ExceptionCollection& exceptions);
     virtual void visit(Function& function);
     virtual void visit(FunctionCollection& functions);
     virtual void visit(Generator& generator);

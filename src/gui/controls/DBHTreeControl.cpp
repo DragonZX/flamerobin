@@ -53,6 +53,8 @@
 
 #include "hierarchy/Column.h"
 #include "hierarchy/Database.h"
+#include "hierarchy/Domain.h"
+#include "hierarchy/Exception.h"
 #include "hierarchy/Function.h"
 #include "hierarchy/Generator.h"
 #include "hierarchy/ItemVisitor.h"
@@ -214,6 +216,10 @@ public:
     virtual void visit(Column& column);
     virtual void visit(ColumnCollection& columns);
     virtual void visit(Database& database);
+    virtual void visit(Domain& domain);
+    virtual void visit(DomainCollection& domains);
+    virtual void visit(Exception& exception);
+    virtual void visit(ExceptionCollection& exceptions);
     virtual void visit(Function& function);
     virtual void visit(FunctionCollection& functions);
     virtual void visit(Generator& generator);
@@ -334,6 +340,33 @@ void DBHItemTreeNodeProperties::visit(Database& database)
         ART_DatabaseConnected : ART_DatabaseDisconnected);
     imageIndexM = DBHTreeImageList::get().getImageIndex(id);
     childrenNotLoadedM = false;
+}
+//-----------------------------------------------------------------------------
+void DBHItemTreeNodeProperties::visit(Domain& domain)
+{
+    if (!domain.isSystem())
+    {
+        visitItem(&domain);
+        imageIndexM = DBHTreeImageList::get().getImageIndex(ART_Domain);
+    }
+}
+//-----------------------------------------------------------------------------
+void DBHItemTreeNodeProperties::visit(DomainCollection& domains)
+{
+    int img = DBHTreeImageList::get().getImageIndex(ART_Domains);
+    visitCollection(&domains, _("Domains"), img);
+}
+//-----------------------------------------------------------------------------
+void DBHItemTreeNodeProperties::visit(Exception& exception)
+{
+    visitItem(&exception);
+    imageIndexM = DBHTreeImageList::get().getImageIndex(ART_Exception);
+}
+//-----------------------------------------------------------------------------
+void DBHItemTreeNodeProperties::visit(ExceptionCollection& exceptions)
+{
+    int img = DBHTreeImageList::get().getImageIndex(ART_Exceptions);
+    visitCollection(&exceptions, _("Exceptions"), img);
 }
 //-----------------------------------------------------------------------------
 void DBHItemTreeNodeProperties::visit(Function& function)

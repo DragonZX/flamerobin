@@ -126,6 +126,8 @@ private:
     DatabaseConnection* metadataConnectionM;
     ServerVersion serverVersionM;
 
+    PSharedDomainCollection domainsM;
+    PSharedExceptionCollection exceptionsM;
     PSharedFunctionCollection functionsM;
     PSharedGeneratorCollection generatorsM;
     PSharedProcedureCollection proceduresM;

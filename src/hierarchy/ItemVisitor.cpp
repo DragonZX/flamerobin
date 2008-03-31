@@ -38,6 +38,8 @@
 
 #include "hierarchy/Column.h"
 #include "hierarchy/Database.h"
+#include "hierarchy/Domain.h"
+#include "hierarchy/Exception.h"
 #include "hierarchy/Function.h"
 #include "hierarchy/Generator.h"
 #include "hierarchy/Item.h"
@@ -66,6 +68,26 @@ void ItemVisitor::visit(ColumnCollection& columns)
 void ItemVisitor::visit(Database& database)
 {
     defaultAction(&database);
+}
+//-----------------------------------------------------------------------------
+void ItemVisitor::visit(Domain& domain)
+{
+    defaultAction(&domain);
+}
+//-----------------------------------------------------------------------------
+void ItemVisitor::visit(DomainCollection& domains)
+{
+    defaultAction(&domains);
+}
+//-----------------------------------------------------------------------------
+void ItemVisitor::visit(Exception& exception)
+{
+    defaultAction(&exception);
+}
+//-----------------------------------------------------------------------------
+void ItemVisitor::visit(ExceptionCollection& exceptions)
+{
+    defaultAction(&exceptions);
 }
 //-----------------------------------------------------------------------------
 void ItemVisitor::visit(Function& function)
