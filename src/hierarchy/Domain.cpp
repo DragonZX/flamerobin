@@ -45,6 +45,7 @@
 //-----------------------------------------------------------------------------
 // Domain class
 Domain::Domain(const Identifier& identifier)
+    : MetadataItemBase(), notNullM(false)
 {
     setIdentifier(identifier);
 }
@@ -52,6 +53,11 @@ Domain::Domain(const Identifier& identifier)
 const wxString Domain::getTypeName() const
 {
     return wxT("DOMAIN");
+}
+//-----------------------------------------------------------------------------
+bool Domain::isNullable()
+{
+    return !notNullM;
 }
 //-----------------------------------------------------------------------------
 bool Domain::isSystem()
@@ -67,14 +73,42 @@ void Domain::accept(ItemVisitor* visitor)
         visitor->visit(*this);
 }
 //-----------------------------------------------------------------------------
-// DomainCollection class
-PSharedItem DomainCollection::createCollectionItem(const Identifier& identifier)
+// DomainCollectionBase class
+PSharedItem DomainCollectionBase::createCollectionItem(
+    const Identifier& identifier)
 {
     PSharedItem domain(new Domain(identifier));
     domain->setParent(shared_from_this());
     return domain;
 }
 //-----------------------------------------------------------------------------
+void DomainCollectionBase::setCollectionItemData(PSharedItem item,
+    const VectorOfAny& data)
+{
+    Domain* domain = dynamic_cast<Domain*>(item.get());
+    wxCHECK_RET(domain,
+        wxT("DomainCollectionBase::setCollectionItemData() called without domain"));
+    // type, subtype, length, precision, scale, character set, bytes per char,
+    // NULL flag, default src, collation name, validation src
+    // for each data item there is a bool first for NULL, then the item value
+    wxASSERT(data.size() == 2 * 11);
+
+    // TODO: implement DomainCollectionBase::setCollectionItemData()
+}
+//-----------------------------------------------------------------------------
+Domain* DomainCollectionBase::getDomain(const Identifier& identifier)
+{
+    for (unsigned i = 0; i < getChildrenCount(); ++i)
+    {
+        Domain* domain = dynamic_cast<Domain*>(getChild(i).get());
+        wxASSERT(domain);
+        if (domain && domain->getIdentifier() != identifier)
+            return domain;
+    }
+    return 0;
+}
+//-----------------------------------------------------------------------------
+// DomainCollection class
 void DomainCollection::loadChildren()
 {
     Database* db = getDatabase();
@@ -84,8 +118,18 @@ void DomainCollection::loadChildren()
     if (dbc)
     {
         setLoadChildrenState(lcsLoading);
-        std::string sql("select f.RDB$FIELD_NAME from RDB$FIELDS f"
-            " left outer join RDB$TYPES t on f.RDB$FIELD_TYPE = t.RDB$TYPE"
+        std::string sql("select f.RDB$FIELD_NAME, t.RDB$TYPE,"
+            " f.RDB$FIELD_SUB_TYPE, f.RDB$FIELD_LENGTH, f.RDB$FIELD_PRECISION,"
+            " f.RDB$FIELD_SCALE, c.RDB$CHARACTER_SET_NAME,"
+            " c.RDB$BYTES_PER_CHARACTER, f.RDB$NULL_FLAG,"
+            " f.RDB$DEFAULT_SOURCE, l.RDB$COLLATION_NAME,"
+            " f.RDB$VALIDATION_SOURCE from RDB$FIELDS f"
+            " join RDB$TYPES t on f.RDB$FIELD_TYPE = t.RDB$TYPE"
+            " left outer join RDB$CHARACTER_SETS c "
+                " on c.RDB$CHARACTER_SET_ID = f.RDB$CHARACTER_SET_ID"
+            " left outer join RDB$COLLATIONS l"
+                " on l.RDB$COLLATION_ID = f.RDB$COLLATION_ID"
+                " and l.RDB$CHARACTER_SET_ID = f.RDB$CHARACTER_SET_ID"
             " where t.RDB$FIELD_NAME = 'RDB$FIELD_TYPE'"
             " and f.RDB$FIELD_NAME not starting with 'RDB$' order by 1");
         dbc->loadCollection(getHandle(), sql);
@@ -106,14 +150,6 @@ void DomainCollection::accept(ItemVisitor* visitor)
 }
 //-----------------------------------------------------------------------------
 // SystemDomainCollection class
-PSharedItem SystemDomainCollection::createCollectionItem(
-    const Identifier& identifier)
-{
-    PSharedItem domain(new Domain(identifier));
-    domain->setParent(shared_from_this());
-    return domain;
-}
-//-----------------------------------------------------------------------------
 void SystemDomainCollection::loadChildren()
 {
     Database* db = getDatabase();
@@ -123,8 +159,18 @@ void SystemDomainCollection::loadChildren()
     if (dbc)
     {
         setLoadChildrenState(lcsLoading);
-        std::string sql("select f.RDB$FIELD_NAME from RDB$FIELDS f"
-            " left outer join RDB$TYPES t on f.RDB$FIELD_TYPE = t.RDB$TYPE"
+        std::string sql("select f.RDB$FIELD_NAME, t.RDB$TYPE,"
+            " f.RDB$FIELD_SUB_TYPE, f.RDB$FIELD_LENGTH, f.RDB$FIELD_PRECISION,"
+            " f.RDB$FIELD_SCALE, c.RDB$CHARACTER_SET_NAME,"
+            " c.RDB$BYTES_PER_CHARACTER, f.RDB$NULL_FLAG,"
+            " f.RDB$DEFAULT_SOURCE, l.RDB$COLLATION_NAME,"
+            " f.RDB$VALIDATION_SOURCE from RDB$FIELDS f"
+            " join RDB$TYPES t on f.RDB$FIELD_TYPE = t.RDB$TYPE"
+            " left outer join RDB$CHARACTER_SETS c "
+                " on c.RDB$CHARACTER_SET_ID = f.RDB$CHARACTER_SET_ID"
+            " left outer join RDB$COLLATIONS l"
+                " on l.RDB$COLLATION_ID = f.RDB$COLLATION_ID"
+                " and l.RDB$CHARACTER_SET_ID = f.RDB$CHARACTER_SET_ID"
             " where t.RDB$FIELD_NAME = 'RDB$FIELD_TYPE'"
             " and f.RDB$FIELD_NAME starting with 'RDB$' order by 1");
         dbc->loadCollection(getHandle(), sql);

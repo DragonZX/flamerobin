@@ -187,6 +187,7 @@ private:
 class ItemNameIsIdentifier
 {
 public:
+    const Identifier& getIdentifier();
     virtual bool isSystem();
 protected:
     const wxString getNameImpl() const;

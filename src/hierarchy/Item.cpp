@@ -199,6 +199,11 @@ void ItemNameIsString::setNameImpl(const wxString& name)
     nameM = name;
 }
 //-----------------------------------------------------------------------------
+const Identifier& ItemNameIsIdentifier::getIdentifier()
+{
+    return identifierM;
+}
+//-----------------------------------------------------------------------------
 void ItemNameIsIdentifier::setIdentifier(const Identifier& identifier)
 {
     identifierM = identifier;

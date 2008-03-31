@@ -45,11 +45,19 @@ public:
     void setText(const wxString& source);
     void setFromSql(const wxString& source);
 
-    bool equals(const Identifier& rhs) const;
-    bool equals(const wxString& rhs) const;
     wxString get() const;
     wxString getQuoted() const;
     static wxString userString(const wxString& s);
+
+    // replacement for equals() methods
+    bool operator==(const Identifier& rhs) const;
+    bool operator==(const wxString& rhs) const;
+};
+//----------------------------------------------------------------------------
+template<class T>
+bool operator!=(const Identifier& lhs, const T& rhs)
+{
+    return !(lhs == rhs);
 };
 //----------------------------------------------------------------------------
 #endif

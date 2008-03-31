@@ -81,6 +81,8 @@ public:
     virtual Database* getDatabase();
     virtual bool hasChildren();
 
+    Domain* getDomain(const Identifier& identifier);
+
     virtual const wxString getTypeName() const;
     virtual const wxString getId() const;
     void setName(const wxString& name);

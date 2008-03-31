@@ -238,19 +238,6 @@ bool Identifier::needsQuoting(const wxString& s)
     return SqlTokenizer::isReservedWord(s);
 }
 //----------------------------------------------------------------------------
-bool Identifier::equals(const Identifier& rhs) const
-{
-    return textM == rhs.textM;
-}
-//----------------------------------------------------------------------------
-bool Identifier::equals(const wxString& rhs) const
-{
-    if (needsQuoting(textM))
-        return (0 == rhs.Cmp(textM));
-    else
-        return (0 == rhs.CmpNoCase(textM));
-}
-//----------------------------------------------------------------------------
 wxString Identifier::get() const
 {
     return textM;
@@ -265,5 +252,18 @@ wxString Identifier::getQuoted() const
     }
     else
         return textM;
+}
+//----------------------------------------------------------------------------
+bool Identifier::operator==(const Identifier& rhs) const
+{
+    return textM == rhs.textM;
+}
+//----------------------------------------------------------------------------
+bool Identifier::operator==(const wxString& rhs) const
+{
+    if (needsQuoting(textM))
+        return (0 == rhs.Cmp(textM));
+    else
+        return (0 == rhs.CmpNoCase(textM));
 }
 //----------------------------------------------------------------------------

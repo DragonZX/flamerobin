@@ -434,3 +434,13 @@ void Database::deleteCollections()
     viewsM.reset();
 }
 //-----------------------------------------------------------------------------
+Domain* Database::getDomain(const Identifier& identifier)
+{
+    Domain* domain = 0;
+    if (domainsM && 0 != (domain = domainsM->getDomain(identifier)))
+        return domain;
+    if (systemDomainsM)
+        domain = systemDomainsM->getDomain(identifier);
+    return domain;
+}
+//-----------------------------------------------------------------------------

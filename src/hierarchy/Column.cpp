@@ -41,6 +41,7 @@
 #include "engine/DatabaseConnection.h"
 
 #include "hierarchy/Column.h"
+#include "hierarchy/Domain.h"
 #include "hierarchy/ItemVisitor.h"
 #include "hierarchy/Relation.h"
 //-----------------------------------------------------------------------------
@@ -61,9 +62,10 @@ void Column::setData(bool notNull, const wxString& fieldSource,
         notNullM = notNull;
         ++changes;
     }
-    if (fieldSourceM.Cmp(fieldSource) != 0)
+    Identifier domainName(fieldSource);
+    if (domainNameM != domainName)
     {
-        fieldSourceM = fieldSource;
+        domainNameM = domainName;
         ++changes;
     }
     if (collationNameM.Cmp(collationName) != 0)
@@ -88,6 +90,30 @@ void Column::setData(bool notNull, const wxString& fieldSource,
     }
     if (changes)
         notifyObservers();
+}
+//-----------------------------------------------------------------------------
+wxString Column::getDatatypeAsString()
+{
+    return wxT("[TODO]");
+}
+//-----------------------------------------------------------------------------
+Domain* Column::getDomain()
+{
+    if (domainNameM.get().empty())
+        return 0;
+
+    Database* db = getDatabase();
+    wxCHECK_MSG(db, 0,
+        wxT("Column::getDomain() called without parent database"));
+    return db->getDomain(domainNameM);
+}
+//-----------------------------------------------------------------------------
+bool Column::isNullable()
+{
+    if (notNullM)
+        return false;
+    Domain* domain = getDomain();
+    return domain && domain->isNullable();
 }
 //-----------------------------------------------------------------------------
 const wxString Column::getTypeName() const

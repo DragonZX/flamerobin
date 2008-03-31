@@ -31,12 +31,13 @@
 #include "hierarchy/Item.h"
 
 class ColumnCollection;
+class Domain;
 //-----------------------------------------------------------------------------
 class Column : public MetadataItemBase
 {
 private:
     bool notNullM;
-    wxString fieldSourceM;
+    Identifier domainNameM;
     wxString collationNameM;
     wxString computedSourceM;
     wxString defaultSourceM;
@@ -51,6 +52,10 @@ public:
     Column(const Identifier& identifier);
 
     virtual const wxString getTypeName() const;
+
+    wxString getDatatypeAsString();
+    Domain* getDomain();
+    bool isNullable();
 
     virtual void accept(ItemVisitor* visitor);
 };

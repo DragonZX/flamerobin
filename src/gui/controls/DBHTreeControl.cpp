@@ -313,6 +313,10 @@ void DBHItemTreeNodeProperties::updateTreeItem(wxTreeItemId id)
 void DBHItemTreeNodeProperties::visit(Column& column)
 {
     visitItem(&column);
+    captionM = captionM + wxT(" ") + column.getDatatypeAsString();
+    if (!column.isNullable())
+// TODO: use "not null" or "NOT NULL" depending on user setting for keywords
+        captionM = captionM + wxT(" not null");
     imageIndexM = DBHTreeImageList::get().getImageIndex(ART_Column);
 }
 //-----------------------------------------------------------------------------
@@ -553,6 +557,8 @@ void DBHTreeNode::update()
     if (!id.IsOk())
         return;
     wxCHECK_RET(itemM, wxT("Item is 0 in DBHTreeNode::update()"));
+
+    wxBusyCursor wait;
 
     DBHItemTreeNodeProperties nodeProps(treeM);
     itemM->accept(&nodeProps);

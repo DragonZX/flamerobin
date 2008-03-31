@@ -32,27 +32,36 @@
 //-----------------------------------------------------------------------------
 class Domain : public MetadataItemBase
 {
+private:
+    bool notNullM;
 public:
     Domain(const Identifier& identifier);
 
     virtual const wxString getTypeName() const;
+    bool isNullable();
     virtual bool isSystem();
     virtual void accept(ItemVisitor* visitor);
 };
 //-----------------------------------------------------------------------------
-class DomainCollection: public MetadataItemCollection
+class DomainCollectionBase: public MetadataItemCollection
 {
 protected:
     virtual PSharedItem createCollectionItem(const Identifier& identifier);
+    virtual void setCollectionItemData(PSharedItem item,
+        const VectorOfAny& data);
+public:
+    Domain* getDomain(const Identifier& identifier);
+};
+//-----------------------------------------------------------------------------
+class DomainCollection: public DomainCollectionBase
+{
 public:
     virtual void loadChildren();
     virtual void accept(ItemVisitor* visitor);
 };
 //-----------------------------------------------------------------------------
-class SystemDomainCollection: public MetadataItemCollection
+class SystemDomainCollection: public DomainCollectionBase
 {
-protected:
-    virtual PSharedItem createCollectionItem(const Identifier& identifier);
 public:
     virtual void loadChildren();
     virtual void accept(ItemVisitor* visitor);
