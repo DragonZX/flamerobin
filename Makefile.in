@@ -51,6 +51,7 @@ FLAMEROBIN_OBJECTS =  \
 	flamerobin_ItemCommands.o \
 	flamerobin_ProcedureCommands.o \
 	flamerobin_TableCommands.o \
+	flamerobin_TreeFolderCommands.o \
 	flamerobin_TriggerCommands.o \
 	flamerobin_Config.o \
 	flamerobin_ArtProvider.o \
@@ -65,7 +66,6 @@ FLAMEROBIN_OBJECTS =  \
 	flamerobin_MainFrame.o \
 	flamerobin_StyleGuide.o \
 	flamerobin_DBHTreeControl.o \
-	flamerobin_DBHTreeControlContextMenuCreator.o \
 	flamerobin_Column.o \
 	flamerobin_Database.o \
 	flamerobin_Domain.o \
@@ -264,6 +264,9 @@ flamerobin_ProcedureCommands.o: $(srcdir)/src/commands/ProcedureCommands.cpp $(F
 flamerobin_TableCommands.o: $(srcdir)/src/commands/TableCommands.cpp $(FLAMEROBIN_ODEP)
 	$(CXXC) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(srcdir)/src/commands/TableCommands.cpp
 
+flamerobin_TreeFolderCommands.o: $(srcdir)/src/commands/TreeFolderCommands.cpp $(FLAMEROBIN_ODEP)
+	$(CXXC) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(srcdir)/src/commands/TreeFolderCommands.cpp
+
 flamerobin_TriggerCommands.o: $(srcdir)/src/commands/TriggerCommands.cpp $(FLAMEROBIN_ODEP)
 	$(CXXC) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(srcdir)/src/commands/TriggerCommands.cpp
 
@@ -305,9 +308,6 @@ flamerobin_StyleGuide.o: $(srcdir)/src/gui/StyleGuide.cpp $(FLAMEROBIN_ODEP)
 
 flamerobin_DBHTreeControl.o: $(srcdir)/src/gui/controls/DBHTreeControl.cpp $(FLAMEROBIN_ODEP)
 	$(CXXC) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(srcdir)/src/gui/controls/DBHTreeControl.cpp
-
-flamerobin_DBHTreeControlContextMenuCreator.o: $(srcdir)/src/gui/controls/DBHTreeControlContextMenuCreator.cpp $(FLAMEROBIN_ODEP)
-	$(CXXC) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(srcdir)/src/gui/controls/DBHTreeControlContextMenuCreator.cpp
 
 flamerobin_Column.o: $(srcdir)/src/hierarchy/Column.cpp $(FLAMEROBIN_ODEP)
 	$(CXXC) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(srcdir)/src/hierarchy/Column.cpp

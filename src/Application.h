@@ -43,6 +43,8 @@ private:
     // Translates the supported macros (like $app and $user) in path
     // specifications coming from the command line or the environment.
     const wxString translatePathMacros(const wxString path) const;
+
+    void OnUpdateUIDisable(wxUpdateUIEvent& event);
 protected:
     virtual const wxString getConfigurableObjectId() const;
 public:

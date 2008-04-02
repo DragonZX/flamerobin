@@ -492,10 +492,6 @@ SOURCE=.\src\gui\controls\DBHTreeControl.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\gui\controls\DBHTreeControlContextMenuCreator.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\src\hierarchy\Database.cpp
 # End Source File
 # Begin Source File
@@ -614,6 +610,10 @@ SOURCE=.\src\hierarchy\TreeFolder.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\commands\TreeFolderCommands.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\hierarchy\TreeRoot.cpp
 # End Source File
 # Begin Source File
@@ -667,10 +667,6 @@ SOURCE=.\src\config\Config.h
 # Begin Source File
 
 SOURCE=.\src\gui\controls\DBHTreeControl.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\gui\controls\DBHTreeControlContextMenuCreator.h
 # End Source File
 # Begin Source File
 

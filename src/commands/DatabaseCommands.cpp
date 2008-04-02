@@ -54,6 +54,8 @@ private:
     DECLARE_EVENT_TABLE()
 public:
     DatabaseCommands(PSharedItem item);
+
+    virtual void addCommandsTo(wxMenu* menu, bool isContextMenu);
 };
 //-----------------------------------------------------------------------------
 DatabaseCommands::DatabaseCommands(PSharedItem item)
@@ -61,6 +63,38 @@ DatabaseCommands::DatabaseCommands(PSharedItem item)
 {
     databaseM = dynamic_cast<Database*>(item.get());
     wxASSERT(databaseM);
+}
+//-----------------------------------------------------------------------------
+void DatabaseCommands::addCommandsTo(wxMenu* menu, bool isContextMenu)
+{
+    wxCHECK_RET(menu,
+        wxT("DatabaseCommands::addCommandsTo() called without menu"));
+    wxCHECK_RET(databaseM,
+        wxT("DatabaseCommands::addCommandsTo() called without database"));
+    // do not show any popup menu for database nodes that are being connected
+    // or disconnected right now
+    bool connected = databaseM->isConnected();
+    bool disconnected = databaseM->isDisconnected();
+    if (isContextMenu && !connected && !disconnected)
+        return;
+
+    bool addSep = false;
+    if (!isContextMenu || disconnected)
+    {
+        menu->Append(CmdDatabase_Connect, _("&Connect"));
+        menu->Append(CmdDatabase_ConnectAs, _("Connect &as..."));
+        addSep = true;
+    }
+    if (!isContextMenu || connected)
+    {
+        menu->Append(CmdDatabase_Disconnect, _("&Disconnect"));
+        menu->Append(CmdDatabase_Reconnect, _("Reconnec&t"));
+        addSep = true;
+    }
+
+    if (addSep)
+        menu->AppendSeparator();
+    menu->Append(CmdDatabase_ExecuteStatement, _("&Execute SQL statements"));
 }
 //-----------------------------------------------------------------------------
 BEGIN_EVENT_TABLE(DatabaseCommands, ItemCommands)

@@ -60,6 +60,7 @@ FLAMEROBIN_OBJECTS =  \
 	gcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_ItemCommands.o \
 	gcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_ProcedureCommands.o \
 	gcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_TableCommands.o \
+	gcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_TreeFolderCommands.o \
 	gcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_TriggerCommands.o \
 	gcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_Config.o \
 	gcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_ArtProvider.o \
@@ -74,7 +75,6 @@ FLAMEROBIN_OBJECTS =  \
 	gcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_MainFrame.o \
 	gcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_StyleGuide.o \
 	gcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_DBHTreeControl.o \
-	gcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_DBHTreeControlContextMenuCreator.o \
 	gcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_Column.o \
 	gcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_Database.o \
 	gcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_Domain.o \
@@ -224,6 +224,9 @@ gcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_ProcedureCommands.o: ./src/commands/Proce
 gcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_TableCommands.o: ./src/commands/TableCommands.cpp
 	$(CXX) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(CPPDEPS) $<
 
+gcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_TreeFolderCommands.o: ./src/commands/TreeFolderCommands.cpp
+	$(CXX) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(CPPDEPS) $<
+
 gcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_TriggerCommands.o: ./src/commands/TriggerCommands.cpp
 	$(CXX) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(CPPDEPS) $<
 
@@ -264,9 +267,6 @@ gcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_StyleGuide.o: ./src/gui/StyleGuide.cpp
 	$(CXX) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(CPPDEPS) $<
 
 gcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_DBHTreeControl.o: ./src/gui/controls/DBHTreeControl.cpp
-	$(CXX) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(CPPDEPS) $<
-
-gcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_DBHTreeControlContextMenuCreator.o: ./src/gui/controls/DBHTreeControlContextMenuCreator.cpp
 	$(CXX) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(CPPDEPS) $<
 
 gcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_Column.o: ./src/hierarchy/Column.cpp

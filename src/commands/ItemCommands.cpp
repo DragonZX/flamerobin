@@ -41,8 +41,6 @@
 #include "hierarchy/Database.h"
 #include "hierarchy/Table.h"
 //-----------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------
 /*static*/
 ItemCommands::TypeInfoFactoryMap& ItemCommands::getFactories()
 {
@@ -92,6 +90,10 @@ ItemCommands* ItemCommands::createItemCommands(PSharedItem item)
 //-----------------------------------------------------------------------------
 ItemCommands::ItemCommands(PSharedItem item)
     : wxEvtHandler(), itemM(item)
+{
+}
+//-----------------------------------------------------------------------------
+void ItemCommands::addCommandsTo(wxMenu* /*menu*/, bool /*isContextMenu*/)
 {
 }
 //-----------------------------------------------------------------------------

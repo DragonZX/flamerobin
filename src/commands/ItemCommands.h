@@ -54,7 +54,6 @@ private:
     PSharedItem itemM;
 protected:
     ItemCommands(PSharedItem item);
-
 public:
     static bool registerFactory(const std::type_info& info,
         ItemCommandsFactory* factory);
@@ -62,6 +61,7 @@ public:
         ItemCommandsFactory* factory);
     static ItemCommands* createItemCommands(PSharedItem item);
 
+    virtual void addCommandsTo(wxMenu* menu, bool isContextMenu);
     PSharedItem getItem();
 };
 //-----------------------------------------------------------------------------

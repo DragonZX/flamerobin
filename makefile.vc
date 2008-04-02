@@ -67,6 +67,7 @@ FLAMEROBIN_OBJECTS =  \
 	vc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_ItemCommands.obj \
 	vc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_ProcedureCommands.obj \
 	vc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_TableCommands.obj \
+	vc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_TreeFolderCommands.obj \
 	vc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_TriggerCommands.obj \
 	vc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_Config.obj \
 	vc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_ArtProvider.obj \
@@ -81,7 +82,6 @@ FLAMEROBIN_OBJECTS =  \
 	vc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_MainFrame.obj \
 	vc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_StyleGuide.obj \
 	vc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_DBHTreeControl.obj \
-	vc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_DBHTreeControlContextMenuCreator.obj \
 	vc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_Column.obj \
 	vc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_Database.obj \
 	vc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_Domain.obj \
@@ -263,6 +263,9 @@ vc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_ProcedureCommands.obj: .\src\commands\Proc
 vc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_TableCommands.obj: .\src\commands\TableCommands.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(FLAMEROBIN_CXXFLAGS) .\src\commands\TableCommands.cpp
 
+vc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_TreeFolderCommands.obj: .\src\commands\TreeFolderCommands.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(FLAMEROBIN_CXXFLAGS) .\src\commands\TreeFolderCommands.cpp
+
 vc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_TriggerCommands.obj: .\src\commands\TriggerCommands.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(FLAMEROBIN_CXXFLAGS) .\src\commands\TriggerCommands.cpp
 
@@ -304,9 +307,6 @@ vc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_StyleGuide.obj: .\src\gui\StyleGuide.cpp
 
 vc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_DBHTreeControl.obj: .\src\gui\controls\DBHTreeControl.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(FLAMEROBIN_CXXFLAGS) .\src\gui\controls\DBHTreeControl.cpp
-
-vc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_DBHTreeControlContextMenuCreator.obj: .\src\gui\controls\DBHTreeControlContextMenuCreator.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(FLAMEROBIN_CXXFLAGS) .\src\gui\controls\DBHTreeControlContextMenuCreator.cpp
 
 vc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_Column.obj: .\src\hierarchy\Column.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(FLAMEROBIN_CXXFLAGS) .\src\hierarchy\Column.cpp

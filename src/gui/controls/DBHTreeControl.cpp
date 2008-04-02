@@ -42,14 +42,16 @@
 #include <algorithm>
 #include <map>
 #include <vector>
+#include <boost/shared_ptr.hpp>
 
 #include "config/Config.h"
+
+#include "commands/ItemCommands.h"
 
 #include "core/ArtProvider.h"
 #include "core/CommandIds.h"
 
 #include "gui/controls/DBHTreeControl.h"
-#include "gui/controls/DBHTreeControlContextMenuCreator.h"
 
 #include "hierarchy/Column.h"
 #include "hierarchy/Database.h"
@@ -732,29 +734,31 @@ void DBHTreeControl::OnContextMenu(wxContextMenuEvent& event)
             SelectItem(id);
     }
 
-    Item* item = 0;
+    PSharedItem item;
     if (id.IsOk())
     {
         DBHTreeNode* nodeData = DBHTreeNode::getFromTreeData(GetItemData(id));
         if (nodeData)
-            item = nodeData->getItem();
+            item = nodeData->getSharedItem();
     }
-
-    // compute the menu coordinates if the event does not contain them
-    if (useSelected && item)
+    if (!item)
+        return;
+    // make sure the ItemCommands object will be properly freed
+    boost::shared_ptr<ItemCommands> commands(
+        ItemCommands::createItemCommands(item));
+    if (commands)
     {
-        wxRect rc;
-        GetBoundingRect(id, rc, true);
-        pos = wxPoint(rc.GetLeft(), rc.GetTop() + rc.GetHeight() / 2);
+        // compute the menu coordinates if the event does not contain them
+        if (useSelected)
+        {
+            wxRect rc;
+            GetBoundingRect(id, rc, true);
+            pos = wxPoint(rc.GetLeft(), rc.GetTop() + rc.GetHeight() / 2);
+        }
+        wxMenu menu;
+        commands->addCommandsTo(&menu, true);
+        PopupMenu(&menu, pos);
     }
-
-    wxMenu menu;
-    DBHTreeControlContextMenuCreator cmc(menu);
-    if (item)
-        item->accept(&cmc);
-    else
-        TreeRoot::get()->accept(&cmc);
-    PopupMenu(&menu, pos);
 }
 //-----------------------------------------------------------------------------
 void DBHTreeControl::OnTreeItemActivated(wxTreeEvent& /*event*/)

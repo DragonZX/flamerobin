@@ -238,7 +238,6 @@
         $(SOURCEDIR)/gui/StyleGuide.h
 
         $(SOURCEDIR)/gui/controls/DBHTreeControl.h
-        $(SOURCEDIR)/gui/controls/DBHTreeControlContextMenuCreator.h
 
         $(SOURCEDIR)/hierarchy/Column.h
         $(SOURCEDIR)/hierarchy/Database.h
@@ -283,6 +282,7 @@
         $(SOURCEDIR)/commands/ItemCommands.cpp
         $(SOURCEDIR)/commands/ProcedureCommands.cpp
         $(SOURCEDIR)/commands/TableCommands.cpp
+        $(SOURCEDIR)/commands/TreeFolderCommands.cpp
         $(SOURCEDIR)/commands/TriggerCommands.cpp
 
         $(SOURCEDIR)/config/Config.cpp
@@ -302,7 +302,6 @@
         $(SOURCEDIR)/gui/StyleGuide.cpp
 
         $(SOURCEDIR)/gui/controls/DBHTreeControl.cpp
-        $(SOURCEDIR)/gui/controls/DBHTreeControlContextMenuCreator.cpp
 
         $(SOURCEDIR)/hierarchy/Column.cpp
         $(SOURCEDIR)/hierarchy/Database.cpp

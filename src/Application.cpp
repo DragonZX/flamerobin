@@ -46,6 +46,7 @@
 #include "Application.h"
 #include "config/Config.h"
 #include "core/ArtProvider.h"
+#include "core/CommandIds.h"
 #include "core/FRError.h"
 #include "core/StringUtils.h"
 #include "gui/MainFrame.h"
@@ -101,6 +102,19 @@ bool Application::OnInit()
     wxArtProvider::PushProvider(new ArtProvider);
 #endif
     wxImage::AddHandler(new wxPNGHandler);
+
+    // IBPP initialization is not thread-safe on Windows, therefore we have to
+    // force loading of client library and get API entry points in GUI thread
+    IBPP::GDSVersion();
+
+    // disable all (context) menu commands that are not enabled by a proper
+    // wxCommandUpdateUI handler - necessary for wxMac, where commands in the
+    // mein menu need to be disabled if they are not applicable to the
+    // currently active control/frame
+    Connect(wxID_LOWEST, wxID_HIGHEST, wxEVT_UPDATE_UI,
+        wxUpdateUIEventHandler(Application::OnUpdateUIDisable));
+    Connect(CmdIdFirst, CmdIdLast, wxEVT_UPDATE_UI,
+        wxUpdateUIEventHandler(Application::OnUpdateUIDisable));
 
     // first frame shows complete DBH, starting with global root node
     PSharedTreeRoot root = TreeRoot::get();
@@ -186,5 +200,10 @@ void Application::openDatabasesFromParams(MainFrame* frFrame)
             frFrame->openUnregisteredDatabase(cmdlineParamsM[i]);
         cmdlineParamsM.Clear();
     }
+}
+//-----------------------------------------------------------------------------
+void Application::OnUpdateUIDisable(wxUpdateUIEvent& event)
+{
+    event.Enable(false);
 }
 //-----------------------------------------------------------------------------

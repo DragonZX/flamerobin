@@ -29,7 +29,9 @@
 #define FR_COMMANDIDS_H
 
 enum CmdIds {
-  CmdView_StatusBar = 100,
+  CmdIdFirst = 100,
+
+  CmdView_StatusBar = CmdIdFirst,
   CmdView_SearchBar, CmdView_DisconnectedDatabases,
 
   CmdHelp_Manual = 110,
@@ -37,6 +39,9 @@ enum CmdIds {
 
   CmdURL_HomePage = 120,
   CmdURL_ProjectPage, CmdURL_FeatureRequest, CmdURL_BugReport,
+
+  CmdFolder_ConnectAllDatabases = 130,
+  CmdFolder_DisconnectAllDatabases,
 
   CmdDatabase_Register = 200,
   CmdDatabase_Properties, CmdDatabase_RegistrationInfo, CmdDatabase_Unregister,
@@ -57,7 +62,9 @@ enum CmdIds {
   CmdObject_CreateDomain, CmdObject_CreateException, CmdObject_CreateFunction,
   CmdObject_CreateGenerator, CmdObject_CreateProcedure, CmdObject_CreateRole,
   CmdObject_CreateTable, CmdObject_CreateTrigger, CmdObject_CreateView,
-  CmdObject_DefaultAction
+  CmdObject_DefaultAction,
+
+  CmdIdLast
 };
 //-----------------------------------------------------------------------------
 #endif // FR_COMMANDIDS_H
