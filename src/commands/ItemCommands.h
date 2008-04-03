@@ -54,6 +54,9 @@ private:
     PSharedItem itemM;
 protected:
     ItemCommands(PSharedItem item);
+
+    void CommandIsDisabled(wxUpdateUIEvent& event);
+    void CommandIsEnabled(wxUpdateUIEvent& event);
 public:
     static bool registerFactory(const std::type_info& info,
         ItemCommandsFactory* factory);

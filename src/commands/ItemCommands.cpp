@@ -102,3 +102,13 @@ PSharedItem ItemCommands::getItem()
     return itemM;
 }
 //-----------------------------------------------------------------------------
+void ItemCommands::CommandIsDisabled(wxUpdateUIEvent& event)
+{
+    event.Enable(false);
+}
+//-----------------------------------------------------------------------------
+void ItemCommands::CommandIsEnabled(wxUpdateUIEvent& event)
+{
+    event.Enable(true);
+}
+//-----------------------------------------------------------------------------

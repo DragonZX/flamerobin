@@ -72,10 +72,7 @@ TreeRoot::TreeRoot()
 /*static*/ 
 PSharedTreeRoot TreeRoot::get()
 {
-    static TreeRoot root;
-    // this is a shared pointer to a static object - for reference see
-    // http://www.boost.org/libs/smart_ptr/sp_techniques.html#static
-    PSharedTreeRoot sharedRoot(&root, null_deleter()); 
+    static PSharedTreeRoot sharedRoot(new TreeRoot());
     return sharedRoot;
 }
 //-----------------------------------------------------------------------------

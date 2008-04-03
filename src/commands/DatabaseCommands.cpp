@@ -47,9 +47,9 @@ private:
     Database* databaseM;
 
     void OnConnectDatabase(wxCommandEvent& event);
-    void OnUpdateConnectDatabase(wxUpdateUIEvent& event);
     void OnDisconnectDatabase(wxCommandEvent& event);
-    void OnUpdateDisconnectDatabase(wxUpdateUIEvent& event);
+    void DatabaseIsConnected(wxUpdateUIEvent& event);
+    void DatabaseIsDisconnected(wxUpdateUIEvent& event);
 
     DECLARE_EVENT_TABLE()
 public:
@@ -95,16 +95,22 @@ void DatabaseCommands::addCommandsTo(wxMenu* menu, bool isContextMenu)
     if (addSep)
         menu->AppendSeparator();
     menu->Append(CmdDatabase_ExecuteStatement, _("&Execute SQL statements"));
+    if (isContextMenu)
+    {
+        menu->AppendSeparator();
+        menu->Append(CmdView_OpenInNewFrame, _("&Open in new frame"));
+    }
 }
 //-----------------------------------------------------------------------------
 BEGIN_EVENT_TABLE(DatabaseCommands, ItemCommands)
     EVT_MENU(CmdObject_DefaultAction, DatabaseCommands::OnConnectDatabase)
     EVT_MENU(CmdDatabase_Connect, DatabaseCommands::OnConnectDatabase)
-    EVT_UPDATE_UI(CmdDatabase_Connect, DatabaseCommands::OnUpdateConnectDatabase)
+    EVT_UPDATE_UI(CmdDatabase_Connect, DatabaseCommands::DatabaseIsDisconnected)
     EVT_MENU(CmdDatabase_ConnectAs, DatabaseCommands::OnConnectDatabase)
-    EVT_UPDATE_UI(CmdDatabase_ConnectAs, DatabaseCommands::OnUpdateConnectDatabase)
+    EVT_UPDATE_UI(CmdDatabase_ConnectAs, DatabaseCommands::DatabaseIsDisconnected)
     EVT_MENU(CmdDatabase_Disconnect, DatabaseCommands::OnDisconnectDatabase)
-    EVT_UPDATE_UI(CmdDatabase_Disconnect, DatabaseCommands::OnUpdateDisconnectDatabase)
+    EVT_UPDATE_UI(CmdDatabase_Disconnect, DatabaseCommands::DatabaseIsConnected)
+    EVT_UPDATE_UI(CmdView_OpenInNewFrame, ItemCommands::CommandIsEnabled)
 END_EVENT_TABLE()
 //-----------------------------------------------------------------------------
 void DatabaseCommands::OnConnectDatabase(wxCommandEvent& event)
@@ -119,20 +125,20 @@ void DatabaseCommands::OnConnectDatabase(wxCommandEvent& event)
     }
 }
 //-----------------------------------------------------------------------------
-void DatabaseCommands::OnUpdateConnectDatabase(wxUpdateUIEvent& event)
-{
-    event.Enable(databaseM && databaseM->isDisconnected());
-}
-//-----------------------------------------------------------------------------
 void DatabaseCommands::OnDisconnectDatabase(wxCommandEvent& /*event*/)
 {
     if (databaseM && databaseM->isConnected())
         databaseM->disconnect();
 }
 //-----------------------------------------------------------------------------
-void DatabaseCommands::OnUpdateDisconnectDatabase(wxUpdateUIEvent& event)
+void DatabaseCommands::DatabaseIsConnected(wxUpdateUIEvent& event)
 {
     event.Enable(databaseM && databaseM->isConnected());
+}
+//-----------------------------------------------------------------------------
+void DatabaseCommands::DatabaseIsDisconnected(wxUpdateUIEvent& event)
+{
+    event.Enable(databaseM && databaseM->isDisconnected());
 }
 //-----------------------------------------------------------------------------
 static const ItemCommandsFactoryImpl<Database, DatabaseCommands> factory;

@@ -41,6 +41,7 @@
 #include "commands/ItemCommands.h"
 
 #include "core/ArtProvider.h"
+#include "core/CommandIds.h"
 
 #include "gui/MainFrame.h"
 #include "gui/controls/DBHTreeControl.h"
@@ -54,6 +55,8 @@ MainFrame::MainFrame(wxWindow* parent, int id, PSharedItem treeRootItem)
     : BaseFrame(parent, id, _("FlameRobin Database Admin")),
         selectedItemCommandsM(0)
 {
+    isMainFrameM = TreeRoot::get() == treeRootItem;
+
     createMenu();
     createControls();
     layoutControls();
@@ -61,6 +64,12 @@ MainFrame::MainFrame(wxWindow* parent, int id, PSharedItem treeRootItem)
     connectEventHandlers();
 
     dbhTreeM->createRootNode(treeRootItem);
+    if (!isMainFrameM)
+    {
+        wxString rootName(treeRootItem->getName());
+        if (!rootName.empty())
+            SetTitle(GetTitle() + wxT(" - ") + rootName);
+    }
 }
 //-----------------------------------------------------------------------------
 MainFrame::~MainFrame()
@@ -105,10 +114,6 @@ Database* MainFrame::getSelectedDatabase()
 //-----------------------------------------------------------------------------
 void MainFrame::connectEventHandlers()
 {
-    // global menu item handlers
-    Connect(wxID_EXIT, wxEVT_COMMAND_MENU_SELECTED,
-        wxCommandEventHandler(MainFrame::OnMenuExitApp));
-
     // tree view handlers
     Connect(dbhTreeM->GetId(), wxEVT_COMMAND_TREE_SEL_CHANGED,
         wxTreeEventHandler(MainFrame::OnTreeSelectionChanged));
@@ -176,10 +181,27 @@ bool MainFrame::openUnregisteredDatabase(const wxString& /*dbpath*/)
     return false;
 }
 //-----------------------------------------------------------------------------
+BEGIN_EVENT_TABLE(MainFrame, wxFrame)
+    EVT_MENU(CmdView_OpenInNewFrame, MainFrame::OnMenuOpenInNewFrame)
+    EVT_UPDATE_UI(CmdView_OpenInNewFrame, MainFrame::OnUpdateUIEnable)
+END_EVENT_TABLE()
+//-----------------------------------------------------------------------------
 // event handler methods
-void MainFrame::OnMenuExitApp(wxCommandEvent& /*event*/)
+void MainFrame::OnMenuOpenInNewFrame(wxCommandEvent& /*event*/)
 {
-    Close();
+    PSharedItem selectedItem;
+    if (selectedItemCommandsM)
+        selectedItem = selectedItemCommandsM->getItem();
+    if (selectedItem)
+    {
+        MainFrame* mf = new MainFrame(0, wxID_ANY, selectedItem);
+        mf->Show();
+    }
+}
+//-----------------------------------------------------------------------------
+void MainFrame::OnUpdateUIEnable(wxUpdateUIEvent& event)
+{
+    event.Enable(true);
 }
 //-----------------------------------------------------------------------------
 void MainFrame::OnTreeSelectionChanged(wxTreeEvent& event)

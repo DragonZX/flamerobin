@@ -87,15 +87,19 @@ void TreeFolderCommands::addCommandsTo(wxMenu* menu, bool isContextMenu)
     menu->Append(CmdFolder_ConnectAllDatabases, _("&Connect all databases"));
     menu->Append(CmdFolder_DisconnectAllDatabases,
         _("&Disconnect all databases"));
+/*
+    menu->AppendSeparator();
+    menu->Append(CmdView_OpenInNewFrame, _("&Open in new frame"));
+*/
 }
 //-----------------------------------------------------------------------------
 BEGIN_EVENT_TABLE(TreeFolderCommands, ItemCommands)
     EVT_MENU(CmdDatabase_Create, TreeFolderCommands::OnCreateDatabase)
-    EVT_UPDATE_UI(CmdDatabase_Create, TreeFolderCommands::OnUpdateUIEnable)
+    EVT_UPDATE_UI(CmdDatabase_Create, ItemCommands::CommandIsEnabled)
     EVT_MENU(CmdDatabase_RestoreIntoNew, TreeFolderCommands::OnCreateDatabaseRestoreBackup)
-    EVT_UPDATE_UI(CmdDatabase_RestoreIntoNew, TreeFolderCommands::OnUpdateUIEnable)
+    EVT_UPDATE_UI(CmdDatabase_RestoreIntoNew, ItemCommands::CommandIsEnabled)
     EVT_MENU(CmdDatabase_Register, TreeFolderCommands::OnRegisterDatabase)
-    EVT_UPDATE_UI(CmdDatabase_Register, TreeFolderCommands::OnUpdateUIEnable)
+    EVT_UPDATE_UI(CmdDatabase_Register, ItemCommands::CommandIsEnabled)
     EVT_MENU(CmdFolder_ConnectAllDatabases, TreeFolderCommands::OnConnectAllDatabases)
     EVT_UPDATE_UI(CmdFolder_ConnectAllDatabases, TreeFolderCommands::OnUpdateConnectAllDatabases)
     EVT_MENU(CmdFolder_DisconnectAllDatabases, TreeFolderCommands::OnDisconnectAllDatabases)
@@ -115,11 +119,6 @@ void TreeFolderCommands::OnCreateDatabaseRestoreBackup(wxCommandEvent& event)
 void TreeFolderCommands::OnRegisterDatabase(wxCommandEvent& event)
 {
 // TODO: implement TreeFolderCommands::OnRegisterDatabase()
-}
-//-----------------------------------------------------------------------------
-void TreeFolderCommands::OnUpdateUIEnable(wxUpdateUIEvent& event)
-{
-    event.Enable(true);
 }
 //-----------------------------------------------------------------------------
 void TreeFolderCommands::OnConnectAllDatabases(wxCommandEvent& /*event*/)

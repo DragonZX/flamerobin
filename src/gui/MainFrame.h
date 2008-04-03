@@ -57,6 +57,7 @@ private:
     ItemCommands* selectedItemCommandsM;
     void setSelectedItem(PSharedItem selectedItem);
     Database* getSelectedDatabase();
+    bool isMainFrameM;
 
     void connectEventHandlers();
     void createControls();
@@ -67,8 +68,12 @@ private:
 
 private:
     // event handler methods
-    void OnMenuExitApp(wxCommandEvent& event);
+    void OnMenuOpenInNewFrame(wxCommandEvent& event);
     void OnTreeSelectionChanged(wxTreeEvent& event);
+
+    void OnUpdateUIEnable(wxUpdateUIEvent& event);
+
+    DECLARE_EVENT_TABLE()
 };
 //-----------------------------------------------------------------------------
 #endif // FR_MAINFRAME_H

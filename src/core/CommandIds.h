@@ -33,6 +33,7 @@ enum CmdIds {
 
   CmdView_StatusBar = CmdIdFirst,
   CmdView_SearchBar, CmdView_DisconnectedDatabases,
+  CmdView_OpenInNewFrame,
 
   CmdHelp_Manual = 110,
   CmdHelp_RelNotes, CmdHelp_License,
