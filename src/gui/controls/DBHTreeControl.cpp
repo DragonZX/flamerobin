@@ -268,7 +268,7 @@ void DBHItemTreeNodeProperties::visitCollection(Item* item,
     captionIsBoldM = n > 0;
     captionM = caption;
     if (state == Item::lcsLoading)
-        captionM = captionM + _(" (expanding...)");
+        captionM = captionM + wxT(" ") + _("(expanding...)");
     else if (n > 0)
         captionM = caption + wxString::Format(wxT(" (%u)"), n);
     imageIndexM = imageIndex;
@@ -282,7 +282,7 @@ void DBHItemTreeNodeProperties::visitItem(Item* item)
     visibleM = true;
     captionIsBoldM = item->hasChildren();
     if (state == Item::lcsLoading)
-        captionM = item->getName() + _(" (expanding...)");
+        captionM = captionM + wxT(" ") + _("(expanding...)");
     else
         captionM = item->getName();
     imageIndexM = -1;
@@ -339,9 +339,9 @@ void DBHItemTreeNodeProperties::visit(Database& database)
     captionIsBoldM = database.isConnected();
     captionM = database.getName();
     if (database.getConnectionState() == Database::csConnecting)
-        captionM += wxT(" (connecting...)");
+        captionM = captionM + wxT(" ") + _("(connecting...)");
     if (database.getConnectionState() == Database::csDisconnecting)
-        captionM += wxT(" (disconnecting...)");
+        captionM = captionM + wxT(" ") + _("(disconnecting...)");
     wxArtID id = (database.isConnected() ?
         ART_DatabaseConnected : ART_DatabaseDisconnected);
     imageIndexM = DBHTreeImageList::get().getImageIndex(id);

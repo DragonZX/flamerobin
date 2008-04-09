@@ -56,6 +56,7 @@ private:
     wxString charsetM;
     wxString usernameM;
     wxString passwordM;
+    bool askForPasswordM;
     wxString roleM;
 public:
     DatabaseCredentials();
@@ -64,11 +65,13 @@ public:
     wxString getUsername() const;
     wxString getRawPassword() const;
     wxString getRole() const;
+    bool getAskForPassword() const;
     void setCharset(const wxString& charset);
     void setUsername(const wxString& username);
     void setRawPassword(const wxString& password);
+    void setAskForPassword(bool askForPassword);
     void setRole(const wxString& role);
-    bool operator!= (DatabaseCredentials& rhs);
+    bool operator!= (DatabaseCredentials& rhs) const;
 };
 //-----------------------------------------------------------------------------
 // Database class

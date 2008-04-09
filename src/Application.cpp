@@ -103,6 +103,10 @@ bool Application::OnInit()
 #endif
     wxImage::AddHandler(new wxPNGHandler);
 
+    localeM.Init();
+    localeM.AddCatalog(wxT("wx"));
+    localeM.AddCatalog(wxT("flamerobin"));
+
     // IBPP initialization is not thread-safe on Windows, therefore we have to
     // force loading of client library and get API entry points in GUI thread
     IBPP::GDSVersion();

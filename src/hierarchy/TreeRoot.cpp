@@ -44,11 +44,6 @@
 #include "hierarchy/Database.h"
 #include "hierarchy/TreeRoot.h"
 //-----------------------------------------------------------------------------
-struct null_deleter
-{
-    void operator()(void const *) const {}
-};
-//-----------------------------------------------------------------------------
 static const wxString getXmlNodeContent(wxXmlNode* node,
     const wxString& defaultValue)
 {
@@ -130,7 +125,7 @@ bool TreeRoot::loadHierarchy()
         if (xmln->GetType() != wxXML_ELEMENT_NODE)
             continue;
         if (xmln->GetName() == wxT("database"))
-            parseDatabase(me, xmln, wxEmptyString);
+            parseDatabase(me, xmln, wxEmptyString, imported);
         else if (xmln->GetName() == wxT("folder"))
             parseFolder(me, xmln);
         else if (xmln->GetName() == wxT("server"))
@@ -149,7 +144,7 @@ bool TreeRoot::loadHierarchy()
 }
 //-----------------------------------------------------------------------------
 bool TreeRoot::parseDatabase(PSharedItem parent, wxXmlNode* xmln,
-    const wxString& serverHostnamePort)
+    const wxString& serverHostnamePort, bool importOldSettings)
 {
     wxASSERT(xmln);
 
@@ -158,6 +153,8 @@ bool TreeRoot::parseDatabase(PSharedItem parent, wxXmlNode* xmln,
     database->setParent(parent);
 
     DatabaseCredentials dbc;
+    if (importOldSettings)
+        dbc.setAskForPassword(true);
 
     for (xmln = xmln->GetChildren(); (xmln); xmln = xmln->GetNext())
     {
@@ -176,7 +173,13 @@ bool TreeRoot::parseDatabase(PSharedItem parent, wxXmlNode* xmln,
         else if (xmln->GetName() == wxT("username"))
             dbc.setUsername(value);
         else if (xmln->GetName() == wxT("password"))
+        {
             dbc.setRawPassword(value);
+            if (importOldSettings && value != wxEmptyString)
+                dbc.setAskForPassword(false);
+        }
+        else if (xmln->GetName() == wxT("askforpassword"))
+            dbc.setAskForPassword(value == wxT("1"));
         else if (xmln->GetName() == wxT("encrypted"))
             database->setStoreEncryptedPassword(value == wxT("1"));
         else if (xmln->GetName() == wxT("role"))
@@ -217,7 +220,8 @@ bool TreeRoot::parseFolder(PSharedItem parent, wxXmlNode* xmln)
             folder->setName(value);
         else if (xmln->GetName() == wxT("database"))
         {
-            if (!parseDatabase(folder, xmln, wxEmptyString))
+            // folder is part of new hierarchy file format
+            if (!parseDatabase(folder, xmln, wxEmptyString, false))
                 return false;
         }
     }
@@ -241,7 +245,10 @@ bool TreeRoot::parseServer(PSharedItem parent, wxXmlNode* xmln)
 
         wxString value(getXmlNodeContent(xmln, wxEmptyString));
         if (xmln->GetName() == wxT("name"))
-            folder->setName(wxString::Format(_("Databases on %s"), value.c_str()));
+        {
+            folder->setName(wxString::Format(_("Databases on %s"),
+                value.c_str()));
+        }
         else if (xmln->GetName() == wxT("host"))
         {
             if (!srvHostPort.empty())
@@ -258,7 +265,8 @@ bool TreeRoot::parseServer(PSharedItem parent, wxXmlNode* xmln)
         }
         else if (xmln->GetName() == wxT("database"))
         {
-            if (!parseDatabase(folder, xmln, srvHostPort))
+            // server is part of old hierarchy file format
+            if (!parseDatabase(folder, xmln, srvHostPort, true))
                 return false;
         }
     }
@@ -266,5 +274,11 @@ bool TreeRoot::parseServer(PSharedItem parent, wxXmlNode* xmln)
     if (folder->getName().empty())
         folder->setName(srvHostPort);
     return true;
+}
+//-----------------------------------------------------------------------------
+bool TreeRoot::saveHierarchy()
+{
+// TODO: implement TreeRoot::saveHierarchy()
+    return false;
 }
 //-----------------------------------------------------------------------------

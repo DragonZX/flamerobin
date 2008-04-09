@@ -106,6 +106,7 @@ bool ServerVersion::versionIsAtLeast(unsigned major, unsigned minor,
 // DatabaseCredentials class
 DatabaseCredentials::DatabaseCredentials()
 {
+    askForPasswordM = true;
 }
 //-----------------------------------------------------------------------------
 wxString DatabaseCredentials::getCharset() const
@@ -128,6 +129,11 @@ wxString DatabaseCredentials::getRole() const
     return roleM;
 }
 //-----------------------------------------------------------------------------
+bool DatabaseCredentials::getAskForPassword() const
+{
+    return askForPasswordM;
+}
+//-----------------------------------------------------------------------------
 void DatabaseCredentials::setCharset(const wxString& charset)
 {
     charsetM = charset;
@@ -143,12 +149,17 @@ void DatabaseCredentials::setRawPassword(const wxString& password)
     passwordM = password;
 }
 //-----------------------------------------------------------------------------
+void DatabaseCredentials::setAskForPassword(bool askForPassword)
+{
+    askForPasswordM = askForPassword;
+}
+//-----------------------------------------------------------------------------
 void DatabaseCredentials::setRole(const wxString& role)
 {
     roleM = role;
 }
 //-----------------------------------------------------------------------------
-bool DatabaseCredentials::operator!= (DatabaseCredentials& rhs)
+bool DatabaseCredentials::operator!= (DatabaseCredentials& rhs) const
 {
     return (rhs.charsetM != charsetM) || (rhs.usernameM != usernameM)
         || (rhs.passwordM != passwordM) || (rhs.roleM != roleM);

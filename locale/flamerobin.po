@@ -1,0 +1,1252 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: 0.1\n"
+"POT-Creation-Date: 2008-04-09 17:59+0200\n"
+"PO-Revision-Date: 2008-04-09 18:19+0100\n"
+"Last-Translator: Michael Hieke <michael.hieke@elwi-elektronik.de>\n"
+"Language-Team: flamerobin.org <flamerobin.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-SourceCharset: iso-8859-1\n"
+"X-Poedit-KeywordsList: _;wxPLURAL;wxTRANSLATE\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SearchPath-0: ../src\n"
+
+#: ../src/Application.cpp:60
+msgid ""
+"A fatal error has occured. If you know how to reproduce the problem,\n"
+"please submit the bug report at:\n"
+"http://sourceforge.net/tracker/?group_id=124340&atid=699234\n"
+"\n"
+"The program can try to keep running so that you can save your data.\n"
+"Do you wish to try?\n"
+msgstr ""
+
+#: ../src/Application.cpp:61
+msgid "Fatal Application Error"
+msgstr ""
+
+#: ../src/Application.cpp:147
+msgid "Unhandled Error in FlameRobin"
+msgstr ""
+
+#: ../src/Application.cpp:164
+msgid "Set FlameRobin's home path"
+msgstr ""
+
+#: ../src/Application.cpp:166
+msgid "Set FlameRobin's user home path"
+msgstr ""
+
+#: ../src/Application.cpp:168
+msgid "File name of database to open"
+msgstr ""
+
+#: ../src/commands/DatabaseCommands.cpp:84
+msgid "&Connect"
+msgstr ""
+
+#: ../src/commands/DatabaseCommands.cpp:85
+msgid "Connect &as..."
+msgstr ""
+
+#: ../src/commands/DatabaseCommands.cpp:90
+msgid "&Disconnect"
+msgstr ""
+
+#: ../src/commands/DatabaseCommands.cpp:91
+msgid "Reconnec&t"
+msgstr ""
+
+#: ../src/commands/DatabaseCommands.cpp:97
+msgid "&Execute SQL statements"
+msgstr ""
+
+#: ../src/commands/DatabaseCommands.cpp:101
+msgid "&Open in new frame"
+msgstr ""
+
+#: ../src/commands/TreeFolderCommands.cpp:82
+msgid "Create &new database..."
+msgstr ""
+
+#: ../src/commands/TreeFolderCommands.cpp:84
+msgid "Restore bac&kup into new database..."
+msgstr ""
+
+#: ../src/commands/TreeFolderCommands.cpp:85
+msgid "&Register existing database..."
+msgstr ""
+
+#: ../src/commands/TreeFolderCommands.cpp:87
+msgid "&Connect all databases"
+msgstr ""
+
+#: ../src/commands/TreeFolderCommands.cpp:89
+msgid "&Disconnect all databases"
+msgstr ""
+
+#: ../src/core/FRError.cpp:46
+msgid "Error"
+msgstr ""
+
+#: ../src/engine/DatabaseConnection.cpp:217
+msgid "An error occurred while connecting to the database!"
+msgstr ""
+
+#: ../src/engine/DatabaseConnection.cpp:259
+msgid "An error occurred while disconnecting from the database!"
+msgstr ""
+
+#: ../src/engine/DatabaseConnection.cpp:363
+msgid "An error occurred while fetching the list of identifiers!"
+msgstr ""
+
+#: ../src/gui/MainFrame.cpp:55
+msgid "FlameRobin Database Admin"
+msgstr ""
+
+#: ../src/gui/MainFrame.cpp:165
+msgid "[No database selected]"
+msgstr ""
+
+#: ../src/gui/controls/DBHTreeControl.cpp:271
+#: ../src/gui/controls/DBHTreeControl.cpp:285
+msgid "(expanding...)"
+msgstr ""
+
+#: ../src/gui/controls/DBHTreeControl.cpp:328
+msgid "Columns"
+msgstr ""
+
+#: ../src/gui/controls/DBHTreeControl.cpp:342
+msgid "(connecting...)"
+msgstr ""
+
+#: ../src/gui/controls/DBHTreeControl.cpp:344
+msgid "(disconnecting...)"
+msgstr ""
+
+#: ../src/gui/controls/DBHTreeControl.cpp:364
+msgid "Domains"
+msgstr ""
+
+#: ../src/gui/controls/DBHTreeControl.cpp:376
+msgid "Exceptions"
+msgstr ""
+
+#: ../src/gui/controls/DBHTreeControl.cpp:388
+msgid "Functions"
+msgstr ""
+
+#: ../src/gui/controls/DBHTreeControl.cpp:400
+msgid "Generators"
+msgstr ""
+
+#: ../src/gui/controls/DBHTreeControl.cpp:412
+msgid "Procedures"
+msgstr ""
+
+#: ../src/gui/controls/DBHTreeControl.cpp:418
+msgid "System Tables"
+msgstr ""
+
+#: ../src/gui/controls/DBHTreeControl.cpp:431
+msgid "Tables"
+msgstr ""
+
+#: ../src/gui/controls/DBHTreeControl.cpp:453
+msgid "Triggers"
+msgstr ""
+
+#: ../src/gui/controls/DBHTreeControl.cpp:455
+msgid "Database Triggers"
+msgstr ""
+
+#: ../src/gui/controls/DBHTreeControl.cpp:467
+msgid "Views"
+msgstr ""
+
+#: ../src/hierarchy/TreeRoot.cpp:64
+msgid "Firebird Databases"
+msgstr ""
+
+#: ../src/hierarchy/TreeRoot.cpp:77
+msgid "Localhost"
+msgstr ""
+
+#: ../src/hierarchy/TreeRoot.cpp:249
+#, c-format
+msgid "Databases on %s"
+msgstr ""
+
+#: ../src/ibpp/array.cpp:51
+#: ../src/ibpp/array.cpp:75
+#: ../src/ibpp/array.cpp:200
+#: ../src/ibpp/array.cpp:548
+#: ../src/ibpp/array.cpp:904
+#: ../src/ibpp/blob.cpp:49
+#: ../src/ibpp/blob.cpp:68
+#: ../src/ibpp/blob.cpp:169
+#: ../src/ibpp/blob.cpp:209
+#: ../src/ibpp/blob.cpp:254
+#: ../src/ibpp/events.cpp:186
+#: ../src/ibpp/transaction.cpp:120
+msgid "No Database is attached."
+msgstr ""
+
+#: ../src/ibpp/array.cpp:53
+#: ../src/ibpp/array.cpp:77
+#: ../src/ibpp/array.cpp:202
+#: ../src/ibpp/array.cpp:550
+#: ../src/ibpp/array.cpp:911
+#: ../src/ibpp/blob.cpp:51
+#: ../src/ibpp/blob.cpp:70
+#: ../src/ibpp/blob.cpp:171
+#: ../src/ibpp/blob.cpp:211
+#: ../src/ibpp/blob.cpp:261
+msgid "No Transaction is attached."
+msgstr ""
+
+#: ../src/ibpp/array.cpp:63
+msgid "isc_array_lookup_bounds failed."
+msgstr ""
+
+#: ../src/ibpp/array.cpp:73
+#: ../src/ibpp/array.cpp:98
+#: ../src/ibpp/array.cpp:125
+#: ../src/ibpp/array.cpp:134
+#: ../src/ibpp/array.cpp:143
+#: ../src/ibpp/array.cpp:151
+#: ../src/ibpp/array.cpp:198
+#: ../src/ibpp/array.cpp:546
+msgid "Array description not set."
+msgstr ""
+
+#: ../src/ibpp/array.cpp:79
+#: ../src/ibpp/array.cpp:153
+msgid "Invalid dimension."
+msgstr ""
+
+#: ../src/ibpp/array.cpp:86
+msgid "Invalid bounds. You can only narrow the bounds."
+msgstr ""
+
+#: ../src/ibpp/array.cpp:115
+#: ../src/ibpp/row.cpp:711
+#: ../src/ibpp/row.cpp:1357
+#: ../src/ibpp/row.cpp:1387
+#: ../src/ibpp/row.cpp:1478
+#: ../src/ibpp/row.cpp:1534
+msgid "Found an unknown sqltype !"
+msgstr ""
+
+#: ../src/ibpp/array.cpp:155
+msgid "Null reference detected."
+msgstr ""
+
+#: ../src/ibpp/array.cpp:196
+msgid "Array Id not read from column."
+msgstr ""
+
+#: ../src/ibpp/array.cpp:204
+#: ../src/ibpp/array.cpp:552
+msgid "Wrong count of array elements"
+msgstr ""
+
+#: ../src/ibpp/array.cpp:211
+msgid "isc_array_get_slice failed."
+msgstr ""
+
+#: ../src/ibpp/array.cpp:213
+#: ../src/ibpp/array.cpp:898
+msgid "Internal buffer size discrepancy."
+msgstr ""
+
+#: ../src/ibpp/array.cpp:244
+#: ../src/ibpp/array.cpp:271
+#: ../src/ibpp/array.cpp:333
+#: ../src/ibpp/array.cpp:398
+#: ../src/ibpp/array.cpp:466
+#: ../src/ibpp/array.cpp:471
+#: ../src/ibpp/array.cpp:482
+#: ../src/ibpp/array.cpp:507
+#: ../src/ibpp/array.cpp:518
+#: ../src/ibpp/array.cpp:529
+#: ../src/ibpp/array.cpp:585
+#: ../src/ibpp/array.cpp:611
+#: ../src/ibpp/array.cpp:681
+#: ../src/ibpp/array.cpp:748
+#: ../src/ibpp/array.cpp:819
+#: ../src/ibpp/array.cpp:830
+#: ../src/ibpp/array.cpp:856
+#: ../src/ibpp/array.cpp:867
+#: ../src/ibpp/array.cpp:878
+#: ../src/ibpp/row.cpp:844
+#: ../src/ibpp/row.cpp:868
+#: ../src/ibpp/row.cpp:909
+#: ../src/ibpp/row.cpp:947
+#: ../src/ibpp/row.cpp:982
+#: ../src/ibpp/row.cpp:988
+#: ../src/ibpp/row.cpp:995
+#: ../src/ibpp/row.cpp:1009
+#: ../src/ibpp/row.cpp:1016
+#: ../src/ibpp/row.cpp:1023
+#: ../src/ibpp/row.cpp:1040
+#: ../src/ibpp/row.cpp:1046
+#: ../src/ibpp/row.cpp:1114
+#: ../src/ibpp/row.cpp:1147
+#: ../src/ibpp/row.cpp:1187
+#: ../src/ibpp/row.cpp:1230
+#: ../src/ibpp/row.cpp:1277
+#: ../src/ibpp/row.cpp:1283
+#: ../src/ibpp/row.cpp:1290
+#: ../src/ibpp/row.cpp:1305
+#: ../src/ibpp/row.cpp:1313
+#: ../src/ibpp/row.cpp:1321
+#: ../src/ibpp/row.cpp:1342
+#: ../src/ibpp/row.cpp:1348
+msgid "Incompatible types."
+msgstr ""
+
+#: ../src/ibpp/array.cpp:352
+#: ../src/ibpp/array.cpp:417
+#: ../src/ibpp/array.cpp:429
+#: ../src/ibpp/array.cpp:639
+#: ../src/ibpp/array.cpp:651
+#: ../src/ibpp/array.cpp:718
+#: ../src/ibpp/row.cpp:884
+#: ../src/ibpp/row.cpp:891
+#: ../src/ibpp/row.cpp:929
+#: ../src/ibpp/row.cpp:1206
+#: ../src/ibpp/row.cpp:1249
+#: ../src/ibpp/row.cpp:1258
+msgid "Out of range numeric conversion !"
+msgstr ""
+
+#: ../src/ibpp/array.cpp:539
+#: ../src/ibpp/array.cpp:888
+msgid "Unknown sql type."
+msgstr ""
+
+#: ../src/ibpp/array.cpp:814
+#, c-format
+msgid "Incompatible types (blr_int64 and ADT %d)."
+msgstr ""
+
+#: ../src/ibpp/array.cpp:896
+msgid "isc_array_put_slice failed."
+msgstr ""
+
+#: ../src/ibpp/array.cpp:946
+#: ../src/ibpp/array.cpp:955
+#: ../src/ibpp/blob.cpp:297
+#: ../src/ibpp/blob.cpp:310
+msgid "Null Id reference detected."
+msgstr ""
+
+#: ../src/ibpp/array.cpp:992
+msgid "Can't attach a 0 Database object."
+msgstr ""
+
+#: ../src/ibpp/array.cpp:1002
+msgid "Can't attach a 0 Transaction object."
+msgstr ""
+
+#: ../src/ibpp/blob.cpp:47
+#: ../src/ibpp/blob.cpp:66
+#: ../src/ibpp/blob.cpp:167
+#: ../src/ibpp/blob.cpp:207
+msgid "Blob already opened."
+msgstr ""
+
+#: ../src/ibpp/blob.cpp:53
+#: ../src/ibpp/blob.cpp:213
+msgid "Blob Id is not assigned."
+msgstr ""
+
+#: ../src/ibpp/blob.cpp:59
+#: ../src/ibpp/blob.cpp:219
+msgid "isc_open_blob2 failed."
+msgstr ""
+
+#: ../src/ibpp/blob.cpp:77
+#: ../src/ibpp/blob.cpp:178
+msgid "isc_create_blob failed."
+msgstr ""
+
+#: ../src/ibpp/blob.cpp:89
+#: ../src/ibpp/blob.cpp:200
+#: ../src/ibpp/blob.cpp:247
+msgid "isc_close_blob failed."
+msgstr ""
+
+#: ../src/ibpp/blob.cpp:98
+msgid "Can't cancel a Blob opened for read"
+msgstr ""
+
+#: ../src/ibpp/blob.cpp:103
+msgid "isc_cancel_blob failed."
+msgstr ""
+
+#: ../src/ibpp/blob.cpp:111
+#: ../src/ibpp/blob.cpp:130
+#: ../src/ibpp/blob.cpp:150
+msgid "The Blob is not opened"
+msgstr ""
+
+#: ../src/ibpp/blob.cpp:113
+msgid "Can't read from Blob opened for write"
+msgstr ""
+
+#: ../src/ibpp/blob.cpp:115
+#: ../src/ibpp/blob.cpp:134
+msgid "Invalid segment size (max 64Kb-1)"
+msgstr ""
+
+#: ../src/ibpp/blob.cpp:123
+#: ../src/ibpp/blob.cpp:236
+msgid "isc_get_segment failed."
+msgstr ""
+
+#: ../src/ibpp/blob.cpp:132
+msgid "Can't write to Blob opened for read"
+msgstr ""
+
+#: ../src/ibpp/blob.cpp:140
+#: ../src/ibpp/blob.cpp:192
+msgid "isc_put_segment failed."
+msgstr ""
+
+#: ../src/ibpp/blob.cpp:157
+msgid "isc_blob_info failed."
+msgstr ""
+
+#: ../src/ibpp/blob.cpp:295
+msgid "Can't set Id on an opened BlobImpl."
+msgstr ""
+
+#: ../src/ibpp/blob.cpp:306
+msgid "Can't get Id on an opened BlobImpl."
+msgstr ""
+
+#: ../src/ibpp/blob.cpp:308
+msgid "Can only get Id of a newly created Blob."
+msgstr ""
+
+#: ../src/ibpp/blob.cpp:318
+msgid "Can't attach a NULL Database object."
+msgstr ""
+
+#: ../src/ibpp/blob.cpp:328
+msgid "Can't attach a NULL Transaction object."
+msgstr ""
+
+#: ../src/ibpp/database.cpp:49
+msgid "Database is already connected."
+msgstr ""
+
+#: ../src/ibpp/database.cpp:51
+#: ../src/ibpp/database.cpp:85
+msgid "Unspecified database name."
+msgstr ""
+
+#: ../src/ibpp/database.cpp:53
+#: ../src/ibpp/database.cpp:87
+#: ../src/ibpp/service.cpp:56
+msgid "Unspecified user name."
+msgstr ""
+
+#: ../src/ibpp/database.cpp:55
+msgid "Only dialects 1 and 3 are supported."
+msgstr ""
+
+#: ../src/ibpp/database.cpp:75
+#: ../src/ibpp/statement.cpp:376
+msgid "isc_dsql_execute_immediate failed"
+msgstr ""
+
+#: ../src/ibpp/database.cpp:107
+msgid "isc_attach_database failed"
+msgstr ""
+
+#: ../src/ibpp/database.cpp:128
+#: ../src/ibpp/database.cpp:256
+#: ../src/ibpp/database.cpp:289
+#: ../src/ibpp/database.cpp:316
+#: ../src/ibpp/database.cpp:341
+msgid "isc_database_info failed"
+msgstr ""
+
+#: ../src/ibpp/database.cpp:138
+#, c-format
+msgid "Unsupported Server : wrong ODS version (%d), at least '10' required."
+msgstr ""
+
+#: ../src/ibpp/database.cpp:147
+msgid "Dialect 1 or 3 required"
+msgstr ""
+
+#: ../src/ibpp/database.cpp:156
+msgid "GDS32.DLL version 5 against IBSERVER 6"
+msgstr ""
+
+#: ../src/ibpp/database.cpp:213
+msgid "isc_detach_database failed"
+msgstr ""
+
+#: ../src/ibpp/database.cpp:219
+#: ../src/ibpp/statement.cpp:244
+#: ../src/ibpp/statement.cpp:387
+msgid "Database must be connected."
+msgstr ""
+
+#: ../src/ibpp/database.cpp:227
+msgid "isc_drop_database failed"
+msgstr ""
+
+#: ../src/ibpp/database.cpp:237
+#: ../src/ibpp/database.cpp:275
+#: ../src/ibpp/database.cpp:301
+#: ../src/ibpp/database.cpp:328
+msgid "Database is not connected."
+msgstr ""
+
+#: ../src/ibpp/database.cpp:379
+msgid "Transaction object is null."
+msgstr ""
+
+#: ../src/ibpp/database.cpp:388
+msgid "ITransaction object is null."
+msgstr ""
+
+#: ../src/ibpp/database.cpp:397
+msgid "Can't attach a null Statement object."
+msgstr ""
+
+#: ../src/ibpp/database.cpp:406
+msgid "Can't detach a null Statement object."
+msgstr ""
+
+#: ../src/ibpp/database.cpp:415
+msgid "Can't attach a null Blob object."
+msgstr ""
+
+#: ../src/ibpp/database.cpp:424
+msgid "Can't detach a null Blob object."
+msgstr ""
+
+#: ../src/ibpp/database.cpp:433
+msgid "Can't attach a null Array object."
+msgstr ""
+
+#: ../src/ibpp/database.cpp:442
+msgid "Can't detach a null Array object."
+msgstr ""
+
+#: ../src/ibpp/database.cpp:451
+msgid "Can't attach a null Events object."
+msgstr ""
+
+#: ../src/ibpp/database.cpp:460
+msgid "Can't detach a null Events object."
+msgstr ""
+
+#: ../src/ibpp/date.cpp:51
+#: ../src/ibpp/date.cpp:57
+#: ../src/ibpp/date.cpp:64
+#: ../src/ibpp/date.cpp:70
+#: ../src/ibpp/date.cpp:77
+#: ../src/ibpp/date.cpp:85
+#: ../src/ibpp/date.cpp:93
+#: ../src/ibpp/date.cpp:101
+#: ../src/ibpp/date.cpp:109
+#: ../src/ibpp/date.cpp:111
+#: ../src/ibpp/date.cpp:118
+#: ../src/ibpp/date.cpp:121
+msgid "Out of range"
+msgstr ""
+
+#: ../src/ibpp/dbkey.cpp:59
+#: ../src/ibpp/dbkey.cpp:72
+msgid "Null DBKey reference detected."
+msgstr ""
+
+#: ../src/ibpp/dbkey.cpp:61
+msgid "Invalid DBKey size."
+msgstr ""
+
+#: ../src/ibpp/dbkey.cpp:70
+#: ../src/ibpp/dbkey.cpp:82
+msgid "DBKey not assigned."
+msgstr ""
+
+#: ../src/ibpp/dbkey.cpp:74
+msgid "Incompatible DBKey size detected."
+msgstr ""
+
+#: ../src/ibpp/events.cpp:73
+#: ../src/ibpp/events.cpp:118
+msgid "Zero length event names not permitted"
+msgstr ""
+
+#: ../src/ibpp/events.cpp:75
+#: ../src/ibpp/events.cpp:120
+msgid "Event name is too long"
+msgstr ""
+
+#: ../src/ibpp/events.cpp:78
+msgid "Can't add this event, the events list would overflow IB/FB limitation"
+msgstr ""
+
+#: ../src/ibpp/events.cpp:214
+#: ../src/ibpp/events.cpp:238
+msgid "Database is not connected"
+msgstr ""
+
+#: ../src/ibpp/events.cpp:228
+msgid "isc_que_events failed"
+msgstr ""
+
+#: ../src/ibpp/events.cpp:254
+msgid "isc_cancel_events failed"
+msgstr ""
+
+#: ../src/ibpp/events.cpp:275
+msgid "Internal buffer size error"
+msgstr ""
+
+#: ../src/ibpp/events.cpp:337
+msgid "Can't attach a null Database object."
+msgstr ""
+
+#: ../src/ibpp/exception.cpp:74
+msgid "Context: "
+msgstr ""
+
+#: ../src/ibpp/exception.cpp:77
+msgid "Message: "
+msgstr ""
+
+#: ../src/ibpp/exception.cpp:309
+msgid " and "
+msgstr ""
+
+#: ../src/ibpp/row.cpp:50
+#: ../src/ibpp/row.cpp:65
+#: ../src/ibpp/row.cpp:74
+#: ../src/ibpp/row.cpp:85
+#: ../src/ibpp/row.cpp:98
+#: ../src/ibpp/row.cpp:107
+#: ../src/ibpp/row.cpp:116
+#: ../src/ibpp/row.cpp:125
+#: ../src/ibpp/row.cpp:134
+#: ../src/ibpp/row.cpp:143
+#: ../src/ibpp/row.cpp:152
+#: ../src/ibpp/row.cpp:161
+#: ../src/ibpp/row.cpp:182
+#: ../src/ibpp/row.cpp:193
+#: ../src/ibpp/row.cpp:208
+#: ../src/ibpp/row.cpp:223
+#: ../src/ibpp/row.cpp:243
+#: ../src/ibpp/row.cpp:254
+#: ../src/ibpp/row.cpp:265
+#: ../src/ibpp/row.cpp:282
+#: ../src/ibpp/row.cpp:303
+#: ../src/ibpp/row.cpp:312
+#: ../src/ibpp/row.cpp:323
+#: ../src/ibpp/row.cpp:334
+#: ../src/ibpp/row.cpp:345
+#: ../src/ibpp/row.cpp:356
+#: ../src/ibpp/row.cpp:367
+#: ../src/ibpp/row.cpp:376
+#: ../src/ibpp/row.cpp:397
+#: ../src/ibpp/row.cpp:406
+#: ../src/ibpp/row.cpp:415
+#: ../src/ibpp/row.cpp:424
+#: ../src/ibpp/row.cpp:445
+#: ../src/ibpp/row.cpp:453
+#: ../src/ibpp/row.cpp:461
+#: ../src/ibpp/row.cpp:469
+#: ../src/ibpp/row.cpp:477
+#: ../src/ibpp/row.cpp:485
+#: ../src/ibpp/row.cpp:493
+#: ../src/ibpp/row.cpp:501
+#: ../src/ibpp/row.cpp:509
+#: ../src/ibpp/row.cpp:517
+#: ../src/ibpp/row.cpp:525
+#: ../src/ibpp/row.cpp:533
+#: ../src/ibpp/row.cpp:541
+#: ../src/ibpp/row.cpp:549
+#: ../src/ibpp/row.cpp:557
+#: ../src/ibpp/row.cpp:565
+#: ../src/ibpp/row.cpp:583
+#: ../src/ibpp/row.cpp:591
+#: ../src/ibpp/row.cpp:650
+#: ../src/ibpp/row.cpp:663
+#: ../src/ibpp/row.cpp:676
+#: ../src/ibpp/row.cpp:689
+#: ../src/ibpp/row.cpp:720
+#: ../src/ibpp/row.cpp:731
+#: ../src/ibpp/row.cpp:742
+#: ../src/ibpp/row.cpp:753
+#: ../src/ibpp/row.cpp:763
+#: ../src/ibpp/statement.cpp:670
+#: ../src/ibpp/statement.cpp:678
+#: ../src/ibpp/statement.cpp:688
+#: ../src/ibpp/statement.cpp:696
+#: ../src/ibpp/statement.cpp:704
+#: ../src/ibpp/statement.cpp:712
+#: ../src/ibpp/statement.cpp:720
+#: ../src/ibpp/statement.cpp:730
+#: ../src/ibpp/statement.cpp:738
+#: ../src/ibpp/statement.cpp:748
+#: ../src/ibpp/statement.cpp:756
+#: ../src/ibpp/statement.cpp:766
+#: ../src/ibpp/statement.cpp:774
+#: ../src/ibpp/statement.cpp:784
+#: ../src/ibpp/statement.cpp:792
+#: ../src/ibpp/statement.cpp:802
+#: ../src/ibpp/statement.cpp:810
+#: ../src/ibpp/statement.cpp:818
+#: ../src/ibpp/statement.cpp:826
+#: ../src/ibpp/statement.cpp:834
+#: ../src/ibpp/statement.cpp:842
+#: ../src/ibpp/statement.cpp:850
+#: ../src/ibpp/statement.cpp:868
+#: ../src/ibpp/statement.cpp:876
+#: ../src/ibpp/statement.cpp:886
+#: ../src/ibpp/statement.cpp:894
+#: ../src/ibpp/statement.cpp:902
+#: ../src/ibpp/statement.cpp:910
+#: ../src/ibpp/statement.cpp:918
+#: ../src/ibpp/statement.cpp:928
+#: ../src/ibpp/statement.cpp:936
+#: ../src/ibpp/statement.cpp:946
+#: ../src/ibpp/statement.cpp:954
+#: ../src/ibpp/statement.cpp:964
+#: ../src/ibpp/statement.cpp:972
+#: ../src/ibpp/statement.cpp:982
+#: ../src/ibpp/statement.cpp:990
+#: ../src/ibpp/statement.cpp:1000
+#: ../src/ibpp/statement.cpp:1008
+#: ../src/ibpp/statement.cpp:1016
+#: ../src/ibpp/statement.cpp:1024
+#: ../src/ibpp/statement.cpp:1032
+#: ../src/ibpp/statement.cpp:1040
+#: ../src/ibpp/statement.cpp:1048
+#: ../src/ibpp/statement.cpp:1066
+#: ../src/ibpp/statement.cpp:1074
+#: ../src/ibpp/statement.cpp:1082
+#: ../src/ibpp/statement.cpp:1090
+#: ../src/ibpp/statement.cpp:1098
+#: ../src/ibpp/statement.cpp:1128
+#: ../src/ibpp/statement.cpp:1138
+msgid "The row is not initialized."
+msgstr ""
+
+#: ../src/ibpp/row.cpp:52
+#: ../src/ibpp/row.cpp:245
+#: ../src/ibpp/row.cpp:652
+#: ../src/ibpp/row.cpp:665
+#: ../src/ibpp/row.cpp:678
+#: ../src/ibpp/row.cpp:691
+#: ../src/ibpp/row.cpp:722
+#: ../src/ibpp/row.cpp:733
+#: ../src/ibpp/row.cpp:744
+#: ../src/ibpp/row.cpp:755
+#: ../src/ibpp/row.cpp:809
+#: ../src/ibpp/row.cpp:1068
+msgid "Variable index out of range."
+msgstr ""
+
+#: ../src/ibpp/row.cpp:56
+msgid "This column can't be null."
+msgstr ""
+
+#: ../src/ibpp/row.cpp:76
+#: ../src/ibpp/row.cpp:87
+msgid "null char* pointer detected."
+msgstr ""
+
+#: ../src/ibpp/row.cpp:89
+#: ../src/ibpp/row.cpp:286
+msgid "Length must be >= 0"
+msgstr ""
+
+#: ../src/ibpp/row.cpp:184
+msgid "Requires use of a dialect 3 database."
+msgstr ""
+
+#: ../src/ibpp/row.cpp:196
+msgid "IBlob and Row attached to different databases"
+msgstr ""
+
+#: ../src/ibpp/row.cpp:199
+msgid "IBlob and Row attached to different transactions"
+msgstr ""
+
+#: ../src/ibpp/row.cpp:211
+msgid "IArray and Row attached to different databases"
+msgstr ""
+
+#: ../src/ibpp/row.cpp:214
+msgid "IArray and Row attached to different transactions"
+msgstr ""
+
+#: ../src/ibpp/row.cpp:267
+#: ../src/ibpp/row.cpp:284
+#: ../src/ibpp/statement.cpp:680
+#: ../src/ibpp/statement.cpp:722
+#: ../src/ibpp/statement.cpp:740
+#: ../src/ibpp/statement.cpp:758
+#: ../src/ibpp/statement.cpp:776
+#: ../src/ibpp/statement.cpp:794
+#: ../src/ibpp/statement.cpp:878
+#: ../src/ibpp/statement.cpp:920
+#: ../src/ibpp/statement.cpp:938
+#: ../src/ibpp/statement.cpp:956
+#: ../src/ibpp/statement.cpp:974
+#: ../src/ibpp/statement.cpp:992
+msgid "Null pointer detected"
+msgstr ""
+
+#: ../src/ibpp/row.cpp:593
+msgid "Column name <empty> not found."
+msgstr ""
+
+#: ../src/ibpp/row.cpp:633
+msgid "Could not find matching column."
+msgstr ""
+
+#: ../src/ibpp/row.cpp:811
+msgid "Unexpected null pointer detected."
+msgstr ""
+
+#: ../src/ibpp/row.cpp:1059
+msgid "The field uses an unsupported SQL type !"
+msgstr ""
+
+#: ../src/ibpp/service.cpp:54
+#: ../src/ibpp/service.cpp:93
+#: ../src/ibpp/service.cpp:112
+#: ../src/ibpp/service.cpp:218
+#: ../src/ibpp/service.cpp:289
+#: ../src/ibpp/service.cpp:361
+#: ../src/ibpp/service.cpp:384
+#: ../src/ibpp/service.cpp:407
+#: ../src/ibpp/service.cpp:431
+#: ../src/ibpp/service.cpp:455
+#: ../src/ibpp/service.cpp:479
+#: ../src/ibpp/service.cpp:513
+#: ../src/ibpp/service.cpp:536
+#: ../src/ibpp/service.cpp:559
+#: ../src/ibpp/service.cpp:595
+#: ../src/ibpp/service.cpp:629
+#: ../src/ibpp/service.cpp:669
+#: ../src/ibpp/service.cpp:695
+msgid "Requires the version 6 of GDS32.DLL"
+msgstr ""
+
+#: ../src/ibpp/service.cpp:58
+msgid "Unspecified user password."
+msgstr ""
+
+#: ../src/ibpp/service.cpp:84
+msgid "isc_service_attach failed"
+msgstr ""
+
+#: ../src/ibpp/service.cpp:104
+msgid "isc_service_detach failed"
+msgstr ""
+
+#: ../src/ibpp/service.cpp:114
+#: ../src/ibpp/service.cpp:133
+#: ../src/ibpp/service.cpp:165
+#: ../src/ibpp/service.cpp:198
+#: ../src/ibpp/service.cpp:220
+#: ../src/ibpp/service.cpp:291
+#: ../src/ibpp/service.cpp:363
+#: ../src/ibpp/service.cpp:386
+#: ../src/ibpp/service.cpp:409
+#: ../src/ibpp/service.cpp:433
+#: ../src/ibpp/service.cpp:457
+#: ../src/ibpp/service.cpp:481
+#: ../src/ibpp/service.cpp:515
+#: ../src/ibpp/service.cpp:538
+#: ../src/ibpp/service.cpp:561
+#: ../src/ibpp/service.cpp:597
+#: ../src/ibpp/service.cpp:631
+msgid "Service is not connected."
+msgstr ""
+
+#: ../src/ibpp/service.cpp:125
+#: ../src/ibpp/service.cpp:239
+#: ../src/ibpp/service.cpp:307
+#: ../src/ibpp/service.cpp:678
+#: ../src/ibpp/service.cpp:713
+msgid "isc_service_query failed"
+msgstr ""
+
+#: ../src/ibpp/service.cpp:135
+#: ../src/ibpp/service.cpp:167
+#: ../src/ibpp/service.cpp:200
+#: ../src/ibpp/service.cpp:222
+msgid "Username required."
+msgstr ""
+
+#: ../src/ibpp/service.cpp:137
+msgid "Password required."
+msgstr ""
+
+#: ../src/ibpp/service.cpp:157
+#: ../src/ibpp/service.cpp:189
+#: ../src/ibpp/service.cpp:210
+#: ../src/ibpp/service.cpp:231
+#: ../src/ibpp/service.cpp:299
+#: ../src/ibpp/service.cpp:376
+#: ../src/ibpp/service.cpp:399
+#: ../src/ibpp/service.cpp:423
+#: ../src/ibpp/service.cpp:447
+#: ../src/ibpp/service.cpp:471
+#: ../src/ibpp/service.cpp:505
+#: ../src/ibpp/service.cpp:528
+#: ../src/ibpp/service.cpp:551
+#: ../src/ibpp/service.cpp:586
+#: ../src/ibpp/service.cpp:622
+#: ../src/ibpp/service.cpp:659
+msgid "isc_service_start failed"
+msgstr ""
+
+#: ../src/ibpp/service.cpp:243
+#: ../src/ibpp/service.cpp:312
+msgid "isc_service_query returned unexpected answer"
+msgstr ""
+
+#: ../src/ibpp/service.cpp:365
+#: ../src/ibpp/service.cpp:388
+#: ../src/ibpp/service.cpp:411
+#: ../src/ibpp/service.cpp:435
+#: ../src/ibpp/service.cpp:459
+#: ../src/ibpp/service.cpp:483
+#: ../src/ibpp/service.cpp:517
+#: ../src/ibpp/service.cpp:540
+#: ../src/ibpp/service.cpp:563
+#: ../src/ibpp/service.cpp:599
+#: ../src/ibpp/service.cpp:635
+msgid "Main database file must be specified."
+msgstr ""
+
+#: ../src/ibpp/service.cpp:576
+msgid "One of rpMendRecords, rpValidatePages, rpValidateFull is required."
+msgstr ""
+
+#: ../src/ibpp/service.cpp:601
+#: ../src/ibpp/service.cpp:633
+msgid "Backup file must be specified."
+msgstr ""
+
+#: ../src/ibpp/statement.cpp:47
+#: ../src/ibpp/statement.cpp:356
+msgid "An IDatabase must be attached."
+msgstr ""
+
+#: ../src/ibpp/statement.cpp:49
+#: ../src/ibpp/statement.cpp:358
+msgid "IDatabase must be connected."
+msgstr ""
+
+#: ../src/ibpp/statement.cpp:51
+#: ../src/ibpp/statement.cpp:360
+msgid "An ITransaction must be attached."
+msgstr ""
+
+#: ../src/ibpp/statement.cpp:53
+#: ../src/ibpp/statement.cpp:362
+msgid "ITransaction must be started."
+msgstr ""
+
+#: ../src/ibpp/statement.cpp:55
+#: ../src/ibpp/statement.cpp:364
+msgid "SQL statement can't be 0."
+msgstr ""
+
+#: ../src/ibpp/statement.cpp:68
+msgid "isc_dsql_allocate_statement failed"
+msgstr ""
+
+#: ../src/ibpp/statement.cpp:104
+msgid "isc_dsql_prepare failed"
+msgstr ""
+
+#: ../src/ibpp/statement.cpp:117
+msgid "isc_dsql_sql_info failed"
+msgstr ""
+
+#: ../src/ibpp/statement.cpp:139
+msgid "Unknown or unsupported statement type"
+msgstr ""
+
+#: ../src/ibpp/statement.cpp:169
+msgid "isc_dsql_describe failed"
+msgstr ""
+
+#: ../src/ibpp/statement.cpp:185
+#: ../src/ibpp/statement.cpp:216
+msgid "isc_dsql_describe_bind failed"
+msgstr ""
+
+#: ../src/ibpp/statement.cpp:240
+#: ../src/ibpp/statement.cpp:265
+#: ../src/ibpp/statement.cpp:315
+#: ../src/ibpp/statement.cpp:383
+#: ../src/ibpp/statement.cpp:498
+#: ../src/ibpp/statement.cpp:508
+#: ../src/ibpp/statement.cpp:518
+#: ../src/ibpp/statement.cpp:528
+#: ../src/ibpp/statement.cpp:538
+#: ../src/ibpp/statement.cpp:548
+#: ../src/ibpp/statement.cpp:558
+#: ../src/ibpp/statement.cpp:568
+#: ../src/ibpp/statement.cpp:578
+#: ../src/ibpp/statement.cpp:588
+#: ../src/ibpp/statement.cpp:598
+#: ../src/ibpp/statement.cpp:608
+#: ../src/ibpp/statement.cpp:618
+#: ../src/ibpp/statement.cpp:628
+#: ../src/ibpp/statement.cpp:638
+#: ../src/ibpp/statement.cpp:648
+#: ../src/ibpp/statement.cpp:1106
+#: ../src/ibpp/statement.cpp:1116
+#: ../src/ibpp/statement.cpp:1126
+#: ../src/ibpp/statement.cpp:1136
+#: ../src/ibpp/statement.cpp:1146
+#: ../src/ibpp/statement.cpp:1156
+#: ../src/ibpp/statement.cpp:1166
+#: ../src/ibpp/statement.cpp:1176
+#: ../src/ibpp/statement.cpp:1186
+msgid "No statement has been prepared."
+msgstr ""
+
+#: ../src/ibpp/statement.cpp:242
+#: ../src/ibpp/statement.cpp:385
+msgid "A Database must be attached."
+msgstr ""
+
+#: ../src/ibpp/statement.cpp:253
+#: ../src/ibpp/statement.cpp:397
+msgid "isc_dsql_sql_info failed."
+msgstr ""
+
+#: ../src/ibpp/statement.cpp:270
+#: ../src/ibpp/statement.cpp:324
+msgid "All parameters must be specified."
+msgstr ""
+
+#: ../src/ibpp/statement.cpp:286
+#: ../src/ibpp/statement.cpp:337
+msgid "isc_dsql_execute failed"
+msgstr ""
+
+#: ../src/ibpp/statement.cpp:302
+msgid "isc_dsql_execute2 failed"
+msgstr ""
+
+#: ../src/ibpp/statement.cpp:310
+msgid "Cursor name can't be 0."
+msgstr ""
+
+#: ../src/ibpp/statement.cpp:317
+msgid "Statement must be a SELECT FOR UPDATE."
+msgstr ""
+
+#: ../src/ibpp/statement.cpp:319
+msgid "Statement would return no rows."
+msgstr ""
+
+#: ../src/ibpp/statement.cpp:346
+msgid "isc_dsql_set_cursor_name failed"
+msgstr ""
+
+#: ../src/ibpp/statement.cpp:416
+#: ../src/ibpp/statement.cpp:443
+msgid "No statement has been executed or no result set available."
+msgstr ""
+
+#: ../src/ibpp/statement.cpp:433
+#: ../src/ibpp/statement.cpp:466
+msgid "isc_dsql_fetch failed."
+msgstr ""
+
+#: ../src/ibpp/statement.cpp:491
+#: ../src/ibpp/statement.cpp:1273
+msgid "isc_dsql_free_statement failed."
+msgstr ""
+
+#: ../src/ibpp/statement.cpp:500
+#: ../src/ibpp/statement.cpp:510
+#: ../src/ibpp/statement.cpp:520
+#: ../src/ibpp/statement.cpp:530
+#: ../src/ibpp/statement.cpp:540
+#: ../src/ibpp/statement.cpp:550
+#: ../src/ibpp/statement.cpp:560
+#: ../src/ibpp/statement.cpp:570
+#: ../src/ibpp/statement.cpp:580
+#: ../src/ibpp/statement.cpp:590
+#: ../src/ibpp/statement.cpp:600
+#: ../src/ibpp/statement.cpp:610
+#: ../src/ibpp/statement.cpp:620
+#: ../src/ibpp/statement.cpp:630
+#: ../src/ibpp/statement.cpp:640
+#: ../src/ibpp/statement.cpp:650
+msgid "The statement does not take parameters."
+msgstr ""
+
+#: ../src/ibpp/statement.cpp:1108
+#: ../src/ibpp/statement.cpp:1118
+msgid "The statement does not return results."
+msgstr ""
+
+#: ../src/ibpp/statement.cpp:1148
+#: ../src/ibpp/statement.cpp:1158
+#: ../src/ibpp/statement.cpp:1168
+#: ../src/ibpp/statement.cpp:1178
+#: ../src/ibpp/statement.cpp:1188
+msgid "The statement uses no parameters."
+msgstr ""
+
+#: ../src/ibpp/statement.cpp:1226
+msgid "Can't attach a 0 IDatabase object."
+msgstr ""
+
+#: ../src/ibpp/statement.cpp:1246
+msgid "Can't attach a 0 ITransaction object."
+msgstr ""
+
+#: ../src/ibpp/time.cpp:54
+msgid "Invalid time value"
+msgstr ""
+
+#: ../src/ibpp/time.cpp:65
+msgid "Invalid hour, minute, second values"
+msgstr ""
+
+#: ../src/ibpp/transaction.cpp:51
+msgid "Can't attach an unbound Database."
+msgstr ""
+
+#: ../src/ibpp/transaction.cpp:60
+msgid "Can't detach an unbound Database."
+msgstr ""
+
+#: ../src/ibpp/transaction.cpp:70
+msgid "Can't add table reservation if Transaction started."
+msgstr ""
+
+#: ../src/ibpp/transaction.cpp:73
+msgid "Can't add table reservation on an unbound Database."
+msgstr ""
+
+#: ../src/ibpp/transaction.cpp:108
+msgid "Illegal TTR value detected."
+msgstr ""
+
+#: ../src/ibpp/transaction.cpp:112
+msgid "The database connection you specified is not attached to this transaction."
+msgstr ""
+
+#: ../src/ibpp/transaction.cpp:137
+msgid "All attached Database should have been connected."
+msgstr ""
+
+#: ../src/ibpp/transaction.cpp:157
+#: ../src/ibpp/transaction.cpp:176
+#: ../src/ibpp/transaction.cpp:206
+msgid "Transaction is not started."
+msgstr ""
+
+#: ../src/ibpp/transaction.cpp:247
+msgid "Can't attach a 0 Statement object."
+msgstr ""
+
+#: ../src/ibpp/transaction.cpp:256
+msgid "Can't detach a 0 Statement object."
+msgstr ""
+
+#: ../src/ibpp/transaction.cpp:265
+msgid "Can't attach a 0 BlobImpl object."
+msgstr ""
+
+#: ../src/ibpp/transaction.cpp:274
+msgid "Can't detach a 0 BlobImpl object."
+msgstr ""
+
+#: ../src/ibpp/transaction.cpp:283
+msgid "Can't attach a 0 ArrayImpl object."
+msgstr ""
+
+#: ../src/ibpp/transaction.cpp:292
+msgid "Can't detach a 0 ArrayImpl object."
+msgstr ""
+
+#: ../src/ibpp/transaction.cpp:302
+msgid "Can't attach a Database if Transaction started."
+msgstr ""
+
+#: ../src/ibpp/transaction.cpp:305
+msgid "Can't attach a null Database."
+msgstr ""
+
+#: ../src/ibpp/transaction.cpp:341
+msgid "Can't detach a Database if Transaction started."
+msgstr ""
+
+#: ../src/ibpp/transaction.cpp:344
+msgid "Can't detach a null Database."
+msgstr ""
+
+#: ../src/ibpp/_ibpp.cpp:192
+msgid "Can't find or load FBCLIENT.DLL or GDS32.DLL"
+msgstr ""
+
+#: ../src/ibpp/_ibpp.cpp:204
+msgid "Entry-point isc_"
+msgstr ""
+
+#: ../src/ibpp/_ibpp.cpp:204
+msgid " not found"
+msgstr ""
+
+#: ../src/ibpp/_ibs.cpp:60
+msgid "SQL Message : "
+msgstr ""
+
+#: ../src/ibpp/_ibs.cpp:63
+msgid "Engine Code    : "
+msgstr ""
+
+#: ../src/ibpp/_ibs.cpp:69
+msgid "Engine Message :"
+msgstr ""
+
+#: ../src/ibpp/_rb.cpp:95
+#: ../src/ibpp/_rb.cpp:113
+#: ../src/ibpp/_rb.cpp:154
+#: ../src/ibpp/_rb.cpp:167
+msgid "Token not found."
+msgstr ""
+
+#: ../src/ibpp/_rb.cpp:139
+msgid "Token/Subtoken not found."
+msgstr ""
+
+#: ../src/ibpp/_spb.cpp:80
+msgid "Invalid length parameter"
+msgstr ""
+

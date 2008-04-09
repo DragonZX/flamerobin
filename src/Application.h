@@ -28,11 +28,14 @@
 #ifndef FR_APPLICATION_H
 #define FR_APPLICATION_H
 //-----------------------------------------------------------------------------
-class MainFrame;
+#include <wx/app.h>
 
+class MainFrame;
+//-----------------------------------------------------------------------------
 class Application: public wxApp
 {
 private:
+    wxLocale localeM;
     // Open databases whose file names were given as command line parameters
     wxArrayString cmdlineParamsM;
     void openDatabasesFromParams(MainFrame* frFrame);

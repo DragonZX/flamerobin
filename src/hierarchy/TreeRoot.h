@@ -43,6 +43,7 @@ public:
 
     void createDefaultHierarchy();
     bool loadHierarchy();
+    bool saveHierarchy();
 
     void disconnectAllDatabases();
 
@@ -56,7 +57,7 @@ private:
     unsigned nextIdM;
 
     bool parseDatabase(PSharedItem parent, wxXmlNode* xmln,
-        const wxString& serverHostnamePort);
+        const wxString& serverHostnamePort, bool importOldSettings);
     bool parseFolder(PSharedItem parent, wxXmlNode* xmln);
     bool parseServer(PSharedItem parent, wxXmlNode* xmln);
 };
