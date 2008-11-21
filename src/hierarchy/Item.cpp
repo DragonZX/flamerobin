@@ -219,6 +219,11 @@ bool ItemNameIsIdentifier::isSystem()
     return false;
 }
 //-----------------------------------------------------------------------------
+bool ItemHasNoChildren::containsChildImpl(PSharedItem /*child*/) const
+{
+    return false;
+}
+//-----------------------------------------------------------------------------
 unsigned ItemHasNoChildren::getChildrenCountImpl() const
 {
     return 0;
@@ -266,6 +271,13 @@ void ItemHasNoChildren::unlockChildrenImpl()
 ItemHasChildren::ItemHasChildren()
 {
     loadChildrenStateM = Item::lcsNotLoaded;
+}
+//-----------------------------------------------------------------------------
+bool ItemHasChildren::containsChildImpl(PSharedItem child) const
+{
+    std::vector<PSharedItem>::const_iterator it = std::find(childrenM.begin(),
+        childrenM.end(), child);
+    return it != childrenM.end();
 }
 //-----------------------------------------------------------------------------
 unsigned ItemHasChildren::getChildrenCountImpl() const
@@ -348,26 +360,23 @@ void ItemHasChildren::unlockChildrenImpl()
 void MetadataItemCollection::setChildrenIdentifiers(
     const std::list<Identifier>& identifiers)
 {
-    bool changed = identifiers.size() != getChildrenCount();
-    std::vector<PSharedItem> children;
-
     SubjectLocker lock(this);
+    std::vector<PSharedItem> children;
     for (std::list<Identifier>::const_iterator it = identifiers.begin();
         it != identifiers.end(); ++it)
     {
         const Identifier& id = *it;
         PSharedItem child = getChild(id.get());
         if (!child)
-        {
             child = createCollectionItem(id);
-            changed = true;
-        }
         children.push_back(child);
     }
-    if (changed)
+    clearChildren();
+    for (std::vector<PSharedItem>::iterator it = children.begin();
+        it != children.end(); ++it)
     {
-// TODO: remove children that are no longer in identifiers
-    };
+        addChildImpl(*it);
+    }
     setLoadChildrenState(Item::lcsLoaded);
     notifyObservers();
 }

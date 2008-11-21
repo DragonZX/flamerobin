@@ -59,6 +59,11 @@ void Generator::accept(ItemVisitor* visitor)
         visitor->visit(*this);
 }
 //-----------------------------------------------------------------------------
+void Generator::loadValue()
+{
+// TODO
+}
+//-----------------------------------------------------------------------------
 // GeneratorCollection class
 PSharedItem GeneratorCollection::createCollectionItem(const Identifier& identifier)
 {

@@ -55,8 +55,11 @@ private:
 protected:
     ItemCommands(PSharedItem item);
 
+    virtual bool hasChildItems();
+
     void CommandIsDisabled(wxUpdateUIEvent& event);
     void CommandIsEnabled(wxUpdateUIEvent& event);
+    void CommandIsEnabledIfHasChildItems(wxUpdateUIEvent& event);
 public:
     static bool registerFactory(const std::type_info& info,
         ItemCommandsFactory* factory);
@@ -71,7 +74,6 @@ public:
 template<class T, class TC>
 class ItemCommandsFactoryImpl : public ItemCommandsFactory
 {
-public:
 public:
     ItemCommandsFactoryImpl() : ItemCommandsFactory()
     {

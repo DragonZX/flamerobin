@@ -102,6 +102,11 @@ PSharedItem ItemCommands::getItem()
     return itemM;
 }
 //-----------------------------------------------------------------------------
+bool ItemCommands::hasChildItems()
+{
+    return false;
+}
+//-----------------------------------------------------------------------------
 void ItemCommands::CommandIsDisabled(wxUpdateUIEvent& event)
 {
     event.Enable(false);
@@ -110,5 +115,10 @@ void ItemCommands::CommandIsDisabled(wxUpdateUIEvent& event)
 void ItemCommands::CommandIsEnabled(wxUpdateUIEvent& event)
 {
     event.Enable(true);
+}
+//-----------------------------------------------------------------------------
+void ItemCommands::CommandIsEnabledIfHasChildItems(wxUpdateUIEvent& event)
+{
+    event.Enable(hasChildItems());
 }
 //-----------------------------------------------------------------------------

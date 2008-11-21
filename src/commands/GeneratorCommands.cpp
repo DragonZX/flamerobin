@@ -56,5 +56,90 @@ GeneratorCommands::GeneratorCommands(PSharedItem item)
     wxASSERT(generatorM);
 }
 //-----------------------------------------------------------------------------
-static const ItemCommandsFactoryImpl<Generator, GeneratorCommands> factory;
+// GeneratorCollectionCommands class
+class GeneratorCollectionCommands : public ItemCommands
+{
+private:
+    GeneratorCollection* generatorsM;
+
+    void OnCreateNew(wxCommandEvent& event);
+    void OnRefresh(wxCommandEvent& event);
+    void OnShowInfo(wxCommandEvent& event);
+
+    DECLARE_EVENT_TABLE()
+protected:
+    virtual bool hasChildItems();
+public:
+    GeneratorCollectionCommands(PSharedItem item);
+
+    virtual void addCommandsTo(wxMenu* menu, bool isContextMenu);
+};
+//-----------------------------------------------------------------------------
+GeneratorCollectionCommands::GeneratorCollectionCommands(PSharedItem item)
+    : ItemCommands(item), generatorsM(0)
+{
+    generatorsM = dynamic_cast<GeneratorCollection*>(item.get());
+    wxASSERT(generatorsM);
+}
+//-----------------------------------------------------------------------------
+void GeneratorCollectionCommands::addCommandsTo(wxMenu* menu,
+    bool /*isContextMenu*/)
+{
+    wxCHECK_RET(menu,
+        wxT("GeneratorCollectionCommands::addCommandsTo() called without menu"));
+    wxCHECK_RET(generatorsM,
+        wxT("GeneratorCollectionCommands::addCommandsTo() called without collection"));
+
+    menu->Append(CmdObject_Create, _("&Create new generator..."));
+    menu->AppendSeparator();
+    menu->Append(CmdObject_ShowInfo, _("&Show all generator values"));
+    menu->AppendSeparator();
+    menu->Append(CmdObject_Refresh, _("&Refresh"));
+}
+//-----------------------------------------------------------------------------
+bool GeneratorCollectionCommands::hasChildItems()
+{
+    return generatorsM != 0 && generatorsM->hasChildren();
+}
+//-----------------------------------------------------------------------------
+BEGIN_EVENT_TABLE(GeneratorCollectionCommands, ItemCommands)
+    EVT_MENU(CmdObject_Create, GeneratorCollectionCommands::OnCreateNew)
+    EVT_UPDATE_UI(CmdObject_Create, ItemCommands::CommandIsEnabled)
+    EVT_MENU(CmdObject_ShowInfo, GeneratorCollectionCommands::OnShowInfo)
+    EVT_UPDATE_UI(CmdObject_ShowInfo, ItemCommands::CommandIsEnabledIfHasChildItems)
+    EVT_MENU(CmdObject_Refresh, GeneratorCollectionCommands::OnRefresh)
+    EVT_UPDATE_UI(CmdObject_Refresh, ItemCommands::CommandIsEnabled)
+END_EVENT_TABLE()
+//-----------------------------------------------------------------------------
+void GeneratorCollectionCommands::OnCreateNew(wxCommandEvent& event)
+{
+}
+//-----------------------------------------------------------------------------
+void GeneratorCollectionCommands::OnRefresh(wxCommandEvent& /*event*/)
+{
+    wxCHECK_RET(generatorsM,
+        wxT("GeneratorCollectionCommands::OnRefresh() called without collection"));
+
+    generatorsM->refreshData();
+}
+//-----------------------------------------------------------------------------
+void GeneratorCollectionCommands::OnShowInfo(wxCommandEvent& /*event*/)
+{
+    wxCHECK_RET(generatorsM,
+        wxT("GeneratorCollectionCommands::OnShowInfo() called without collection"));
+
+    for (unsigned i = 0; i < generatorsM->getChildrenCount(); ++i)
+    {
+        PSharedItem child = generatorsM->getChild(i);
+        wxASSERT(child != 0);
+        Generator* generator = dynamic_cast<Generator*>(child.get());
+        wxASSERT(generator != 0);
+        generator->loadValue();
+    }
+}
+//-----------------------------------------------------------------------------
+static const ItemCommandsFactoryImpl<Generator,
+    GeneratorCommands> itemFactory;
+static const ItemCommandsFactoryImpl<GeneratorCollection,
+    GeneratorCollectionCommands> collectionFactory;
 //-----------------------------------------------------------------------------

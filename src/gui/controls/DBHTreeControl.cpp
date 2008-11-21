@@ -263,8 +263,8 @@ void DBHItemTreeNodeProperties::visitCollection(Item* item,
 {
     wxASSERT(item);
     visibleM = true;
-    unsigned n = item->getChildrenCount();
     Item::LoadChildrenState state = item->getLoadChildrenState();
+    unsigned n = (state == Item::lcsLoaded) ? item->getChildrenCount() : 0;
     captionIsBoldM = n > 0;
     captionM = caption;
     if (state == Item::lcsLoading)
@@ -576,7 +576,7 @@ void DBHTreeNode::update()
     // for implementation see also EVT_TREE_ITEM_EXPANDING event handler
     if (nodeProps.hasNotLoadedChildren())
     {
-        treeM.Collapse(id);
+        treeM.CollapseAndReset(id);
         treeM.SetItemHasChildren(id);
         return;
     }
@@ -616,13 +616,17 @@ void DBHTreeNode::update()
     }
 
     // remove all child nodes if item has no children at all
-    if (itemM->getChildrenCount() == 0 && treeM.GetChildrenCount(id, false))
+    if (!itemM->hasChildren() && treeM.GetChildrenCount(id, false))
         treeM.CollapseAndReset(id);
 
     // remove any child nodes that have no corresponding item
-    if (itemM->getChildrenCount())
+    wxTreeItemId childId = treeM.GetLastChild(id);
+    while (childId.IsOk())
     {
-        // TODO: find orphaned child nodes and delete them
+        prevChildId = treeM.GetPrevSibling(childId);
+        if (!itemM->containsChild(treeM.getItemFromId(childId)))
+            treeM.Delete(childId);
+        childId = prevChildId;
     }
 
     if (nodeProps.getSortChildren())

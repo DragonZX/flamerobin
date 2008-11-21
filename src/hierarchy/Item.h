@@ -67,6 +67,7 @@ public:
     virtual Relation* getRelation();
 
     // access to child items (Composite pattern)
+    virtual bool containsChild(PSharedItem item) const = 0;
     virtual bool hasChildren() const;
     virtual unsigned getChildrenCount() const = 0;
     virtual PSharedItem getChild(unsigned index) const = 0;
@@ -153,25 +154,28 @@ public:
         ItemHasChildrenPolicy::unlockChildrenImpl();
     };
 
+    virtual bool containsChild(PSharedItem child) const
+        { return ItemHasChildrenPolicy::containsChildImpl(child); };
+
     virtual unsigned getChildrenCount() const
-    {
-        return ItemHasChildrenPolicy::getChildrenCountImpl();
-    };
+        { return ItemHasChildrenPolicy::getChildrenCountImpl(); };
+
     virtual PSharedItem getChild(unsigned index) const
-    {
-        return ItemHasChildrenPolicy::getChildImpl(index);
-    };
+        { return ItemHasChildrenPolicy::getChildImpl(index); };
+
     virtual PSharedItem getChild(const wxString& name) const
-    {
-        return ItemHasChildrenPolicy::getChildImpl(name);
-    };
+        { return ItemHasChildrenPolicy::getChildImpl(name); };
+
     virtual LoadChildrenState getLoadChildrenState() const
-    {
-        return ItemHasChildrenPolicy::getLoadChildrenStateImpl();
-    };
+        { return ItemHasChildrenPolicy::getLoadChildrenStateImpl(); };
 
     virtual const wxString getName() const
         { return ItemHasIdentifierPolicy::getNameImpl(); };
+
+    virtual void refreshData()
+    {
+        setLoadChildrenState(Item::lcsNotLoaded);
+    }
 };
 //-----------------------------------------------------------------------------
 // Policy classes for item name
@@ -200,6 +204,7 @@ private:
 class ItemHasNoChildren
 {
 protected:
+    bool containsChildImpl(PSharedItem child) const;
     unsigned getChildrenCountImpl() const;
     PSharedItem getChildImpl(unsigned index) const;
     PSharedItem getChildImpl(const wxString& name) const;
@@ -220,6 +225,7 @@ public:
 protected:
     ItemHasChildren();
 
+    bool containsChildImpl(PSharedItem child) const;
     unsigned getChildrenCountImpl() const;
     PSharedItem getChildImpl(unsigned index) const;
     PSharedItem getChildImpl(const wxString& name) const;

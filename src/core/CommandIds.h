@@ -63,6 +63,7 @@ enum CmdIds {
   CmdObject_CreateDomain, CmdObject_CreateException, CmdObject_CreateFunction,
   CmdObject_CreateGenerator, CmdObject_CreateProcedure, CmdObject_CreateRole,
   CmdObject_CreateTable, CmdObject_CreateTrigger, CmdObject_CreateView,
+  CmdObject_ShowInfo, CmdObject_Refresh,
   CmdObject_DefaultAction,
 
   CmdIdLast

@@ -130,6 +130,12 @@ bool TreeRoot::loadHierarchy()
             parseFolder(me, xmln);
         else if (xmln->GetName() == wxT("server"))
             parseServer(me, xmln);
+        else if (xmln->GetName() == wxT("name"))
+        {
+            wxString value(getXmlNodeContent(xmln, wxEmptyString));
+            if (!value.empty())
+                setName(value);
+        }
         else if (xmln->GetName() == wxT("nextId"))
         {
             wxString value(getXmlNodeContent(xmln, wxEmptyString));

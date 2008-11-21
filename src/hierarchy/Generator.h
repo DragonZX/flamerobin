@@ -35,6 +35,8 @@ class Generator : public MetadataItemBase
 public:
     Generator(const Identifier& identifier);
 
+    void loadValue();
+
     virtual const wxString getTypeName() const;
 
     virtual void accept(ItemVisitor* visitor);
