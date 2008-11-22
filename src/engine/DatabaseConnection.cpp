@@ -43,18 +43,6 @@
 #include "engine/DatabaseConnection.h"
 #include "sql/Identifier.h"
 //-----------------------------------------------------------------------------
-class DatabaseConnectionThread: public WorkerThread<SharedDBCThreadJob>
-{
-private:
-    IBPP::Database databaseM;
-    IBPP::Transaction transactionM;
-public:
-    DatabaseConnectionThread(ThreadJobManager<SharedDBCThreadJob>& manager);
-    IBPP::Database& getDatabase(); 
-    IBPP::Transaction& getTransaction();
-    void setDatabase(IBPP::Database& database);
-};
-//-----------------------------------------------------------------------------
 DatabaseConnectionThread::DatabaseConnectionThread(
         ThreadJobManager<SharedDBCThreadJob>& manager)
     : WorkerThread<SharedDBCThreadJob>(manager) 
@@ -402,7 +390,6 @@ void FetchIdentifiersJob::processResults()
             collection->setChildrenIdentifiers(identifiers);
         }
     }
-
 }
 //-----------------------------------------------------------------------------
 // DatabaseConnection class
@@ -424,6 +411,13 @@ void DatabaseConnection::connect()
 void DatabaseConnection::disconnect()
 {
     queueJob(SharedDBCThreadJob(new DatabaseDisconnectJob(databaseM)));
+}
+//-----------------------------------------------------------------------------
+void DatabaseConnection::executeJob(SharedDBCThreadJob job)
+{
+    wxCHECK_RET(job.get(),
+        wxT("job is 0 in DatabaseConnection::executeJob(()"));
+    queueJob(job);
 }
 //-----------------------------------------------------------------------------
 void DatabaseConnection::loadCollection(Item::Handle itemHandle,

@@ -96,10 +96,10 @@ private:
 
     WorkerThread<ThreadJob>* threadM;
 
-    typedef std::list<ThreadJob> MultipleThreadJobs;
-    MultipleThreadJobs pendingJobsM;
+    typedef std::list<ThreadJob> ThreadJobList;
+    ThreadJobList pendingJobsM;
     ThreadJob executedJobM;
-    MultipleThreadJobs processedJobsM;
+    ThreadJobList processedJobsM;
 
     bool blockNotificationsM;
     void OnJobCompleted(wxCommandEvent&)
@@ -200,13 +200,13 @@ protected:
         return true;
     };
 
-    bool queueJobs(MultipleThreadJobs jobs)
+    bool queueJobs(ThreadJobList jobs)
     {
         wxMutexLocker lock(mutexM);
         if (shutdownRequestM)
             return false;
         unsigned added = 0;
-        for (typename MultipleThreadJobs::iterator it = jobs.begin();
+        for (typename ThreadJobList::iterator it = jobs.begin();
             it != jobs.end(); ++it)
         {
             ThreadJob job = *it;

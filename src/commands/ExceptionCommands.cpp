@@ -38,29 +38,29 @@
 
 #include "commands/ItemCommands.h"
 #include "core/CommandIds.h"
-#include "hierarchy/Function.h"
+#include "hierarchy/Exception.h"
 //-----------------------------------------------------------------------------
-// FunctionCommands class
-class FunctionCommands : public ItemCommands
+// ExceptionCommands class
+class ExceptionCommands : public ItemCommands
 {
 private:
-    Function* functionM;
+    Exception* exceptionM;
 public:
-    FunctionCommands(PSharedItem item);
+    ExceptionCommands(PSharedItem item);
 };
 //-----------------------------------------------------------------------------
-FunctionCommands::FunctionCommands(PSharedItem item)
-    : ItemCommands(item), functionM(0)
+ExceptionCommands::ExceptionCommands(PSharedItem item)
+    : ItemCommands(item), exceptionM(0)
 {
-    functionM = dynamic_cast<Function*>(item.get());
-    wxASSERT(functionM);
+    exceptionM = dynamic_cast<Exception*>(item.get());
+    wxASSERT(exceptionM);
 }
 //-----------------------------------------------------------------------------
-// FunctionCollectionCommands class
-class FunctionCollectionCommands : public ItemCommands
+// ExceptionCollectionCommands class
+class ExceptionCollectionCommands : public ItemCommands
 {
 private:
-    FunctionCollection* functionsM;
+    ExceptionCollection* exceptionsM;
 
     void OnCreateNew(wxCommandEvent& event);
     void OnRefresh(wxCommandEvent& event);
@@ -69,57 +69,57 @@ private:
 protected:
     virtual bool hasChildItems();
 public:
-    FunctionCollectionCommands(PSharedItem item);
+    ExceptionCollectionCommands(PSharedItem item);
 
     virtual void addCommandsTo(wxMenu* menu, bool isContextMenu);
 };
 //-----------------------------------------------------------------------------
-FunctionCollectionCommands::FunctionCollectionCommands(PSharedItem item)
-    : ItemCommands(item), functionsM(0)
+ExceptionCollectionCommands::ExceptionCollectionCommands(PSharedItem item)
+    : ItemCommands(item), exceptionsM(0)
 {
-    functionsM = dynamic_cast<FunctionCollection*>(item.get());
-    wxASSERT(functionsM);
+    exceptionsM = dynamic_cast<ExceptionCollection*>(item.get());
+    wxASSERT(exceptionsM);
 }
 //-----------------------------------------------------------------------------
-void FunctionCollectionCommands::addCommandsTo(wxMenu* menu,
+void ExceptionCollectionCommands::addCommandsTo(wxMenu* menu,
     bool /*isContextMenu*/)
 {
     wxCHECK_RET(menu,
-        wxT("FunctionCollectionCommands::addCommandsTo() called without menu"));
-    wxCHECK_RET(functionsM,
-        wxT("FunctionCollectionCommands::addCommandsTo() called without collection"));
+        wxT("ExceptionCollectionCommands::addCommandsTo() called without menu"));
+    wxCHECK_RET(exceptionsM,
+        wxT("ExceptionCollectionCommands::addCommandsTo() called without collection"));
 
-    menu->Append(CmdObject_Create, _("&Declare new function..."));
+    menu->Append(CmdObject_Create, _("&Create new exception..."));
     menu->AppendSeparator();
     menu->Append(CmdObject_Refresh, _("&Refresh"));
 }
 //-----------------------------------------------------------------------------
-bool FunctionCollectionCommands::hasChildItems()
+bool ExceptionCollectionCommands::hasChildItems()
 {
-    return functionsM != 0 && functionsM->hasChildren();
+    return exceptionsM != 0 && exceptionsM->hasChildren();
 }
 //-----------------------------------------------------------------------------
-BEGIN_EVENT_TABLE(FunctionCollectionCommands, ItemCommands)
-    EVT_MENU(CmdObject_Create, FunctionCollectionCommands::OnCreateNew)
+BEGIN_EVENT_TABLE(ExceptionCollectionCommands, ItemCommands)
+    EVT_MENU(CmdObject_Create, ExceptionCollectionCommands::OnCreateNew)
     EVT_UPDATE_UI(CmdObject_Create, ItemCommands::CommandIsEnabled)
-    EVT_MENU(CmdObject_Refresh, FunctionCollectionCommands::OnRefresh)
+    EVT_MENU(CmdObject_Refresh, ExceptionCollectionCommands::OnRefresh)
     EVT_UPDATE_UI(CmdObject_Refresh, ItemCommands::CommandIsEnabled)
 END_EVENT_TABLE()
 //-----------------------------------------------------------------------------
-void FunctionCollectionCommands::OnCreateNew(wxCommandEvent& /*event*/)
+void ExceptionCollectionCommands::OnCreateNew(wxCommandEvent& /*event*/)
 {
-// TODO: implement FunctionCollectionCommands::OnCreateNew()
+// TODO: implement ExceptionCollectionCommands::OnCreateNew()
 }
 //-----------------------------------------------------------------------------
-void FunctionCollectionCommands::OnRefresh(wxCommandEvent& /*event*/)
+void ExceptionCollectionCommands::OnRefresh(wxCommandEvent& /*event*/)
 {
-    wxCHECK_RET(functionsM,
-        wxT("FunctionCollectionCommands::OnRefresh() called without collection"));
+    wxCHECK_RET(exceptionsM,
+        wxT("ExceptionCollectionCommands::OnRefresh() called without collection"));
 
-    functionsM->refreshData();
+    exceptionsM->refreshData();
 }
 //-----------------------------------------------------------------------------
-static const ItemCommandsFactoryImpl<Function, FunctionCommands> itemFactory;
-static const ItemCommandsFactoryImpl<FunctionCollection,
-    FunctionCollectionCommands> collectionFactory;
+static const ItemCommandsFactoryImpl<Exception, ExceptionCommands> itemFactory;
+static const ItemCommandsFactoryImpl<ExceptionCollection,
+    ExceptionCollectionCommands> collectionFactory;
 //-----------------------------------------------------------------------------

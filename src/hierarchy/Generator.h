@@ -28,14 +28,22 @@
 #ifndef FR_GENERATOR_H
 #define FR_GENERATOR_H
 //-----------------------------------------------------------------------------
+#include <ibpp.h> // TODO: for int64_t, better use a different header file
+
 #include "hierarchy/Item.h"
 //-----------------------------------------------------------------------------
 class Generator : public MetadataItemBase
 {
+private:
+    int64_t valueM;
+    bool valueLoadedM;
 public:
     Generator(const Identifier& identifier);
 
+    int64_t getValue() const;
+    void setValue(int64_t value);
     void loadValue();
+    bool isValueLoaded() const;
 
     virtual const wxString getTypeName() const;
 
@@ -47,6 +55,8 @@ class GeneratorCollection: public MetadataItemCollection
 protected:
     virtual PSharedItem createCollectionItem(const Identifier& identifier);
 public:
+    void loadValues();
+
     virtual void loadChildren();
     virtual void accept(ItemVisitor* visitor);
 };

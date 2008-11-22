@@ -38,29 +38,29 @@
 
 #include "commands/ItemCommands.h"
 #include "core/CommandIds.h"
-#include "hierarchy/Function.h"
+#include "hierarchy/View.h"
 //-----------------------------------------------------------------------------
-// FunctionCommands class
-class FunctionCommands : public ItemCommands
+// ViewCommands class
+class ViewCommands : public ItemCommands
 {
 private:
-    Function* functionM;
+    View* viewM;
 public:
-    FunctionCommands(PSharedItem item);
+    ViewCommands(PSharedItem item);
 };
 //-----------------------------------------------------------------------------
-FunctionCommands::FunctionCommands(PSharedItem item)
-    : ItemCommands(item), functionM(0)
+ViewCommands::ViewCommands(PSharedItem item)
+    : ItemCommands(item), viewM(0)
 {
-    functionM = dynamic_cast<Function*>(item.get());
-    wxASSERT(functionM);
+    viewM = dynamic_cast<View*>(item.get());
+    wxASSERT(viewM);
 }
 //-----------------------------------------------------------------------------
-// FunctionCollectionCommands class
-class FunctionCollectionCommands : public ItemCommands
+// ViewCollectionCommands class
+class ViewCollectionCommands : public ItemCommands
 {
 private:
-    FunctionCollection* functionsM;
+    ViewCollection* viewsM;
 
     void OnCreateNew(wxCommandEvent& event);
     void OnRefresh(wxCommandEvent& event);
@@ -69,57 +69,57 @@ private:
 protected:
     virtual bool hasChildItems();
 public:
-    FunctionCollectionCommands(PSharedItem item);
+    ViewCollectionCommands(PSharedItem item);
 
     virtual void addCommandsTo(wxMenu* menu, bool isContextMenu);
 };
 //-----------------------------------------------------------------------------
-FunctionCollectionCommands::FunctionCollectionCommands(PSharedItem item)
-    : ItemCommands(item), functionsM(0)
+ViewCollectionCommands::ViewCollectionCommands(PSharedItem item)
+    : ItemCommands(item), viewsM(0)
 {
-    functionsM = dynamic_cast<FunctionCollection*>(item.get());
-    wxASSERT(functionsM);
+    viewsM = dynamic_cast<ViewCollection*>(item.get());
+    wxASSERT(viewsM);
 }
 //-----------------------------------------------------------------------------
-void FunctionCollectionCommands::addCommandsTo(wxMenu* menu,
+void ViewCollectionCommands::addCommandsTo(wxMenu* menu,
     bool /*isContextMenu*/)
 {
     wxCHECK_RET(menu,
-        wxT("FunctionCollectionCommands::addCommandsTo() called without menu"));
-    wxCHECK_RET(functionsM,
-        wxT("FunctionCollectionCommands::addCommandsTo() called without collection"));
+        wxT("ViewCollectionCommands::addCommandsTo() called without menu"));
+    wxCHECK_RET(viewsM,
+        wxT("ViewCollectionCommands::addCommandsTo() called without collection"));
 
-    menu->Append(CmdObject_Create, _("&Declare new function..."));
+    menu->Append(CmdObject_Create, _("&Create new view..."));
     menu->AppendSeparator();
     menu->Append(CmdObject_Refresh, _("&Refresh"));
 }
 //-----------------------------------------------------------------------------
-bool FunctionCollectionCommands::hasChildItems()
+bool ViewCollectionCommands::hasChildItems()
 {
-    return functionsM != 0 && functionsM->hasChildren();
+    return viewsM != 0 && viewsM->hasChildren();
 }
 //-----------------------------------------------------------------------------
-BEGIN_EVENT_TABLE(FunctionCollectionCommands, ItemCommands)
-    EVT_MENU(CmdObject_Create, FunctionCollectionCommands::OnCreateNew)
+BEGIN_EVENT_TABLE(ViewCollectionCommands, ItemCommands)
+    EVT_MENU(CmdObject_Create, ViewCollectionCommands::OnCreateNew)
     EVT_UPDATE_UI(CmdObject_Create, ItemCommands::CommandIsEnabled)
-    EVT_MENU(CmdObject_Refresh, FunctionCollectionCommands::OnRefresh)
+    EVT_MENU(CmdObject_Refresh, ViewCollectionCommands::OnRefresh)
     EVT_UPDATE_UI(CmdObject_Refresh, ItemCommands::CommandIsEnabled)
 END_EVENT_TABLE()
 //-----------------------------------------------------------------------------
-void FunctionCollectionCommands::OnCreateNew(wxCommandEvent& /*event*/)
+void ViewCollectionCommands::OnCreateNew(wxCommandEvent& /*event*/)
 {
-// TODO: implement FunctionCollectionCommands::OnCreateNew()
+// TODO: implement ViewCollectionCommands::OnCreateNew()
 }
 //-----------------------------------------------------------------------------
-void FunctionCollectionCommands::OnRefresh(wxCommandEvent& /*event*/)
+void ViewCollectionCommands::OnRefresh(wxCommandEvent& /*event*/)
 {
-    wxCHECK_RET(functionsM,
-        wxT("FunctionCollectionCommands::OnRefresh() called without collection"));
+    wxCHECK_RET(viewsM,
+        wxT("ViewCollectionCommands::OnRefresh() called without collection"));
 
-    functionsM->refreshData();
+    viewsM->refreshData();
 }
 //-----------------------------------------------------------------------------
-static const ItemCommandsFactoryImpl<Function, FunctionCommands> itemFactory;
-static const ItemCommandsFactoryImpl<FunctionCollection,
-    FunctionCollectionCommands> collectionFactory;
+static const ItemCommandsFactoryImpl<View, ViewCommands> itemFactory;
+static const ItemCommandsFactoryImpl<ViewCollection,
+    ViewCollectionCommands> collectionFactory;
 //-----------------------------------------------------------------------------

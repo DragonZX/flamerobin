@@ -484,6 +484,10 @@ SOURCE=.\src\hierarchy\Column.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\commands\ColumnCommands.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\config\Config.cpp
 # End Source File
 # Begin Source File
@@ -508,7 +512,15 @@ SOURCE=.\src\hierarchy\Domain.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\commands\DomainCommands.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\hierarchy\Exception.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\commands\ExceptionCommands.cpp
 # End Source File
 # Begin Source File
 
@@ -627,6 +639,10 @@ SOURCE=.\src\commands\TriggerCommands.cpp
 # Begin Source File
 
 SOURCE=.\src\hierarchy\View.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\commands\ViewCommands.cpp
 # End Source File
 # Begin Source File
 

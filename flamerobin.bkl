@@ -113,7 +113,7 @@
     </set>
 
     <set var="FIREBIRDFRAMEWORK">
-        <if cond="PLATFORM_MACOSX=='1'">-framework Firebird</if>  -->
+        <if cond="PLATFORM_MACOSX=='1'">-framework Firebird</if>
     </set>
     <set var="FIREBIRDLIBRARY">
         <if cond="PLATFORM_UNIX=='1'">fbclient</if>
@@ -276,7 +276,10 @@
         $(SOURCEDIR)/Application.cpp
         $(SOURCEDIR)/PCH.cpp
 
+        $(SOURCEDIR)/commands/ColumnCommands.cpp
         $(SOURCEDIR)/commands/DatabaseCommands.cpp
+        $(SOURCEDIR)/commands/DomainCommands.cpp
+        $(SOURCEDIR)/commands/ExceptionCommands.cpp
         $(SOURCEDIR)/commands/FunctionCommands.cpp
         $(SOURCEDIR)/commands/GeneratorCommands.cpp
         $(SOURCEDIR)/commands/ItemCommands.cpp
@@ -284,6 +287,7 @@
         $(SOURCEDIR)/commands/TableCommands.cpp
         $(SOURCEDIR)/commands/TreeFolderCommands.cpp
         $(SOURCEDIR)/commands/TriggerCommands.cpp
+        $(SOURCEDIR)/commands/ViewCommands.cpp
 
         $(SOURCEDIR)/config/Config.cpp
 

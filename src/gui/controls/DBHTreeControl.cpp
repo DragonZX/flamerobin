@@ -41,6 +41,7 @@
 
 #include <algorithm>
 #include <map>
+#include <sstream>
 #include <vector>
 #include <boost/shared_ptr.hpp>
 
@@ -50,6 +51,7 @@
 
 #include "core/ArtProvider.h"
 #include "core/CommandIds.h"
+#include "core/StringUtils.h"
 
 #include "gui/controls/DBHTreeControl.h"
 
@@ -391,6 +393,12 @@ void DBHItemTreeNodeProperties::visit(FunctionCollection& functions)
 void DBHItemTreeNodeProperties::visit(Generator& generator)
 {
     visitItem(&generator);
+    if (generator.isValueLoaded())
+    {
+        std::ostringstream ss;
+        ss << " = " << generator.getValue();
+        captionM += std2wx(ss.str());
+    }
     imageIndexM = DBHTreeImageList::get().getImageIndex(ART_Generator);
 }
 //-----------------------------------------------------------------------------

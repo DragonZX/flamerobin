@@ -40,9 +40,19 @@
 //-----------------------------------------------------------------------------
 class DatabaseConnectionThreadJob;
 typedef boost::shared_ptr<DatabaseConnectionThreadJob> SharedDBCThreadJob;
-
-class DatabaseConnectionThread;
-
+//-----------------------------------------------------------------------------
+class DatabaseConnectionThread: public WorkerThread<SharedDBCThreadJob>
+{
+private:
+    IBPP::Database databaseM;
+    IBPP::Transaction transactionM;
+public:
+    DatabaseConnectionThread(ThreadJobManager<SharedDBCThreadJob>& manager);
+    IBPP::Database& getDatabase(); 
+    IBPP::Transaction& getTransaction();
+    void setDatabase(IBPP::Database& database);
+};
+//-----------------------------------------------------------------------------
 class DatabaseConnectionThreadJob
 {
 private:
@@ -87,6 +97,8 @@ public:
 
     void connect();
     void disconnect();
+
+    void executeJob(SharedDBCThreadJob job);
 
     void loadCollection(Item::Handle itemHandle, const std::string& sql);
     void loadCollection(Item::Handle itemHandle, const std::string& sql,

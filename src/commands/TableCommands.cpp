@@ -56,5 +56,118 @@ TableCommands::TableCommands(PSharedItem item)
     wxASSERT(tableM);
 }
 //-----------------------------------------------------------------------------
+// SystemTableCollectionCommands class
+class SystemTableCollectionCommands : public ItemCommands
+{
+private:
+    SystemTableCollection* tablesM;
+
+    void OnRefresh(wxCommandEvent& event);
+
+    DECLARE_EVENT_TABLE()
+public:
+    SystemTableCollectionCommands(PSharedItem item);
+
+    virtual void addCommandsTo(wxMenu* menu, bool isContextMenu);
+};
+//-----------------------------------------------------------------------------
+SystemTableCollectionCommands::SystemTableCollectionCommands(PSharedItem item)
+    : ItemCommands(item), tablesM(0)
+{
+    tablesM = dynamic_cast<SystemTableCollection*>(item.get());
+    wxASSERT(tablesM);
+}
+//-----------------------------------------------------------------------------
+void SystemTableCollectionCommands::addCommandsTo(wxMenu* menu,
+    bool /*isContextMenu*/)
+{
+    wxCHECK_RET(menu,
+        wxT("SystemTableCollectionCommands::addCommandsTo() called without menu"));
+    wxCHECK_RET(tablesM,
+        wxT("SystemTableCollectionCommands::addCommandsTo() called without collection"));
+
+    menu->Append(CmdObject_Refresh, _("&Refresh"));
+}
+//-----------------------------------------------------------------------------
+BEGIN_EVENT_TABLE(SystemTableCollectionCommands, ItemCommands)
+    EVT_MENU(CmdObject_Refresh, SystemTableCollectionCommands::OnRefresh)
+    EVT_UPDATE_UI(CmdObject_Refresh, ItemCommands::CommandIsEnabled)
+END_EVENT_TABLE()
+//-----------------------------------------------------------------------------
+void SystemTableCollectionCommands::OnRefresh(wxCommandEvent& /*event*/)
+{
+    wxCHECK_RET(tablesM,
+        wxT("SystemTableCollectionCommands::OnRefresh() called without collection"));
+
+    tablesM->refreshData();
+}
+//-----------------------------------------------------------------------------
+// TableCollectionCommands class
+class TableCollectionCommands : public ItemCommands
+{
+private:
+    TableCollection* tablesM;
+
+    void OnCreateNew(wxCommandEvent& event);
+    void OnRefresh(wxCommandEvent& event);
+
+    DECLARE_EVENT_TABLE()
+protected:
+    virtual bool hasChildItems();
+public:
+    TableCollectionCommands(PSharedItem item);
+
+    virtual void addCommandsTo(wxMenu* menu, bool isContextMenu);
+};
+//-----------------------------------------------------------------------------
+TableCollectionCommands::TableCollectionCommands(PSharedItem item)
+    : ItemCommands(item), tablesM(0)
+{
+    tablesM = dynamic_cast<TableCollection*>(item.get());
+    wxASSERT(tablesM);
+}
+//-----------------------------------------------------------------------------
+void TableCollectionCommands::addCommandsTo(wxMenu* menu,
+    bool /*isContextMenu*/)
+{
+    wxCHECK_RET(menu,
+        wxT("TableCollectionCommands::addCommandsTo() called without menu"));
+    wxCHECK_RET(tablesM,
+        wxT("TableCollectionCommands::addCommandsTo() called without collection"));
+
+    menu->Append(CmdObject_Create, _("&Create new table..."));
+    menu->AppendSeparator();
+    menu->Append(CmdObject_Refresh, _("&Refresh"));
+}
+//-----------------------------------------------------------------------------
+bool TableCollectionCommands::hasChildItems()
+{
+    return tablesM != 0 && tablesM->hasChildren();
+}
+//-----------------------------------------------------------------------------
+BEGIN_EVENT_TABLE(TableCollectionCommands, ItemCommands)
+    EVT_MENU(CmdObject_Create, TableCollectionCommands::OnCreateNew)
+    EVT_UPDATE_UI(CmdObject_Create, ItemCommands::CommandIsEnabled)
+    EVT_MENU(CmdObject_Refresh, TableCollectionCommands::OnRefresh)
+    EVT_UPDATE_UI(CmdObject_Refresh, ItemCommands::CommandIsEnabled)
+END_EVENT_TABLE()
+//-----------------------------------------------------------------------------
+void TableCollectionCommands::OnCreateNew(wxCommandEvent& /*event*/)
+{
+// TODO: implement TableCollectionCommands::OnCreateNew()
+}
+//-----------------------------------------------------------------------------
+void TableCollectionCommands::OnRefresh(wxCommandEvent& /*event*/)
+{
+    wxCHECK_RET(tablesM,
+        wxT("TableCollectionCommands::OnRefresh() called without collection"));
+
+    tablesM->refreshData();
+}
+//-----------------------------------------------------------------------------
 static const ItemCommandsFactoryImpl<Table, TableCommands> factory;
+static const ItemCommandsFactoryImpl<SystemTableCollection,
+    SystemTableCollectionCommands> collectionFactory1;
+static const ItemCommandsFactoryImpl<TableCollection,
+    TableCollectionCommands> collectionFactory2;
 //-----------------------------------------------------------------------------

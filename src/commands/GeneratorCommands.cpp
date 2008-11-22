@@ -45,8 +45,14 @@ class GeneratorCommands : public ItemCommands
 {
 private:
     Generator* generatorM;
+
+    void OnShowInfo(wxCommandEvent& event);
+
+    DECLARE_EVENT_TABLE()
 public:
     GeneratorCommands(PSharedItem item);
+
+    virtual void addCommandsTo(wxMenu* menu, bool isContextMenu);
 };
 //-----------------------------------------------------------------------------
 GeneratorCommands::GeneratorCommands(PSharedItem item)
@@ -54,6 +60,29 @@ GeneratorCommands::GeneratorCommands(PSharedItem item)
 {
     generatorM = dynamic_cast<Generator*>(item.get());
     wxASSERT(generatorM);
+}
+//-----------------------------------------------------------------------------
+void GeneratorCommands::addCommandsTo(wxMenu* menu, bool /*isContextMenu*/)
+{
+    wxCHECK_RET(menu,
+        wxT("GeneratorCommands::addCommandsTo() called without menu"));
+    wxCHECK_RET(generatorM,
+        wxT("GeneratorCommands::addCommandsTo() called without generator"));
+
+    menu->Append(CmdObject_ShowInfo, _("&Show value"));
+}
+//-----------------------------------------------------------------------------
+BEGIN_EVENT_TABLE(GeneratorCommands, ItemCommands)
+    EVT_MENU(CmdObject_ShowInfo, GeneratorCommands::OnShowInfo)
+    EVT_UPDATE_UI(CmdObject_ShowInfo, ItemCommands::CommandIsEnabled)
+END_EVENT_TABLE()
+//-----------------------------------------------------------------------------
+void GeneratorCommands::OnShowInfo(wxCommandEvent& /*event*/)
+{
+    wxCHECK_RET(generatorM,
+        wxT("GeneratorCommands::OnShowInfo() called without generator"));
+
+    generatorM->loadValue();
 }
 //-----------------------------------------------------------------------------
 // GeneratorCollectionCommands class
@@ -111,8 +140,9 @@ BEGIN_EVENT_TABLE(GeneratorCollectionCommands, ItemCommands)
     EVT_UPDATE_UI(CmdObject_Refresh, ItemCommands::CommandIsEnabled)
 END_EVENT_TABLE()
 //-----------------------------------------------------------------------------
-void GeneratorCollectionCommands::OnCreateNew(wxCommandEvent& event)
+void GeneratorCollectionCommands::OnCreateNew(wxCommandEvent& /*event*/)
 {
+// TODO: implement GeneratorCollectionCommands::OnCreateNew()
 }
 //-----------------------------------------------------------------------------
 void GeneratorCollectionCommands::OnRefresh(wxCommandEvent& /*event*/)
@@ -128,14 +158,7 @@ void GeneratorCollectionCommands::OnShowInfo(wxCommandEvent& /*event*/)
     wxCHECK_RET(generatorsM,
         wxT("GeneratorCollectionCommands::OnShowInfo() called without collection"));
 
-    for (unsigned i = 0; i < generatorsM->getChildrenCount(); ++i)
-    {
-        PSharedItem child = generatorsM->getChild(i);
-        wxASSERT(child != 0);
-        Generator* generator = dynamic_cast<Generator*>(child.get());
-        wxASSERT(generator != 0);
-        generator->loadValue();
-    }
+    generatorsM->loadValues();
 }
 //-----------------------------------------------------------------------------
 static const ItemCommandsFactoryImpl<Generator,

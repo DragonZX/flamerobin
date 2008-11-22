@@ -36,13 +36,95 @@
     #include "wx/wx.h"
 #endif
 
+#include "core/StringUtils.h"
+
 #include "engine/DatabaseConnection.h"
 
 #include "hierarchy/Generator.h"
 #include "hierarchy/ItemVisitor.h"
 //-----------------------------------------------------------------------------
+struct ItemHandleAndName {
+    Item::Handle handle;
+    std::string name;
+};
+//-----------------------------------------------------------------------------
+// GeneratorLoadValueJob class
+class GeneratorLoadValueJob: public DatabaseConnectionThreadJob
+{
+private:
+    std::list<ItemHandleAndName> generatorsM;
+    std::list<int64_t> generatorValuesM;
+protected:
+    virtual void executeJob(DatabaseConnectionThread* thread);
+public:
+    GeneratorLoadValueJob(Database& database,
+        const ItemHandleAndName& generator);
+    GeneratorLoadValueJob(Database& database,
+        const std::list<ItemHandleAndName>& generators);
+    virtual void processResults();
+};
+//-----------------------------------------------------------------------------
+GeneratorLoadValueJob::GeneratorLoadValueJob(Database& database,
+        const ItemHandleAndName& generator)
+    : DatabaseConnectionThreadJob(database)
+{
+    generatorsM.push_back(generator);
+}
+//-----------------------------------------------------------------------------
+GeneratorLoadValueJob::GeneratorLoadValueJob(Database& database,
+        const std::list<ItemHandleAndName>& generators)
+    : DatabaseConnectionThreadJob(database), generatorsM(generators)
+{
+}
+//-----------------------------------------------------------------------------
+void GeneratorLoadValueJob::executeJob(DatabaseConnectionThread* thread)
+{
+    wxASSERT(thread);
+    IBPP::Database db = thread->getDatabase();
+    if (db != 0 && db->Connected())
+    {
+        IBPP::Transaction tr = IBPP::TransactionFactory(db, IBPP::amRead);
+        tr->Start();
+        IBPP::Statement st = IBPP::StatementFactory(db, tr);
+
+        generatorValuesM.clear();
+        for (std::list<ItemHandleAndName>::iterator it = generatorsM.begin();
+            it != generatorsM.end(); ++it)
+        {
+            std::string stmt = "select gen_id(" + (*it).name
+                + ", 0) from rdb$database";
+            st->Execute(stmt);
+            st->Fetch();
+            int64_t value;
+            st->Get(1, &value);
+            generatorValuesM.push_back(value);
+        }
+    }
+}
+//-----------------------------------------------------------------------------
+void GeneratorLoadValueJob::processResults()
+{
+    wxASSERT(wxIsMainThread());
+
+    if (hasError())
+        reportError(_("An error occurred while fetching the generator values!"));
+
+    std::list<int64_t>::const_iterator itValue = generatorValuesM.begin();
+    for (std::list<ItemHandleAndName>::iterator it = generatorsM.begin();
+        it != generatorsM.end() && itValue != generatorValuesM.end();
+        ++it, ++itValue)
+    {
+        Item* item = Item::getFromHandle((*it).handle);
+        Generator* generator = dynamic_cast<Generator*>(item);
+        wxASSERT(generator);
+        if (generator)
+            generator->setValue(*itValue);
+    }
+}
+//-----------------------------------------------------------------------------
 // Generator class
 Generator::Generator(const Identifier& identifier)
+    : MetadataItemBase(), valueM(0), valueLoadedM(false)
 {
     setIdentifier(identifier);
 }
@@ -59,9 +141,42 @@ void Generator::accept(ItemVisitor* visitor)
         visitor->visit(*this);
 }
 //-----------------------------------------------------------------------------
+int64_t Generator::getValue() const
+{
+    wxASSERT(valueLoadedM);
+    return valueM;
+}
+//-----------------------------------------------------------------------------
+void Generator::setValue(int64_t value)
+{
+    if (!valueLoadedM || valueM != value)
+    {
+        valueLoadedM = true;
+        valueM = value;
+        notifyObservers();
+    }
+}
+//-----------------------------------------------------------------------------
 void Generator::loadValue()
 {
-// TODO
+    Database* db = getDatabase();
+    wxCHECK_RET(db,
+        wxT("Generator::loadValue() called without parent database"));
+    DatabaseConnection* dbc = db->getMetadataConnection();
+    if (dbc)
+    {
+        ItemHandleAndName me;
+        me.handle = getHandle();
+        me.name = wx2std(getIdentifier().getQuoted());
+
+        SharedDBCThreadJob job(new GeneratorLoadValueJob(*db, me));
+        dbc->executeJob(job);
+    }
+}
+//-----------------------------------------------------------------------------
+bool Generator::isValueLoaded() const
+{
+    return valueLoadedM;
 }
 //-----------------------------------------------------------------------------
 // GeneratorCollection class
@@ -99,5 +214,33 @@ void GeneratorCollection::accept(ItemVisitor* visitor)
     wxASSERT(visitor);
     if (visitor)
         visitor->visit(*this);
+}
+//-----------------------------------------------------------------------------
+void GeneratorCollection::loadValues()
+{
+    Database* db = getDatabase();
+    wxCHECK_RET(db,
+        wxT("Generator::loadValue() called without parent database"));
+    DatabaseConnection* dbc = db->getMetadataConnection();
+    if (dbc)
+    {
+        std::list<ItemHandleAndName> generators;
+        for (unsigned i = 0; i < getChildrenCount(); ++i)
+        {
+            PSharedItem item = getChild(i);
+            Generator* generator = dynamic_cast<Generator*>(item.get());
+            wxASSERT(generator);
+            if (generator)
+            {
+                ItemHandleAndName han;
+                han.handle = generator->getHandle();
+                han.name = wx2std(generator->getIdentifier().getQuoted());
+                generators.push_back(han);
+            }
+        }
+
+        SharedDBCThreadJob job(new GeneratorLoadValueJob(*db, generators));
+        dbc->executeJob(job);
+    }
 }
 //-----------------------------------------------------------------------------

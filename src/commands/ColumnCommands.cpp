@@ -37,30 +37,34 @@
 #endif
 
 #include "commands/ItemCommands.h"
+
 #include "core/CommandIds.h"
-#include "hierarchy/Function.h"
+
+#include "hierarchy/Column.h"
+#include "hierarchy/Table.h"
 //-----------------------------------------------------------------------------
-// FunctionCommands class
-class FunctionCommands : public ItemCommands
+// ColumnCommands class
+class ColumnCommands : public ItemCommands
 {
 private:
-    Function* functionM;
+    Column* columnM;
 public:
-    FunctionCommands(PSharedItem item);
+    ColumnCommands(PSharedItem item);
 };
 //-----------------------------------------------------------------------------
-FunctionCommands::FunctionCommands(PSharedItem item)
-    : ItemCommands(item), functionM(0)
+ColumnCommands::ColumnCommands(PSharedItem item)
+    : ItemCommands(item), columnM(0)
 {
-    functionM = dynamic_cast<Function*>(item.get());
-    wxASSERT(functionM);
+    columnM = dynamic_cast<Column*>(item.get());
+    wxASSERT(columnM);
 }
 //-----------------------------------------------------------------------------
-// FunctionCollectionCommands class
-class FunctionCollectionCommands : public ItemCommands
+// ColumnCollectionCommands class
+class ColumnCollectionCommands : public ItemCommands
 {
 private:
-    FunctionCollection* functionsM;
+    ColumnCollection* columnsM;
+    bool canCreateNewM;
 
     void OnCreateNew(wxCommandEvent& event);
     void OnRefresh(wxCommandEvent& event);
@@ -69,57 +73,63 @@ private:
 protected:
     virtual bool hasChildItems();
 public:
-    FunctionCollectionCommands(PSharedItem item);
+    ColumnCollectionCommands(PSharedItem item);
 
     virtual void addCommandsTo(wxMenu* menu, bool isContextMenu);
 };
 //-----------------------------------------------------------------------------
-FunctionCollectionCommands::FunctionCollectionCommands(PSharedItem item)
-    : ItemCommands(item), functionsM(0)
+ColumnCollectionCommands::ColumnCollectionCommands(PSharedItem item)
+    : ItemCommands(item), columnsM(0), canCreateNewM(false)
 {
-    functionsM = dynamic_cast<FunctionCollection*>(item.get());
-    wxASSERT(functionsM);
+    columnsM = dynamic_cast<ColumnCollection*>(item.get());
+    wxASSERT(columnsM);
+
+    Table* table = dynamic_cast<Table*>(columnsM->getRelation());
+    canCreateNewM = table && !table->isSystem();
 }
 //-----------------------------------------------------------------------------
-void FunctionCollectionCommands::addCommandsTo(wxMenu* menu,
+void ColumnCollectionCommands::addCommandsTo(wxMenu* menu,
     bool /*isContextMenu*/)
 {
     wxCHECK_RET(menu,
-        wxT("FunctionCollectionCommands::addCommandsTo() called without menu"));
-    wxCHECK_RET(functionsM,
-        wxT("FunctionCollectionCommands::addCommandsTo() called without collection"));
+        wxT("ColumnCollectionCommands::addCommandsTo() called without menu"));
+    wxCHECK_RET(columnsM,
+        wxT("ColumnCollectionCommands::addCommandsTo() called without collection"));
 
-    menu->Append(CmdObject_Create, _("&Declare new function..."));
-    menu->AppendSeparator();
+    if (canCreateNewM)
+    {
+        menu->Append(CmdObject_Create, _("&Create new column..."));
+        menu->AppendSeparator();
+    }
     menu->Append(CmdObject_Refresh, _("&Refresh"));
 }
 //-----------------------------------------------------------------------------
-bool FunctionCollectionCommands::hasChildItems()
+bool ColumnCollectionCommands::hasChildItems()
 {
-    return functionsM != 0 && functionsM->hasChildren();
+    return columnsM != 0 && columnsM->hasChildren();
 }
 //-----------------------------------------------------------------------------
-BEGIN_EVENT_TABLE(FunctionCollectionCommands, ItemCommands)
-    EVT_MENU(CmdObject_Create, FunctionCollectionCommands::OnCreateNew)
+BEGIN_EVENT_TABLE(ColumnCollectionCommands, ItemCommands)
+    EVT_MENU(CmdObject_Create, ColumnCollectionCommands::OnCreateNew)
     EVT_UPDATE_UI(CmdObject_Create, ItemCommands::CommandIsEnabled)
-    EVT_MENU(CmdObject_Refresh, FunctionCollectionCommands::OnRefresh)
+    EVT_MENU(CmdObject_Refresh, ColumnCollectionCommands::OnRefresh)
     EVT_UPDATE_UI(CmdObject_Refresh, ItemCommands::CommandIsEnabled)
 END_EVENT_TABLE()
 //-----------------------------------------------------------------------------
-void FunctionCollectionCommands::OnCreateNew(wxCommandEvent& /*event*/)
+void ColumnCollectionCommands::OnCreateNew(wxCommandEvent& /*event*/)
 {
-// TODO: implement FunctionCollectionCommands::OnCreateNew()
+// TODO: implement ColumnCollectionCommands::OnCreateNew()
 }
 //-----------------------------------------------------------------------------
-void FunctionCollectionCommands::OnRefresh(wxCommandEvent& /*event*/)
+void ColumnCollectionCommands::OnRefresh(wxCommandEvent& /*event*/)
 {
-    wxCHECK_RET(functionsM,
-        wxT("FunctionCollectionCommands::OnRefresh() called without collection"));
+    wxCHECK_RET(columnsM,
+        wxT("ColumnCollectionCommands::OnRefresh() called without collection"));
 
-    functionsM->refreshData();
+    columnsM->refreshData();
 }
 //-----------------------------------------------------------------------------
-static const ItemCommandsFactoryImpl<Function, FunctionCommands> itemFactory;
-static const ItemCommandsFactoryImpl<FunctionCollection,
-    FunctionCollectionCommands> collectionFactory;
+static const ItemCommandsFactoryImpl<Column, ColumnCommands> itemFactory;
+static const ItemCommandsFactoryImpl<ColumnCollection,
+    ColumnCollectionCommands> collectionFactory;
 //-----------------------------------------------------------------------------

@@ -56,5 +56,70 @@ ProcedureCommands::ProcedureCommands(PSharedItem item)
     wxASSERT(procedureM);
 }
 //-----------------------------------------------------------------------------
-static const ItemCommandsFactoryImpl<Procedure, ProcedureCommands> factory;
+// ProcedureCollectionCommands class
+class ProcedureCollectionCommands : public ItemCommands
+{
+private:
+    ProcedureCollection* proceduresM;
+
+    void OnCreateNew(wxCommandEvent& event);
+    void OnRefresh(wxCommandEvent& event);
+
+    DECLARE_EVENT_TABLE()
+protected:
+    virtual bool hasChildItems();
+public:
+    ProcedureCollectionCommands(PSharedItem item);
+
+    virtual void addCommandsTo(wxMenu* menu, bool isContextMenu);
+};
+//-----------------------------------------------------------------------------
+ProcedureCollectionCommands::ProcedureCollectionCommands(PSharedItem item)
+    : ItemCommands(item), proceduresM(0)
+{
+    proceduresM = dynamic_cast<ProcedureCollection*>(item.get());
+    wxASSERT(proceduresM);
+}
+//-----------------------------------------------------------------------------
+void ProcedureCollectionCommands::addCommandsTo(wxMenu* menu,
+    bool /*isContextMenu*/)
+{
+    wxCHECK_RET(menu,
+        wxT("ProcedureCollectionCommands::addCommandsTo() called without menu"));
+    wxCHECK_RET(proceduresM,
+        wxT("ProcedureCollectionCommands::addCommandsTo() called without collection"));
+
+    menu->Append(CmdObject_Create, _("&Create new procedure..."));
+    menu->AppendSeparator();
+    menu->Append(CmdObject_Refresh, _("&Refresh"));
+}
+//-----------------------------------------------------------------------------
+bool ProcedureCollectionCommands::hasChildItems()
+{
+    return proceduresM != 0 && proceduresM->hasChildren();
+}
+//-----------------------------------------------------------------------------
+BEGIN_EVENT_TABLE(ProcedureCollectionCommands, ItemCommands)
+    EVT_MENU(CmdObject_Create, ProcedureCollectionCommands::OnCreateNew)
+    EVT_UPDATE_UI(CmdObject_Create, ItemCommands::CommandIsEnabled)
+    EVT_MENU(CmdObject_Refresh, ProcedureCollectionCommands::OnRefresh)
+    EVT_UPDATE_UI(CmdObject_Refresh, ItemCommands::CommandIsEnabled)
+END_EVENT_TABLE()
+//-----------------------------------------------------------------------------
+void ProcedureCollectionCommands::OnCreateNew(wxCommandEvent& /*event*/)
+{
+// TODO: implement ProcedureCollectionCommands::OnCreateNew()
+}
+//-----------------------------------------------------------------------------
+void ProcedureCollectionCommands::OnRefresh(wxCommandEvent& /*event*/)
+{
+    wxCHECK_RET(proceduresM,
+        wxT("ProcedureCollectionCommands::OnRefresh() called without collection"));
+
+    proceduresM->refreshData();
+}
+//-----------------------------------------------------------------------------
+static const ItemCommandsFactoryImpl<Procedure, ProcedureCommands> itemFactory;
+static const ItemCommandsFactoryImpl<ProcedureCollection,
+    ProcedureCollectionCommands> collectionFactory;
 //-----------------------------------------------------------------------------

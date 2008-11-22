@@ -55,11 +55,9 @@ void Relation::loadChildren()
 
         columnsM = PSharedColumnCollection(new ColumnCollection());
         columnsM->setParent(me);
-//        columnsM->loadChildren();
 
         triggersM = PSharedTriggerCollection(new TriggerCollection());
         triggersM->setParent(me);
-//        triggersM->loadChildren();
 
         setLoadChildrenState(lcsLoaded);
         notifyObservers();

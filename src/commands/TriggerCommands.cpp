@@ -37,7 +37,10 @@
 #endif
 
 #include "commands/ItemCommands.h"
+
 #include "core/CommandIds.h"
+
+#include "hierarchy/Relation.h"
 #include "hierarchy/Trigger.h"
 //-----------------------------------------------------------------------------
 // TriggerCommands class
@@ -56,5 +59,77 @@ TriggerCommands::TriggerCommands(PSharedItem item)
     wxASSERT(triggerM);
 }
 //-----------------------------------------------------------------------------
-static const ItemCommandsFactoryImpl<Trigger, TriggerCommands> factory;
+// TriggerCollectionCommands class
+class TriggerCollectionCommands : public ItemCommands
+{
+private:
+    TriggerCollection* triggersM;
+    bool canCreateNewM;
+
+    void OnCreateNew(wxCommandEvent& event);
+    void OnRefresh(wxCommandEvent& event);
+
+    DECLARE_EVENT_TABLE()
+protected:
+    virtual bool hasChildItems();
+public:
+    TriggerCollectionCommands(PSharedItem item);
+
+    virtual void addCommandsTo(wxMenu* menu, bool isContextMenu);
+};
+//-----------------------------------------------------------------------------
+TriggerCollectionCommands::TriggerCollectionCommands(PSharedItem item)
+    : ItemCommands(item), triggersM(0), canCreateNewM(false)
+{
+    triggersM = dynamic_cast<TriggerCollection*>(item.get());
+    wxASSERT(triggersM);
+
+    Relation* relation = triggersM->getRelation();
+    canCreateNewM = relation && !relation->isSystem();
+}
+//-----------------------------------------------------------------------------
+void TriggerCollectionCommands::addCommandsTo(wxMenu* menu,
+    bool /*isContextMenu*/)
+{
+    wxCHECK_RET(menu,
+        wxT("TriggerCollectionCommands::addCommandsTo() called without menu"));
+    wxCHECK_RET(triggersM,
+        wxT("TriggerCollectionCommands::addCommandsTo() called without collection"));
+
+    if (canCreateNewM)
+    {
+        menu->Append(CmdObject_Create, _("&Create new trigger..."));
+        menu->AppendSeparator();
+    }
+    menu->Append(CmdObject_Refresh, _("&Refresh"));
+}
+//-----------------------------------------------------------------------------
+bool TriggerCollectionCommands::hasChildItems()
+{
+    return triggersM != 0 && triggersM->hasChildren();
+}
+//-----------------------------------------------------------------------------
+BEGIN_EVENT_TABLE(TriggerCollectionCommands, ItemCommands)
+    EVT_MENU(CmdObject_Create, TriggerCollectionCommands::OnCreateNew)
+    EVT_UPDATE_UI(CmdObject_Create, ItemCommands::CommandIsEnabled)
+    EVT_MENU(CmdObject_Refresh, TriggerCollectionCommands::OnRefresh)
+    EVT_UPDATE_UI(CmdObject_Refresh, ItemCommands::CommandIsEnabled)
+END_EVENT_TABLE()
+//-----------------------------------------------------------------------------
+void TriggerCollectionCommands::OnCreateNew(wxCommandEvent& /*event*/)
+{
+// TODO: implement TriggerCollectionCommands::OnCreateNew()
+}
+//-----------------------------------------------------------------------------
+void TriggerCollectionCommands::OnRefresh(wxCommandEvent& /*event*/)
+{
+    wxCHECK_RET(triggersM,
+        wxT("TriggerCollectionCommands::OnRefresh() called without collection"));
+
+    triggersM->refreshData();
+}
+//-----------------------------------------------------------------------------
+static const ItemCommandsFactoryImpl<Trigger, TriggerCommands> itemFactory;
+static const ItemCommandsFactoryImpl<TriggerCollection,
+    TriggerCollectionCommands> collectionFactory;
 //-----------------------------------------------------------------------------

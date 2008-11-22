@@ -38,29 +38,29 @@
 
 #include "commands/ItemCommands.h"
 #include "core/CommandIds.h"
-#include "hierarchy/Function.h"
+#include "hierarchy/Domain.h"
 //-----------------------------------------------------------------------------
-// FunctionCommands class
-class FunctionCommands : public ItemCommands
+// DomainCommands class
+class DomainCommands : public ItemCommands
 {
 private:
-    Function* functionM;
+    Domain* domainM;
 public:
-    FunctionCommands(PSharedItem item);
+    DomainCommands(PSharedItem item);
 };
 //-----------------------------------------------------------------------------
-FunctionCommands::FunctionCommands(PSharedItem item)
-    : ItemCommands(item), functionM(0)
+DomainCommands::DomainCommands(PSharedItem item)
+    : ItemCommands(item), domainM(0)
 {
-    functionM = dynamic_cast<Function*>(item.get());
-    wxASSERT(functionM);
+    domainM = dynamic_cast<Domain*>(item.get());
+    wxASSERT(domainM);
 }
 //-----------------------------------------------------------------------------
-// FunctionCollectionCommands class
-class FunctionCollectionCommands : public ItemCommands
+// DomainCollectionCommands class
+class DomainCollectionCommands : public ItemCommands
 {
 private:
-    FunctionCollection* functionsM;
+    DomainCollection* domainsM;
 
     void OnCreateNew(wxCommandEvent& event);
     void OnRefresh(wxCommandEvent& event);
@@ -69,57 +69,57 @@ private:
 protected:
     virtual bool hasChildItems();
 public:
-    FunctionCollectionCommands(PSharedItem item);
+    DomainCollectionCommands(PSharedItem item);
 
     virtual void addCommandsTo(wxMenu* menu, bool isContextMenu);
 };
 //-----------------------------------------------------------------------------
-FunctionCollectionCommands::FunctionCollectionCommands(PSharedItem item)
-    : ItemCommands(item), functionsM(0)
+DomainCollectionCommands::DomainCollectionCommands(PSharedItem item)
+    : ItemCommands(item), domainsM(0)
 {
-    functionsM = dynamic_cast<FunctionCollection*>(item.get());
-    wxASSERT(functionsM);
+    domainsM = dynamic_cast<DomainCollection*>(item.get());
+    wxASSERT(domainsM);
 }
 //-----------------------------------------------------------------------------
-void FunctionCollectionCommands::addCommandsTo(wxMenu* menu,
+void DomainCollectionCommands::addCommandsTo(wxMenu* menu,
     bool /*isContextMenu*/)
 {
     wxCHECK_RET(menu,
-        wxT("FunctionCollectionCommands::addCommandsTo() called without menu"));
-    wxCHECK_RET(functionsM,
-        wxT("FunctionCollectionCommands::addCommandsTo() called without collection"));
+        wxT("DomainCollectionCommands::addCommandsTo() called without menu"));
+    wxCHECK_RET(domainsM,
+        wxT("DomainCollectionCommands::addCommandsTo() called without collection"));
 
-    menu->Append(CmdObject_Create, _("&Declare new function..."));
+    menu->Append(CmdObject_Create, _("&Create new domain..."));
     menu->AppendSeparator();
     menu->Append(CmdObject_Refresh, _("&Refresh"));
 }
 //-----------------------------------------------------------------------------
-bool FunctionCollectionCommands::hasChildItems()
+bool DomainCollectionCommands::hasChildItems()
 {
-    return functionsM != 0 && functionsM->hasChildren();
+    return domainsM != 0 && domainsM->hasChildren();
 }
 //-----------------------------------------------------------------------------
-BEGIN_EVENT_TABLE(FunctionCollectionCommands, ItemCommands)
-    EVT_MENU(CmdObject_Create, FunctionCollectionCommands::OnCreateNew)
+BEGIN_EVENT_TABLE(DomainCollectionCommands, ItemCommands)
+    EVT_MENU(CmdObject_Create, DomainCollectionCommands::OnCreateNew)
     EVT_UPDATE_UI(CmdObject_Create, ItemCommands::CommandIsEnabled)
-    EVT_MENU(CmdObject_Refresh, FunctionCollectionCommands::OnRefresh)
+    EVT_MENU(CmdObject_Refresh, DomainCollectionCommands::OnRefresh)
     EVT_UPDATE_UI(CmdObject_Refresh, ItemCommands::CommandIsEnabled)
 END_EVENT_TABLE()
 //-----------------------------------------------------------------------------
-void FunctionCollectionCommands::OnCreateNew(wxCommandEvent& /*event*/)
+void DomainCollectionCommands::OnCreateNew(wxCommandEvent& /*event*/)
 {
-// TODO: implement FunctionCollectionCommands::OnCreateNew()
+// TODO: implement DomainCollectionCommands::OnCreateNew()
 }
 //-----------------------------------------------------------------------------
-void FunctionCollectionCommands::OnRefresh(wxCommandEvent& /*event*/)
+void DomainCollectionCommands::OnRefresh(wxCommandEvent& /*event*/)
 {
-    wxCHECK_RET(functionsM,
-        wxT("FunctionCollectionCommands::OnRefresh() called without collection"));
+    wxCHECK_RET(domainsM,
+        wxT("DomainCollectionCommands::OnRefresh() called without collection"));
 
-    functionsM->refreshData();
+    domainsM->refreshData();
 }
 //-----------------------------------------------------------------------------
-static const ItemCommandsFactoryImpl<Function, FunctionCommands> itemFactory;
-static const ItemCommandsFactoryImpl<FunctionCollection,
-    FunctionCollectionCommands> collectionFactory;
+static const ItemCommandsFactoryImpl<Domain, DomainCommands> itemFactory;
+static const ItemCommandsFactoryImpl<DomainCollection,
+    DomainCollectionCommands> collectionFactory;
 //-----------------------------------------------------------------------------
