@@ -46,17 +46,19 @@ private:
     // Translates the supported macros (like $app and $user) in path
     // specifications coming from the command line or the environment.
     const wxString translatePathMacros(const wxString path) const;
-
-    void OnUpdateUIDisable(wxUpdateUIEvent& event);
 protected:
     virtual const wxString getConfigurableObjectId() const;
 public:
+    virtual void HandleEvent(wxEvtHandler* handler, wxEventFunction func,
+        wxEvent& event) const;
+
     virtual bool OnExceptionInMainLoop();
     virtual int OnExit();
     virtual bool OnInit();
     virtual void OnFatalException();
-    virtual void HandleEvent(wxEvtHandler* handler, wxEventFunction func,
-        wxEvent& event) const;
+private:
+    // event handler methods
+    void OnUpdateUIDisable(wxUpdateUIEvent& event);
 };
 //-----------------------------------------------------------------------------
 DECLARE_APP(Application)

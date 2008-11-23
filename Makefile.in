@@ -65,6 +65,7 @@ FLAMEROBIN_OBJECTS =  \
 	flamerobin_Subject.o \
 	flamerobin_DatabaseConnection.o \
 	flamerobin_WorkerThread.o \
+	flamerobin_AboutBox.o \
 	flamerobin_BaseFrame.o \
 	flamerobin_FrameManager.o \
 	flamerobin_MainFrame.o \
@@ -310,6 +311,9 @@ flamerobin_DatabaseConnection.o: $(srcdir)/src/engine/DatabaseConnection.cpp $(F
 
 flamerobin_WorkerThread.o: $(srcdir)/src/engine/WorkerThread.cpp $(FLAMEROBIN_ODEP)
 	$(CXXC) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(srcdir)/src/engine/WorkerThread.cpp
+
+flamerobin_AboutBox.o: $(srcdir)/src/gui/AboutBox.cpp $(FLAMEROBIN_ODEP)
+	$(CXXC) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(srcdir)/src/gui/AboutBox.cpp
 
 flamerobin_BaseFrame.o: $(srcdir)/src/gui/BaseFrame.cpp $(FLAMEROBIN_ODEP)
 	$(CXXC) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(srcdir)/src/gui/BaseFrame.cpp

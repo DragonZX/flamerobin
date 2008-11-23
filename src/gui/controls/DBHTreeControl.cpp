@@ -45,9 +45,9 @@
 #include <vector>
 #include <boost/shared_ptr.hpp>
 
-#include "config/Config.h"
-
 #include "commands/ItemCommands.h"
+
+#include "config/Config.h"
 
 #include "core/ArtProvider.h"
 #include "core/CommandIds.h"
@@ -654,7 +654,7 @@ void DBHTreeNode::update()
 }
 //-----------------------------------------------------------------------------
 // DBHTreeControl class
-const long DBHTCStyle = wxTR_DEFAULT_STYLE
+const long DBHTCStyle = wxTR_DEFAULT_STYLE | wxNO_BORDER
 #if defined __WXGTK20__ || defined __WXMAC__
     | wxTR_NO_LINES
 #endif

@@ -96,11 +96,7 @@ bool Application::OnInit()
     checkEnvironment();
     parseCommandLine();
 
-#if wxCHECK_VERSION(2, 8, 0)
     wxArtProvider::Push(new ArtProvider);
-#else
-    wxArtProvider::PushProvider(new ArtProvider);
-#endif
     wxImage::AddHandler(new wxPNGHandler);
 
     localeM.Init();

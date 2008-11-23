@@ -29,9 +29,11 @@
 #define FR_MAINFRAME_H
 //-----------------------------------------------------------------------------
 #include <wx/wx.h>
+#include <wx/aui/aui.h>
 
 #include "gui/BaseFrame.h"
 #include "gui/controls/DBHTreeControl.h"
+
 #include "hierarchy/SharedItems.h"
 
 class ItemCommands;
@@ -51,8 +53,9 @@ protected:
     virtual const wxString getName() const;
     virtual const wxRect getDefaultRect() const;
 private:
-    wxPanel* parentPanelM;
+    wxAuiManager auiManagerM;
     DBHTreeControl* dbhTreeM;
+    wxAuiNotebook* auiNotebookM;
 
     ItemCommands* selectedItemCommandsM;
     void setSelectedItem(PSharedItem selectedItem);
@@ -63,11 +66,25 @@ private:
     void createControls();
     void createMenu();
     void layoutControls();
-    void setProperties();
     void updateStatusBar();
+
+    void openHtmlFileIntern(const wxString& caption, const wxString& filename);
+    void openUrlExtern(const wxString& url);
 
 private:
     // event handler methods
+    void OnFileExit(wxCommandEvent& event);
+
+    // Help menu
+    void OnHelpAbout(wxCommandEvent& event);
+    void OnHelpLicense(wxCommandEvent& event);
+    void OnHelpManual(wxCommandEvent& event);
+    void OnHelpReleaseNotes(wxCommandEvent& event);
+    void OnHelpUrlBugReport(wxCommandEvent& event);
+    void OnHelpUrlFeatureRequest(wxCommandEvent& event);
+    void OnHelpUrlHomePage(wxCommandEvent& event);
+    void OnHelpUrlProjectPage(wxCommandEvent& event);
+
     void OnMenuOpenInNewFrame(wxCommandEvent& event);
     void OnTreeSelectionChanged(wxTreeEvent& event);
 
