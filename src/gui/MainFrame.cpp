@@ -118,8 +118,25 @@ void MainFrame::createMenu()
     std::auto_ptr<wxMenuBar> bar(new wxMenuBar);
     // File menu
     std::auto_ptr<wxMenu> menu(new wxMenu);
+    menu->Append(wxID_NEW, _("&New\tCtrl+N"));
+    menu->Append(wxID_OPEN, _("&Open...\tCtrl+O"));
+    menu->Append(wxID_SAVE, _("&Save\tCtrl+S"));
+    menu->Append(wxID_SAVEAS, _("&Save As...\tCtrl+S"));
+    menu->AppendSeparator();
     menu->Append(wxID_EXIT, _("E&xit"));
     bar->Append(menu.release(), _("&File"));
+    // Edit menu
+    menu.reset(new wxMenu);
+    menu->Append(wxID_UNDO, _("&Undo\tCtrl+Z"));
+    menu->Append(wxID_REDO, _("&Redo\tCtrl+Y"));
+    menu->AppendSeparator();
+    menu->Append(wxID_CUT, _("Cu&t\tCtrl+X"));
+    menu->Append(wxID_COPY, _("&Copy\tCtrl+C"));
+    menu->Append(wxID_PASTE, _("&Paste\tCtrl+V"));
+    menu->Append(wxID_DELETE, _("&Delete\tDel"));
+    menu->AppendSeparator();
+    menu->Append(wxID_SELECTALL, _("Select &All\tCtrl+A"));
+    bar->Append(menu.release(), _("&Edit"));
     // Help menu
     menu.reset(new wxMenu);
     menu->Append(CmdHelp_Manual, _("&User manual"));
@@ -148,13 +165,11 @@ void MainFrame::layoutControls()
         Name(wxT("ContentNotebook")).CenterPane().PaneBorder(false));
 
     // load saved AUI layout
-/*
     wxString key = getStorageName() + Config::pathSeparator
         + wxT("AUIPerspective");
     wxString layout;
     if (config().getValue(key, layout) && !layout.empty())
         auiManagerM.LoadPerspective(layout);
-*/
 
     auiManagerM.Update();
 }

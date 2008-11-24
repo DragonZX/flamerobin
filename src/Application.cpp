@@ -111,9 +111,7 @@ bool Application::OnInit()
     // wxCommandUpdateUI handler - necessary for wxMac, where commands in the
     // mein menu need to be disabled if they are not applicable to the
     // currently active control/frame
-    Connect(wxID_LOWEST, wxID_HIGHEST, wxEVT_UPDATE_UI,
-        wxUpdateUIEventHandler(Application::OnUpdateUIDisable));
-    Connect(CmdIdFirst, CmdIdLast, wxEVT_UPDATE_UI,
+    Connect(wxEVT_UPDATE_UI,
         wxUpdateUIEventHandler(Application::OnUpdateUIDisable));
 
     // first frame shows complete DBH, starting with global root node
@@ -204,6 +202,46 @@ void Application::openDatabasesFromParams(MainFrame* frFrame)
 //-----------------------------------------------------------------------------
 void Application::OnUpdateUIDisable(wxUpdateUIEvent& event)
 {
-    event.Enable(false);
+    int evtId = event.GetId();
+    // disable standard commands that have not been enabled yet
+    if (evtId >= wxID_LOWEST && evtId <= wxID_HIGHEST)
+    {
+        const int stdCmds[] = {
+            wxID_OPEN, wxID_CLOSE, wxID_NEW, wxID_SAVE, wxID_SAVEAS,
+            wxID_REVERT, wxID_EXIT, wxID_UNDO, wxID_REDO, wxID_HELP,
+            wxID_PRINT, wxID_PRINT_SETUP, wxID_PAGE_SETUP, wxID_PREVIEW,
+            wxID_ABOUT, wxID_HELP_CONTENTS, wxID_HELP_INDEX, wxID_HELP_SEARCH,
+            wxID_HELP_COMMANDS, wxID_HELP_PROCEDURES, wxID_HELP_CONTEXT,
+            wxID_CLOSE_ALL, wxID_PREFERENCES,
+
+            wxID_EDIT, wxID_CUT, wxID_COPY, wxID_PASTE, wxID_CLEAR, wxID_FIND,
+            wxID_DUPLICATE, wxID_SELECTALL, wxID_DELETE, wxID_REPLACE,
+            wxID_REPLACE_ALL, wxID_PROPERTIES,
+
+            wxID_VIEW_DETAILS, wxID_VIEW_LARGEICONS, wxID_VIEW_SMALLICONS,
+            wxID_VIEW_LIST, wxID_VIEW_SORTDATE, wxID_VIEW_SORTNAME,
+            wxID_VIEW_SORTSIZE, wxID_VIEW_SORTTYPE,
+
+            wxID_FILE, wxID_FILE1, wxID_FILE2, wxID_FILE3, wxID_FILE4,
+            wxID_FILE5, wxID_FILE6, wxID_FILE7, wxID_FILE8, wxID_FILE9,
+
+            wxID_FORWARD, wxID_BACKWARD, wxID_MORE, wxID_SETUP, wxID_RESET,
+            wxID_ADD, wxID_REMOVE,
+
+            wxID_UP, wxID_DOWN, wxID_HOME, wxID_REFRESH, wxID_STOP, wxID_INDEX,
+        };
+
+        for (int i = 0; i < sizeof(stdCmds) / sizeof(int); ++i)
+        {
+            if (stdCmds[i] == evtId)
+            {
+                event.Enable(false);
+                return;
+            }
+        }
+    }
+    // disable FlameRobin commands that have not been enabled yet,
+    // enable everything else
+    event.Enable(evtId < CmdIdFirst || evtId > CmdIdLast);
 }
 //-----------------------------------------------------------------------------
