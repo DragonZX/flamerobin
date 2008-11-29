@@ -244,6 +244,7 @@ private:
 
     bool visibleM;
     bool captionIsBoldM;
+    const wxColour* captionColourM;
     wxString captionM;
     int imageIndexM;
     bool childrenNotLoadedM;
@@ -296,6 +297,7 @@ void DBHItemTreeNodeProperties::reset()
     visibleM = false;
     captionIsBoldM = false;
     captionM.clear();
+    captionColourM = 0;
     imageIndexM = -1;
     childrenNotLoadedM = true;
     sortChildrenM = false;
@@ -308,6 +310,11 @@ void DBHItemTreeNodeProperties::updateTreeItem(wxTreeItemId id)
         treeM.SetItemText(id, captionM);
     if (treeM.IsBold(id) != captionIsBoldM)
         treeM.SetItemBold(id, captionIsBoldM);
+    wxColour fgColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
+    if (captionColourM)
+        fgColour = *captionColourM;
+    if (treeM.GetItemTextColour(id) != fgColour)
+        treeM.SetItemTextColour(id, fgColour);
 
     // update tree node image index without flicker
     if (treeM.GetItemImage(id) != imageIndexM)
@@ -340,10 +347,28 @@ void DBHItemTreeNodeProperties::visit(Database& database)
 
     captionIsBoldM = database.isConnected();
     captionM = database.getName();
-    if (database.getConnectionState() == Database::csConnecting)
-        captionM = captionM + wxT(" ") + _("(connecting...)");
-    if (database.getConnectionState() == Database::csDisconnecting)
-        captionM = captionM + wxT(" ") + _("(disconnecting...)");
+    switch (database.getConnectionState())
+    {
+        case Database::csConnecting:
+            captionM = captionM + wxT(" ") + _("(connecting...)");
+            break;
+        case Database::csDisconnecting:
+            captionM = captionM + wxT(" ") + _("(disconnecting...)");
+            break;
+        case Database::csConnectionFailed:
+            captionM = captionM + wxT(" ") + _("(connection failed)");
+            captionColourM = wxRED;
+            break;
+        case Database::csRestoring:
+            captionM = captionM + wxT(" ") + _("(restoring...)");
+            captionIsBoldM = true;
+            captionColourM = wxBLUE;
+            break;
+        case Database::csRestoreFailed:
+            captionM = captionM + wxT(" ") + _("(restore failed)");
+            captionColourM = wxRED;
+            break;
+    }
     wxArtID id = (database.isConnected() ?
         ART_DatabaseConnected : ART_DatabaseDisconnected);
     imageIndexM = DBHTreeImageList::get().getImageIndex(id);

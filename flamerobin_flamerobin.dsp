@@ -484,6 +484,10 @@ SOURCE=.\src\gui\BaseFrame.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\gui\BaseViewPanel.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\hierarchy\Column.cpp
 # End Source File
 # Begin Source File
@@ -532,10 +536,6 @@ SOURCE=.\src\core\FRError.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\gui\FrameManager.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\src\hierarchy\Function.cpp
 # End Source File
 # Begin Source File
@@ -549,6 +549,10 @@ SOURCE=.\src\hierarchy\Generator.cpp
 # Begin Source File
 
 SOURCE=.\src\commands\GeneratorCommands.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\gui\HtmlViewPanel.cpp
 # End Source File
 # Begin Source File
 
@@ -678,6 +682,10 @@ SOURCE=.\src\gui\BaseFrame.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\gui\BaseViewPanel.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\hierarchy\Column.h
 # End Source File
 # Begin Source File
@@ -714,15 +722,15 @@ SOURCE=.\src\core\FRError.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\gui\FrameManager.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\src\hierarchy\Function.h
 # End Source File
 # Begin Source File
 
 SOURCE=.\src\hierarchy\Generator.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\gui\HtmlViewPanel.h
 # End Source File
 # Begin Source File
 

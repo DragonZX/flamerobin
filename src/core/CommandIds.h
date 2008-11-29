@@ -33,15 +33,16 @@ enum CmdIds {
 
   CmdView_StatusBar = CmdIdFirst,
   CmdView_SearchBar, CmdView_DisconnectedDatabases,
+  CmdView_RegisteredDatabases, CmdView_UnregisteredDatabases,
   CmdView_OpenInNewFrame,
 
-  CmdHelp_Manual = 110,
+  CmdHelp_Manual = 140,
   CmdHelp_RelNotes, CmdHelp_License,
 
-  CmdURL_HomePage = 120,
+  CmdURL_HomePage = 150,
   CmdURL_ProjectPage, CmdURL_FeatureRequest, CmdURL_BugReport,
 
-  CmdFolder_ConnectAllDatabases = 130,
+  CmdFolder_ConnectAllDatabases = 160,
   CmdFolder_DisconnectAllDatabases,
 
   CmdDatabase_Register = 200,

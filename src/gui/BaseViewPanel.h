@@ -25,30 +25,20 @@
 
 */
 
-// For compilers that support precompilation, includes "wx/wx.h".
-#include "wx/wxprec.h"
+//-----------------------------------------------------------------------------
+#ifndef FR_BASEVIEWPANEL_H
+#define FR_BASEVIEWPANEL_H
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
-
-// for all others, include the necessary headers (this file is usually all you
-// need because it includes almost all "standard" wxWindows headers
-#ifndef WX_PRECOMP
-    #include "wx/wx.h"
-#endif
-
-#include "gui/FrameManager.h"
+#include <wx/wx.h>
 //-----------------------------------------------------------------------------
-FrameManager::FrameManager()
+class BaseViewPanel: public wxPanel
 {
-}
+public:
+    BaseViewPanel(wxWindow* parent, wxWindowID id = wxID_ANY,
+        const wxPoint& pos = wxDefaultPosition,
+        const wxSize& size = wxDefaultSize,
+        long style = wxTAB_TRAVERSAL, const wxString& name = wxT("panel"));
+    virtual ~BaseViewPanel();
+};
 //-----------------------------------------------------------------------------
-FrameManager::~FrameManager()
-{
-}
-//-----------------------------------------------------------------------------
-void FrameManager::removeFrame(BaseFrame* /*frame*/)
-{
-}
-//-----------------------------------------------------------------------------
+#endif // FR_BASEVIEWPANEL_H

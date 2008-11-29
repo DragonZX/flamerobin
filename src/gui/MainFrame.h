@@ -50,11 +50,15 @@ public:
     bool openUnregisteredDatabase(const wxString& dbpath);
 
 protected:
+    virtual void doReadConfigSettings(const wxString& prefix);
+    virtual void doWriteConfigSettings(const wxString& prefix) const;
     virtual const wxString getName() const;
     virtual const wxRect getDefaultRect() const;
 private:
     wxAuiManager auiManagerM;
-    DBHTreeControl* dbhTreeM;
+    wxAuiToolBar* auiToolbarM;
+    DBHTreeControl* treeRegisteredDatabasesM;
+    DBHTreeControl* treeUnregisteredDatabasesM;
     wxAuiNotebook* auiNotebookM;
 
     ItemCommands* selectedItemCommandsM;
@@ -65,6 +69,7 @@ private:
     void connectEventHandlers();
     void createControls();
     void createMenu();
+    void createToolbars();
     void layoutControls();
     void updateStatusBar();
 
@@ -74,6 +79,9 @@ private:
 private:
     // event handler methods
     void OnFileExit(wxCommandEvent& event);
+
+    // View menu
+    void OnViewPane(wxCommandEvent& event);
 
     // Help menu
     void OnHelpAbout(wxCommandEvent& event);

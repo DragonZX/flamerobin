@@ -50,6 +50,7 @@
 #include "core/CommandIds.h"
 
 #include "gui/AboutBox.h"
+#include "gui/HtmlViewPanel.h"
 #include "gui/MainFrame.h"
 #include "gui/controls/DBHTreeControl.h"
 
@@ -73,23 +74,19 @@ MainFrame::MainFrame(wxWindow* parent, int id, PSharedItem treeRootItem)
 
     connectEventHandlers();
 
-    dbhTreeM->createRootNode(treeRootItem);
+    treeRegisteredDatabasesM->createRootNode(treeRootItem);
     if (!isMainFrameM)
     {
         wxString rootName(treeRootItem->getName());
         if (!rootName.empty())
             SetTitle(GetTitle() + wxT(" - ") + rootName);
     }
+
+//    treeUnregisteredDatabasesM->createRootNode(PSharedItem());
 }
 //-----------------------------------------------------------------------------
 MainFrame::~MainFrame()
 {
-    // save current AUI layout
-    wxString key = getStorageName() + Config::pathSeparator
-        + wxT("AUIPerspective");
-    wxString layout(auiManagerM.SavePerspective());
-    config().setValue(key, layout);
-
     auiManagerM.UnInit();
 
     setSelectedItem(PSharedItem());
@@ -98,16 +95,21 @@ MainFrame::~MainFrame()
 void MainFrame::connectEventHandlers()
 {
     // tree view handlers
-    Connect(dbhTreeM->GetId(), wxEVT_COMMAND_TREE_SEL_CHANGED,
+    Connect(treeRegisteredDatabasesM->GetId(), wxEVT_COMMAND_TREE_SEL_CHANGED,
         wxTreeEventHandler(MainFrame::OnTreeSelectionChanged));
 }
 //-----------------------------------------------------------------------------
 void MainFrame::createControls()
 {
-    dbhTreeM = new DBHTreeControl(this, wxID_ANY);
+    createToolbars();
+
+    treeRegisteredDatabasesM = new DBHTreeControl(this, wxID_ANY);
+    treeUnregisteredDatabasesM = new DBHTreeControl(this, wxID_ANY);
+
+    int nbStyle = wxAUI_NB_DEFAULT_STYLE | wxAUI_NB_TAB_EXTERNAL_MOVE
+        | wxAUI_NB_WINDOWLIST_BUTTON | wxNO_BORDER;
     auiNotebookM = new wxAuiNotebook(this, wxID_ANY, wxDefaultPosition,
-        wxDefaultSize,
-        wxAUI_NB_DEFAULT_STYLE | wxAUI_NB_TAB_EXTERNAL_MOVE | wxNO_BORDER);
+        wxDefaultSize, nbStyle);
 
     CreateStatusBar();
     updateStatusBar();
@@ -137,16 +139,39 @@ void MainFrame::createMenu()
     menu->AppendSeparator();
     menu->Append(wxID_SELECTALL, _("Select &All\tCtrl+A"));
     bar->Append(menu.release(), _("&Edit"));
+    // View menu
+    menu.reset(new wxMenu);
+    menu->Append(CmdView_RegisteredDatabases, _("&Registered Databases"));
+    menu->Append(CmdView_UnregisteredDatabases, _("&Unregistered Databases"));
+    menu->AppendSeparator();
+    menu->Append(CmdView_StatusBar, _("&Status Bar"));
+    bar->Append(menu.release(), _("&View"));
+    // Database menu
+    menu.reset(new wxMenu);
+
+    bar->Append(menu.release(), _("&Database"));
+    // Object menu
+    menu.reset(new wxMenu);
+
+    bar->Append(menu.release(), _("&Object"));
+    // Statement menu
+    menu.reset(new wxMenu);
+
+    bar->Append(menu.release(), _("&Statement"));
+    // Window menu
+    menu.reset(new wxMenu);
+
+    bar->Append(menu.release(), _("&Window"));
     // Help menu
     menu.reset(new wxMenu);
-    menu->Append(CmdHelp_Manual, _("&User manual"));
-    menu->Append(CmdHelp_RelNotes, _("&What's new"));
+    menu->Append(CmdHelp_Manual, _("&User Manual"));
+    menu->Append(CmdHelp_RelNotes, _("&Release Notes"));
     menu->Append(CmdHelp_License, _("&License"));
     menu->AppendSeparator();
-    menu->Append(CmdURL_HomePage, _("FlameRobin &home page"));
-    menu->Append(CmdURL_ProjectPage, _("SourceForge &project page"));
-    menu->Append(CmdURL_FeatureRequest, _("SourceForge &feature requests"));
-    menu->Append(CmdURL_BugReport, _("SourceForge &bug reports"));
+    menu->Append(CmdURL_HomePage, _("FlameRobin &Home Page"));
+    menu->Append(CmdURL_ProjectPage, _("SourceForge &Project Page"));
+    menu->Append(CmdURL_FeatureRequest, _("SourceForge &Feature Requests"));
+    menu->Append(CmdURL_BugReport, _("SourceForge &Bug Reports"));
     menu->AppendSeparator();
     menu->Append(wxID_ABOUT, _("&About FlameRobin"));
     bar->Append(menu.release(), _("&Help"));
@@ -154,23 +179,51 @@ void MainFrame::createMenu()
     SetMenuBar(bar.release());
 }
 //-----------------------------------------------------------------------------
+void MainFrame::createToolbars()
+{
+    auiToolbarM = new wxAuiToolBar(this);
+    wxSize btnSize(16, 15);
+    auiToolbarM->SetToolBitmapSize(btnSize);
+
+    auiToolbarM->AddTool(wxID_CUT, _("Open File"),
+        wxArtProvider::GetBitmap(wxART_FILE_OPEN, wxART_OTHER, btnSize));
+    auiToolbarM->AddTool(wxID_CUT, _("Save File"),
+        wxArtProvider::GetBitmap(wxART_FILE_SAVE, wxART_OTHER, btnSize));
+    auiToolbarM->AddTool(wxID_CUT, _("Save File As"),
+        wxArtProvider::GetBitmap(wxART_FILE_SAVE_AS, wxART_OTHER, btnSize));
+    auiToolbarM->AddSeparator();
+    auiToolbarM->AddTool(wxID_CUT, _("Cut"),
+        wxArtProvider::GetBitmap(wxART_CUT, wxART_OTHER, btnSize));
+    auiToolbarM->AddTool(wxID_CUT, _("Copy"),
+        wxArtProvider::GetBitmap(wxART_COPY, wxART_OTHER, btnSize));
+    auiToolbarM->AddTool(wxID_CUT, _("Paste"),
+        wxArtProvider::GetBitmap(wxART_PASTE, wxART_OTHER, btnSize));
+    auiToolbarM->AddSeparator();
+    auiToolbarM->AddTool(wxID_CUT, _("Undo"),
+        wxArtProvider::GetBitmap(wxART_UNDO, wxART_OTHER, btnSize));
+    auiToolbarM->AddTool(wxID_CUT, _("Redo"),
+        wxArtProvider::GetBitmap(wxART_REDO, wxART_OTHER, btnSize));
+//    auiToolbarM->Add
+    auiToolbarM->Realize();
+}
+//-----------------------------------------------------------------------------
 void MainFrame::layoutControls()
 {
     // setup default AUI layout
-    auiManagerM.AddPane(dbhTreeM, wxAuiPaneInfo().
-        Name(wxT("DBHTree")).Caption(wxT("Registered Databases")).
+    auiManagerM.AddPane(auiToolbarM, wxAuiPaneInfo().
+        Name(wxT("ToolbarMain")).Caption(wxT("Standard Toolbar")).
+        ToolbarPane().Top().
+        LeftDockable(false).RightDockable(false));
+    auiManagerM.AddPane(treeRegisteredDatabasesM, wxAuiPaneInfo().
+        Name(wxT("TreeRegisteredDB")).Caption(wxT("Registered Databases")).
         BestSize(300, 500).FloatingSize(300, 500).
-        Left().CloseButton(false).MaximizeButton(true));
+        Left().CloseButton(true).MaximizeButton(true));
+    auiManagerM.AddPane(treeUnregisteredDatabasesM, wxAuiPaneInfo().
+        Name(wxT("TreeUnregisteredDB")).Caption(wxT("Unregistered Databases")).
+        BestSize(300, 500).FloatingSize(300, 500).
+        Left().CloseButton(true).MaximizeButton(true).Hide());
     auiManagerM.AddPane(auiNotebookM, wxAuiPaneInfo().
         Name(wxT("ContentNotebook")).CenterPane().PaneBorder(false));
-
-    // load saved AUI layout
-    wxString key = getStorageName() + Config::pathSeparator
-        + wxT("AUIPerspective");
-    wxString layout;
-    if (config().getValue(key, layout) && !layout.empty())
-        auiManagerM.LoadPerspective(layout);
-
     auiManagerM.Update();
 }
 //-----------------------------------------------------------------------------
@@ -191,6 +244,22 @@ void MainFrame::updateStatusBar()
         else
             sbar->SetStatusText(_("[No database selected]"));
     }
+}
+//-----------------------------------------------------------------------------
+void MainFrame::doReadConfigSettings(const wxString& prefix)
+{
+    // load saved AUI layout
+    wxString key = prefix + Config::pathSeparator + wxT("AUIPerspective");
+    wxString layout;
+    if (config().getValue(key, layout) && !layout.empty())
+        auiManagerM.LoadPerspective(layout);
+}
+//-----------------------------------------------------------------------------
+void MainFrame::doWriteConfigSettings(const wxString& prefix) const
+{
+    // save current AUI layout
+    config().setValue(prefix + Config::pathSeparator + wxT("AUIPerspective"),
+        const_cast<MainFrame*>(this)->auiManagerM.SavePerspective());
 }
 //-----------------------------------------------------------------------------
 const wxRect MainFrame::getDefaultRect() const
@@ -246,7 +315,14 @@ bool MainFrame::openUnregisteredDatabase(const wxString& /*dbpath*/)
 void MainFrame::openHtmlFileIntern(const wxString& caption,
     const wxString& filename)
 {
-// TODO: implement MainFrame::openHtmlFileIntern()
+    wxFileName fullname(config().getDocsPath(), filename);
+    if (fullname.FileExists())
+    {
+        HtmlViewPanel* panel = new HtmlViewPanel(auiNotebookM);
+        auiNotebookM->AddPage(panel, caption, true);
+        auiNotebookM->Update();
+        panel->loadFromFile(fullname);
+    }
 }
 //-----------------------------------------------------------------------------
 void MainFrame::openUrlExtern(const wxString& url)
@@ -261,16 +337,22 @@ BEGIN_EVENT_TABLE(MainFrame, wxFrame)
     EVT_MENU(wxID_EXIT, MainFrame::OnFileExit)
     EVT_UPDATE_UI(wxID_EXIT, MainFrame::OnUpdateUIEnable)
 
+    // View menu
+    EVT_MENU_RANGE(CmdView_RegisteredDatabases, CmdView_UnregisteredDatabases, MainFrame::OnViewPane)
+    EVT_UPDATE_UI_RANGE(CmdView_RegisteredDatabases, CmdView_UnregisteredDatabases, MainFrame::OnUpdateUIEnable)
+
     // Help menu
     EVT_MENU(CmdHelp_Manual, MainFrame::OnHelpManual)
     EVT_MENU(CmdHelp_RelNotes, MainFrame::OnHelpReleaseNotes)
     EVT_MENU(CmdHelp_License, MainFrame::OnHelpLicense)
     EVT_UPDATE_UI_RANGE(CmdHelp_Manual, CmdHelp_License, MainFrame::OnUpdateUIEnable)
+
     EVT_MENU(CmdURL_HomePage, MainFrame::OnHelpUrlHomePage)
     EVT_MENU(CmdURL_ProjectPage, MainFrame::OnHelpUrlProjectPage)
     EVT_MENU(CmdURL_FeatureRequest, MainFrame::OnHelpUrlFeatureRequest)
     EVT_MENU(CmdURL_BugReport, MainFrame::OnHelpUrlBugReport)
     EVT_UPDATE_UI_RANGE(CmdURL_HomePage, CmdURL_BugReport, MainFrame::OnUpdateUIEnable)
+
     EVT_MENU(wxID_ABOUT, MainFrame::OnHelpAbout)
     EVT_UPDATE_UI(wxID_ABOUT, MainFrame::OnUpdateUIEnable)
 
@@ -284,6 +366,24 @@ void MainFrame::OnFileExit(wxCommandEvent& /*event*/)
     Close();
 }
 //-----------------------------------------------------------------------------
+// View menu
+void MainFrame::OnViewPane(wxCommandEvent& event)
+{
+    wxWindow* pane = 0;
+    if (event.GetId() == CmdView_RegisteredDatabases)
+        pane = treeRegisteredDatabasesM;
+    else if (event.GetId() == CmdView_UnregisteredDatabases)
+        pane = treeUnregisteredDatabasesM;
+
+    wxAuiPaneInfo& info = auiManagerM.GetPane(pane);
+    if (info.IsOk())
+    {
+        info.Show();
+        auiManagerM.Update();
+    }
+}
+//-----------------------------------------------------------------------------
+// Help menu
 void MainFrame::OnHelpAbout(wxCommandEvent& /*event*/)
 {
     showAboutBox(this);
@@ -296,12 +396,12 @@ void MainFrame::OnHelpLicense(wxCommandEvent& /*event*/)
 //-----------------------------------------------------------------------------
 void MainFrame::OnHelpManual(wxCommandEvent& /*event*/)
 {
-    openHtmlFileIntern(_("Manual"), wxT("fr_manual.html"));
+    openHtmlFileIntern(_("User Manual"), wxT("fr_manual.html"));
 }
 //-----------------------------------------------------------------------------
 void MainFrame::OnHelpReleaseNotes(wxCommandEvent& /*event*/)
 {
-    openHtmlFileIntern(_("Release notes"), wxT("fr_whatsnew.html"));
+    openHtmlFileIntern(_("Release Notes"), wxT("fr_whatsnew.html"));
 }
 //-----------------------------------------------------------------------------
 void MainFrame::OnHelpUrlBugReport(wxCommandEvent& /*event*/)
@@ -345,6 +445,6 @@ void MainFrame::OnUpdateUIEnable(wxUpdateUIEvent& event)
 //-----------------------------------------------------------------------------
 void MainFrame::OnTreeSelectionChanged(wxTreeEvent& event)
 {
-    setSelectedItem(dbhTreeM->getItemFromId(event.GetItem()));
+    setSelectedItem(treeRegisteredDatabasesM->getItemFromId(event.GetItem()));
 }
 //-----------------------------------------------------------------------------

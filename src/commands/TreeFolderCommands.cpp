@@ -127,7 +127,7 @@ void TreeFolderCommands::OnConnectAllDatabases(wxCommandEvent& /*event*/)
     {
         PSharedItem item = folderM->getChild(i);
         Database* database = dynamic_cast<Database*>(item.get());
-        if (database && database->isDisconnected())
+        if (database && database->canConnect())
             database->connect();
     }
 }
@@ -138,7 +138,7 @@ void TreeFolderCommands::OnUpdateConnectAllDatabases(wxUpdateUIEvent& event)
     {
         PSharedItem item = folderM->getChild(i);
         Database* database = dynamic_cast<Database*>(item.get());
-        if (database && database->isDisconnected())
+        if (database && database->canConnect())
         {
             event.Enable(true);
             return;

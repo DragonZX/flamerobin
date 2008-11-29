@@ -101,7 +101,8 @@ FLAMEROBIN_OBJECTS =  \
 	bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_WorkerThread.obj \
 	bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_AboutBox.obj \
 	bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_BaseFrame.obj \
-	bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_FrameManager.obj \
+	bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_BaseViewPanel.obj \
+	bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_HtmlViewPanel.obj \
 	bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_MainFrame.obj \
 	bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_StyleGuide.obj \
 	bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_DBHTreeControl.obj \
@@ -317,8 +318,11 @@ bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_AboutBox.obj: .\src\gui\AboutBox.cpp
 bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_BaseFrame.obj: .\src\gui\BaseFrame.cpp
 	$(CXX) -q -c -P -o$@ $(FLAMEROBIN_CXXFLAGS) .\src\gui\BaseFrame.cpp
 
-bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_FrameManager.obj: .\src\gui\FrameManager.cpp
-	$(CXX) -q -c -P -o$@ $(FLAMEROBIN_CXXFLAGS) .\src\gui\FrameManager.cpp
+bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_BaseViewPanel.obj: .\src\gui\BaseViewPanel.cpp
+	$(CXX) -q -c -P -o$@ $(FLAMEROBIN_CXXFLAGS) .\src\gui\BaseViewPanel.cpp
+
+bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_HtmlViewPanel.obj: .\src\gui\HtmlViewPanel.cpp
+	$(CXX) -q -c -P -o$@ $(FLAMEROBIN_CXXFLAGS) .\src\gui\HtmlViewPanel.cpp
 
 bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_MainFrame.obj: .\src\gui\MainFrame.cpp
 	$(CXX) -q -c -P -o$@ $(FLAMEROBIN_CXXFLAGS) .\src\gui\MainFrame.cpp

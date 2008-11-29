@@ -76,7 +76,8 @@ FLAMEROBIN_OBJECTS =  \
 	gcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_WorkerThread.o \
 	gcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_AboutBox.o \
 	gcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_BaseFrame.o \
-	gcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_FrameManager.o \
+	gcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_BaseViewPanel.o \
+	gcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_HtmlViewPanel.o \
 	gcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_MainFrame.o \
 	gcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_StyleGuide.o \
 	gcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_DBHTreeControl.o \
@@ -277,7 +278,10 @@ gcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_AboutBox.o: ./src/gui/AboutBox.cpp
 gcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_BaseFrame.o: ./src/gui/BaseFrame.cpp
 	$(CXX) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(CPPDEPS) $<
 
-gcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_FrameManager.o: ./src/gui/FrameManager.cpp
+gcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_BaseViewPanel.o: ./src/gui/BaseViewPanel.cpp
+	$(CXX) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(CPPDEPS) $<
+
+gcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_HtmlViewPanel.o: ./src/gui/HtmlViewPanel.cpp
 	$(CXX) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(CPPDEPS) $<
 
 gcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_MainFrame.o: ./src/gui/MainFrame.cpp

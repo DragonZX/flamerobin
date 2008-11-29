@@ -201,7 +201,7 @@ void DatabaseConnectJob::processResults()
     }
     else
     {
-        getDatabase().setConnectionState(Database::csDisconnected);
+        getDatabase().setConnectionState(Database::csConnectionFailed);
         reportError(_("An error occurred while connecting to the database!"));
     }
 }

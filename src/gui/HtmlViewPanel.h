@@ -25,20 +25,24 @@
 
 */
 
-#ifndef FR_FRAMEMANAGER_H
-#define FR_FRAMEMANAGER_H
 //-----------------------------------------------------------------------------
-class BaseFrame;
+#ifndef FR_HTMLVIEWPANEL_H
+#define FR_HTMLVIEWPANEL_H
+
+#include "gui/BaseViewPanel.h"
 //-----------------------------------------------------------------------------
-class FrameManager
+class HtmlViewPanel: public BaseViewPanel
 {
+private:
+    wxHtmlWindow* htmlWindowM;
 public:
-    FrameManager();
-    ~FrameManager();
+    HtmlViewPanel(wxWindow* parent, wxWindowID id = wxID_ANY,
+        const wxPoint& pos = wxDefaultPosition,
+        const wxSize& size = wxDefaultSize,
+        long style = wxTAB_TRAVERSAL, const wxString& name = wxT("panel"));
+    virtual ~HtmlViewPanel();
 
-    static FrameManager& get() { static FrameManager fm; return fm; };
-
-    void removeFrame(BaseFrame* frame);
+    bool loadFromFile(const wxFileName& filename);
 };
 //-----------------------------------------------------------------------------
-#endif // FR_FRAMEMANAGER_H
+#endif // FR_HTMLVIEWPANEL_H

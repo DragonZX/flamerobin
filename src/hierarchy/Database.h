@@ -105,12 +105,13 @@ public:
     void setStoreEncryptedPassword(bool encrypted);
 
     enum ConnectionState {
-        csConnecting, csConnected, csDisconnecting, csDisconnected };
+        csConnecting, csConnected, csDisconnecting, csDisconnected,
+        csConnectionFailed, csRestoring, csRestoreFailed };
 
+    bool canConnect() const;
     void connect();
     void disconnect();
     bool isConnected() const;
-    bool isDisconnected() const;
     ConnectionState getConnectionState() const;
     void setConnectionState(ConnectionState state);
 

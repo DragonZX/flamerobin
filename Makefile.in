@@ -67,7 +67,8 @@ FLAMEROBIN_OBJECTS =  \
 	flamerobin_WorkerThread.o \
 	flamerobin_AboutBox.o \
 	flamerobin_BaseFrame.o \
-	flamerobin_FrameManager.o \
+	flamerobin_BaseViewPanel.o \
+	flamerobin_HtmlViewPanel.o \
 	flamerobin_MainFrame.o \
 	flamerobin_StyleGuide.o \
 	flamerobin_DBHTreeControl.o \
@@ -318,8 +319,11 @@ flamerobin_AboutBox.o: $(srcdir)/src/gui/AboutBox.cpp $(FLAMEROBIN_ODEP)
 flamerobin_BaseFrame.o: $(srcdir)/src/gui/BaseFrame.cpp $(FLAMEROBIN_ODEP)
 	$(CXXC) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(srcdir)/src/gui/BaseFrame.cpp
 
-flamerobin_FrameManager.o: $(srcdir)/src/gui/FrameManager.cpp $(FLAMEROBIN_ODEP)
-	$(CXXC) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(srcdir)/src/gui/FrameManager.cpp
+flamerobin_BaseViewPanel.o: $(srcdir)/src/gui/BaseViewPanel.cpp $(FLAMEROBIN_ODEP)
+	$(CXXC) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(srcdir)/src/gui/BaseViewPanel.cpp
+
+flamerobin_HtmlViewPanel.o: $(srcdir)/src/gui/HtmlViewPanel.cpp $(FLAMEROBIN_ODEP)
+	$(CXXC) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(srcdir)/src/gui/HtmlViewPanel.cpp
 
 flamerobin_MainFrame.o: $(srcdir)/src/gui/MainFrame.cpp $(FLAMEROBIN_ODEP)
 	$(CXXC) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(srcdir)/src/gui/MainFrame.cpp

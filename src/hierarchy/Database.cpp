@@ -315,9 +315,16 @@ void Database::accept(ItemVisitor* visitor)
         visitor->visit(*this);
 }
 //-----------------------------------------------------------------------------
+bool Database::canConnect() const
+{
+    return connectionStateM == csDisconnected
+        || connectionStateM == csConnectionFailed
+        || connectionStateM == csRestoreFailed;
+}
+//-----------------------------------------------------------------------------
 void Database::connect()
 {
-    if (isDisconnected())
+    if (canConnect())
     {
         // setConnectionState() checks for valid metadataConnectionM...
         if (!metadataConnectionM)
@@ -339,11 +346,6 @@ void Database::disconnect()
 bool Database::isConnected() const
 {
     return (connectionStateM == csConnected && metadataConnectionM != 0);
-}
-//-----------------------------------------------------------------------------
-bool Database::isDisconnected() const
-{
-    return connectionStateM == csDisconnected;
 }
 //-----------------------------------------------------------------------------
 Database::ConnectionState Database::getConnectionState() const
