@@ -54,11 +54,6 @@ UNICODE = 0
 FINAL = 0
 !endif
 
-#  [0,1]
-!ifndef STATICRTL
-STATICRTL = 0
-!endif
-
 
 
 # -------------------------------------------------------------------------
@@ -67,98 +62,89 @@ STATICRTL = 0
 
 ### Variables: ###
 
-FLAMEROBIN_CXXFLAGS = $(__RTL_TYPE) -I$(BCCDIR)\include -tWM $(__DEBUGINFO) \
-	$(__OPTIMIZE) $(____flamerobin_UNICODE_DEFINE_p) \
-	$(____flamerobin_WXDEBUG_p) $(____flamerobin_DEBUGFLAG_p) -D_WINDOWS \
-	-D__WINDOWS__ -DWINVER=0x400 -DWIN32 -D__WIN32__ -D__WIN95__ -DSTRICT \
-	-D__WXMSW__ -DwxUSE_GUI=1 -DWIN32_LEAN_AND_MEAN \
+FLAMEROBIN_CXXFLAGS = -tWR -I$(BCCDIR)\include -tWM $(__DEBUGINFO) $(__OPTIMIZE) \
+	$(____flamerobin_UNICODE_DEFINE_p) $(____flamerobin_WXDEBUG_p) \
+	$(____flamerobin_DEBUGFLAG_p) -D_WINDOWS -D__WINDOWS__ -DWINVER=0x400 \
+	-DWIN32 -D__WIN32__ -D__WIN95__ -DSTRICT -D__WXMSW__ -DwxUSE_GUI=1 \
+	-DWIN32_LEAN_AND_MEAN \
 	-I$(____flamerobin_WX_LIB_DIR_FILENAMES)\msw$(U_OPT)$(D_OPT) \
 	-I$(WXDIR)\contrib\include -I$(WXDIR)\include -DIBPP_WINDOWS \
 	-I$(BOOST_ROOT) -I.\src -I.\src\ibpp -I.\res -Hu \
-	-H=bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin.csm $(CPPFLAGS) $(CXXFLAGS)
+	-H=bcc$(U_OPT)$(D_OPT)\flamerobin.csm $(CPPFLAGS) $(CXXFLAGS)
 FLAMEROBIN_OBJECTS =  \
-	bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_Application.obj \
-	bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_PCH.obj \
-	bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_ColumnCommands.obj \
-	bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_DatabaseCommands.obj \
-	bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_DomainCommands.obj \
-	bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_ExceptionCommands.obj \
-	bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_FunctionCommands.obj \
-	bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_GeneratorCommands.obj \
-	bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_ItemCommands.obj \
-	bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_ProcedureCommands.obj \
-	bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_TableCommands.obj \
-	bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_TreeFolderCommands.obj \
-	bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_TriggerCommands.obj \
-	bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_ViewCommands.obj \
-	bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_Config.obj \
-	bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_ArtProvider.obj \
-	bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_FRError.obj \
-	bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_Observer.obj \
-	bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_StringUtils.obj \
-	bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_Subject.obj \
-	bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_DatabaseConnection.obj \
-	bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_WorkerThread.obj \
-	bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_AboutBox.obj \
-	bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_BaseFrame.obj \
-	bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_BaseViewPanel.obj \
-	bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_HtmlViewPanel.obj \
-	bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_MainFrame.obj \
-	bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_StyleGuide.obj \
-	bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_DBHTreeControl.obj \
-	bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_Column.obj \
-	bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_Database.obj \
-	bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_Domain.obj \
-	bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_Exception.obj \
-	bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_Function.obj \
-	bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_Generator.obj \
-	bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_Item.obj \
-	bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_ItemVisitor.obj \
-	bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_Procedure.obj \
-	bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_Relation.obj \
-	bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_Table.obj \
-	bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_TreeFolder.obj \
-	bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_TreeRoot.obj \
-	bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_Trigger.obj \
-	bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_View.obj \
-	bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_Identifier.obj \
-	bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_SqlTokenizer.obj \
-	bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_StyleGuideMSW.obj
-IBPP_CXXFLAGS = $(__RTL_TYPE) -I$(BCCDIR)\include -tWM $(__DEBUGINFO) \
-	$(__OPTIMIZE) -DIBPP_WINDOWS -I.\src\ibpp -Hu \
-	-H=bcc$(U_OPT)$(R_OPT)$(D_OPT)\ibpp.csm $(CPPFLAGS) $(CXXFLAGS)
+	bcc$(U_OPT)$(D_OPT)\flamerobin_Application.obj \
+	bcc$(U_OPT)$(D_OPT)\flamerobin_PCH.obj \
+	bcc$(U_OPT)$(D_OPT)\flamerobin_ColumnCommands.obj \
+	bcc$(U_OPT)$(D_OPT)\flamerobin_DatabaseCommands.obj \
+	bcc$(U_OPT)$(D_OPT)\flamerobin_DomainCommands.obj \
+	bcc$(U_OPT)$(D_OPT)\flamerobin_ExceptionCommands.obj \
+	bcc$(U_OPT)$(D_OPT)\flamerobin_FunctionCommands.obj \
+	bcc$(U_OPT)$(D_OPT)\flamerobin_GeneratorCommands.obj \
+	bcc$(U_OPT)$(D_OPT)\flamerobin_ItemCommands.obj \
+	bcc$(U_OPT)$(D_OPT)\flamerobin_ProcedureCommands.obj \
+	bcc$(U_OPT)$(D_OPT)\flamerobin_TableCommands.obj \
+	bcc$(U_OPT)$(D_OPT)\flamerobin_TreeFolderCommands.obj \
+	bcc$(U_OPT)$(D_OPT)\flamerobin_TriggerCommands.obj \
+	bcc$(U_OPT)$(D_OPT)\flamerobin_ViewCommands.obj \
+	bcc$(U_OPT)$(D_OPT)\flamerobin_Config.obj \
+	bcc$(U_OPT)$(D_OPT)\flamerobin_ArtProvider.obj \
+	bcc$(U_OPT)$(D_OPT)\flamerobin_FRError.obj \
+	bcc$(U_OPT)$(D_OPT)\flamerobin_Observer.obj \
+	bcc$(U_OPT)$(D_OPT)\flamerobin_StringUtils.obj \
+	bcc$(U_OPT)$(D_OPT)\flamerobin_Subject.obj \
+	bcc$(U_OPT)$(D_OPT)\flamerobin_DatabaseConnection.obj \
+	bcc$(U_OPT)$(D_OPT)\flamerobin_WorkerThread.obj \
+	bcc$(U_OPT)$(D_OPT)\flamerobin_AboutBox.obj \
+	bcc$(U_OPT)$(D_OPT)\flamerobin_BaseFrame.obj \
+	bcc$(U_OPT)$(D_OPT)\flamerobin_BaseViewPanel.obj \
+	bcc$(U_OPT)$(D_OPT)\flamerobin_HtmlViewPanel.obj \
+	bcc$(U_OPT)$(D_OPT)\flamerobin_MainFrame.obj \
+	bcc$(U_OPT)$(D_OPT)\flamerobin_StyleGuide.obj \
+	bcc$(U_OPT)$(D_OPT)\flamerobin_DBHTreeControl.obj \
+	bcc$(U_OPT)$(D_OPT)\flamerobin_Column.obj \
+	bcc$(U_OPT)$(D_OPT)\flamerobin_Database.obj \
+	bcc$(U_OPT)$(D_OPT)\flamerobin_Domain.obj \
+	bcc$(U_OPT)$(D_OPT)\flamerobin_Exception.obj \
+	bcc$(U_OPT)$(D_OPT)\flamerobin_Function.obj \
+	bcc$(U_OPT)$(D_OPT)\flamerobin_Generator.obj \
+	bcc$(U_OPT)$(D_OPT)\flamerobin_Item.obj \
+	bcc$(U_OPT)$(D_OPT)\flamerobin_ItemVisitor.obj \
+	bcc$(U_OPT)$(D_OPT)\flamerobin_Procedure.obj \
+	bcc$(U_OPT)$(D_OPT)\flamerobin_Relation.obj \
+	bcc$(U_OPT)$(D_OPT)\flamerobin_Table.obj \
+	bcc$(U_OPT)$(D_OPT)\flamerobin_TreeFolder.obj \
+	bcc$(U_OPT)$(D_OPT)\flamerobin_TreeRoot.obj \
+	bcc$(U_OPT)$(D_OPT)\flamerobin_Trigger.obj \
+	bcc$(U_OPT)$(D_OPT)\flamerobin_View.obj \
+	bcc$(U_OPT)$(D_OPT)\flamerobin_Identifier.obj \
+	bcc$(U_OPT)$(D_OPT)\flamerobin_SqlTokenizer.obj \
+	bcc$(U_OPT)$(D_OPT)\flamerobin_StyleGuideMSW.obj
+IBPP_CXXFLAGS = -tWR -I$(BCCDIR)\include -tWM $(__DEBUGINFO) $(__OPTIMIZE) \
+	-DIBPP_WINDOWS -I.\src\ibpp -Hu -H=bcc$(U_OPT)$(D_OPT)\ibpp.csm $(CPPFLAGS) \
+	$(CXXFLAGS)
 IBPP_OBJECTS =  \
-	bcc$(U_OPT)$(R_OPT)$(D_OPT)\ibpp__dpb.obj \
-	bcc$(U_OPT)$(R_OPT)$(D_OPT)\ibpp__ibpp.obj \
-	bcc$(U_OPT)$(R_OPT)$(D_OPT)\ibpp__ibs.obj \
-	bcc$(U_OPT)$(R_OPT)$(D_OPT)\ibpp__rb.obj \
-	bcc$(U_OPT)$(R_OPT)$(D_OPT)\ibpp__spb.obj \
-	bcc$(U_OPT)$(R_OPT)$(D_OPT)\ibpp__tpb.obj \
-	bcc$(U_OPT)$(R_OPT)$(D_OPT)\ibpp_array.obj \
-	bcc$(U_OPT)$(R_OPT)$(D_OPT)\ibpp_blob.obj \
-	bcc$(U_OPT)$(R_OPT)$(D_OPT)\ibpp_database.obj \
-	bcc$(U_OPT)$(R_OPT)$(D_OPT)\ibpp_date.obj \
-	bcc$(U_OPT)$(R_OPT)$(D_OPT)\ibpp_dbkey.obj \
-	bcc$(U_OPT)$(R_OPT)$(D_OPT)\ibpp_events.obj \
-	bcc$(U_OPT)$(R_OPT)$(D_OPT)\ibpp_exception.obj \
-	bcc$(U_OPT)$(R_OPT)$(D_OPT)\ibpp_row.obj \
-	bcc$(U_OPT)$(R_OPT)$(D_OPT)\ibpp_service.obj \
-	bcc$(U_OPT)$(R_OPT)$(D_OPT)\ibpp_statement.obj \
-	bcc$(U_OPT)$(R_OPT)$(D_OPT)\ibpp_time.obj \
-	bcc$(U_OPT)$(R_OPT)$(D_OPT)\ibpp_transaction.obj \
-	bcc$(U_OPT)$(R_OPT)$(D_OPT)\ibpp_user.obj
+	bcc$(U_OPT)$(D_OPT)\ibpp__dpb.obj \
+	bcc$(U_OPT)$(D_OPT)\ibpp__ibpp.obj \
+	bcc$(U_OPT)$(D_OPT)\ibpp__ibs.obj \
+	bcc$(U_OPT)$(D_OPT)\ibpp__rb.obj \
+	bcc$(U_OPT)$(D_OPT)\ibpp__spb.obj \
+	bcc$(U_OPT)$(D_OPT)\ibpp__tpb.obj \
+	bcc$(U_OPT)$(D_OPT)\ibpp_array.obj \
+	bcc$(U_OPT)$(D_OPT)\ibpp_blob.obj \
+	bcc$(U_OPT)$(D_OPT)\ibpp_database.obj \
+	bcc$(U_OPT)$(D_OPT)\ibpp_date.obj \
+	bcc$(U_OPT)$(D_OPT)\ibpp_dbkey.obj \
+	bcc$(U_OPT)$(D_OPT)\ibpp_events.obj \
+	bcc$(U_OPT)$(D_OPT)\ibpp_exception.obj \
+	bcc$(U_OPT)$(D_OPT)\ibpp_row.obj \
+	bcc$(U_OPT)$(D_OPT)\ibpp_service.obj \
+	bcc$(U_OPT)$(D_OPT)\ibpp_statement.obj \
+	bcc$(U_OPT)$(D_OPT)\ibpp_time.obj \
+	bcc$(U_OPT)$(D_OPT)\ibpp_transaction.obj \
+	bcc$(U_OPT)$(D_OPT)\ibpp_user.obj
 
 ### Conditionally set variables: ###
 
-!if "$(STATICRTL)" == "1"
-R_OPT = s
-!endif
-!if "$(STATICRTL)" == "0"
-__RTL_TYPE_1 = i
-!endif
-!if "$(STATICRTL)" == "1"
-__RTL_TYPE_1 = 
-!endif
 !if "$(UNICODE)" == "1"
 ____flamerobin_UNICODE_DEFINE_p = -D_UNICODE
 !endif
@@ -182,12 +168,6 @@ ______flamerobin_WX_LIB_DIR_FILENAMES_2_p = -L$(WXDIR)\lib\bcc_lib
 !endif
 !if "$(USEDLL)" == "1"
 ______flamerobin_WX_LIB_DIR_FILENAMES_2_p = -L$(WXDIR)\lib\bcc_dll
-!endif
-!if "$(STATICRTL)" == "0"
-__RTL_TYPE = -tWR
-!endif
-!if "$(STATICRTL)" == "1"
-__RTL_TYPE = 
 !endif
 !if "$(FINAL)" == "0"
 __DEBUGINFO = -v
@@ -215,235 +195,238 @@ D_OPT = d
 !endif
 
 
-all: bcc$(U_OPT)$(R_OPT)$(D_OPT)
-bcc$(U_OPT)$(R_OPT)$(D_OPT):
-	-if not exist bcc$(U_OPT)$(R_OPT)$(D_OPT) mkdir bcc$(U_OPT)$(R_OPT)$(D_OPT)
+all: bcc$(U_OPT)$(D_OPT)
+bcc$(U_OPT)$(D_OPT):
+	-if not exist bcc$(U_OPT)$(D_OPT) mkdir bcc$(U_OPT)$(D_OPT)
 
 ### Targets: ###
 
-all: bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin.exe bcc$(U_OPT)$(R_OPT)$(D_OPT)\ibpp.lib
+all: svn-rev bcc$(U_OPT)$(D_OPT)\flamerobin.exe bcc$(U_OPT)$(D_OPT)\ibpp.lib
 
 clean: 
-	-if exist bcc$(U_OPT)$(R_OPT)$(D_OPT)\*.obj del bcc$(U_OPT)$(R_OPT)$(D_OPT)\*.obj
-	-if exist bcc$(U_OPT)$(R_OPT)$(D_OPT)\*.res del bcc$(U_OPT)$(R_OPT)$(D_OPT)\*.res
-	-if exist bcc$(U_OPT)$(R_OPT)$(D_OPT)\*.csm del bcc$(U_OPT)$(R_OPT)$(D_OPT)\*.csm
-	-if exist bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin.exe del bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin.exe
-	-if exist bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin.tds del bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin.tds
-	-if exist bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin.ilc del bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin.ilc
-	-if exist bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin.ild del bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin.ild
-	-if exist bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin.ilf del bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin.ilf
-	-if exist bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin.ils del bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin.ils
-	-if exist bcc$(U_OPT)$(R_OPT)$(D_OPT)\ibpp.lib del bcc$(U_OPT)$(R_OPT)$(D_OPT)\ibpp.lib
+	-if exist bcc$(U_OPT)$(D_OPT)\*.obj del bcc$(U_OPT)$(D_OPT)\*.obj
+	-if exist bcc$(U_OPT)$(D_OPT)\*.res del bcc$(U_OPT)$(D_OPT)\*.res
+	-if exist bcc$(U_OPT)$(D_OPT)\*.csm del bcc$(U_OPT)$(D_OPT)\*.csm
+	-if exist bcc$(U_OPT)$(D_OPT)\flamerobin.exe del bcc$(U_OPT)$(D_OPT)\flamerobin.exe
+	-if exist bcc$(U_OPT)$(D_OPT)\flamerobin.tds del bcc$(U_OPT)$(D_OPT)\flamerobin.tds
+	-if exist bcc$(U_OPT)$(D_OPT)\flamerobin.ilc del bcc$(U_OPT)$(D_OPT)\flamerobin.ilc
+	-if exist bcc$(U_OPT)$(D_OPT)\flamerobin.ild del bcc$(U_OPT)$(D_OPT)\flamerobin.ild
+	-if exist bcc$(U_OPT)$(D_OPT)\flamerobin.ilf del bcc$(U_OPT)$(D_OPT)\flamerobin.ilf
+	-if exist bcc$(U_OPT)$(D_OPT)\flamerobin.ils del bcc$(U_OPT)$(D_OPT)\flamerobin.ils
+	-if exist bcc$(U_OPT)$(D_OPT)\ibpp.lib del bcc$(U_OPT)$(D_OPT)\ibpp.lib
 
-bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin.exe: bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_PCH.obj  $(FLAMEROBIN_OBJECTS) bcc$(U_OPT)$(R_OPT)$(D_OPT)\ibpp.lib  bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_flamerobin.res bcc$(U_OPT)$(R_OPT)$(D_OPT)\ibpp.lib
+svn-rev: 
+	update-svn-rev.cmd
+
+bcc$(U_OPT)$(D_OPT)\flamerobin.exe: bcc$(U_OPT)$(D_OPT)\flamerobin_PCH.obj  $(FLAMEROBIN_OBJECTS) bcc$(U_OPT)$(D_OPT)\ibpp.lib  bcc$(U_OPT)$(D_OPT)\flamerobin_flamerobin.res bcc$(U_OPT)$(D_OPT)\ibpp.lib
 	ilink32 -Tpe -q  -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk  $(__DEBUGINFO) $(______flamerobin_WX_LIB_DIR_FILENAMES_2_p) -aa $(LDFLAGS) @&&|
-	c0w32.obj $(FLAMEROBIN_OBJECTS),$@,, wxmsw28$(U_OPT)$(D_OPT)_aui.lib wxmsw28$(U_OPT)$(D_OPT)_stc.lib wxmsw28$(U_OPT)$(D_OPT)_html.lib wxmsw28$(U_OPT)$(D_OPT)_adv.lib wxmsw28$(U_OPT)$(D_OPT)_core.lib wxbase28$(U_OPT)$(D_OPT)_xml.lib wxbase28$(U_OPT)$(D_OPT).lib wxregex$(U_OPT)$(D_OPT).lib wxexpat$(D_OPT).lib wxtiff$(D_OPT).lib wxjpeg$(D_OPT).lib wxpng$(D_OPT).lib wxzlib$(D_OPT).lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comctl32.lib rpcrt4.lib wsock32.lib bcc$(U_OPT)$(R_OPT)$(D_OPT)\ibpp.lib   import32.lib cw32mt$(__RTL_TYPE_1).lib,, bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_flamerobin.res
+	c0w32.obj $(FLAMEROBIN_OBJECTS),$@,, wxmsw29$(U_OPT)$(D_OPT)_aui.lib wxmsw29$(U_OPT)$(D_OPT)_stc.lib wxmsw29$(U_OPT)$(D_OPT)_html.lib wxmsw29$(U_OPT)$(D_OPT)_adv.lib wxmsw29$(U_OPT)$(D_OPT)_core.lib wxbase29$(U_OPT)$(D_OPT)_xml.lib wxbase29$(U_OPT)$(D_OPT).lib wxscintilla$(D_OPT).lib wxregex$(U_OPT)$(D_OPT).lib wxexpat$(D_OPT).lib wxtiff$(D_OPT).lib wxjpeg$(D_OPT).lib wxpng$(D_OPT).lib wxzlib$(D_OPT).lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comctl32.lib rpcrt4.lib wsock32.lib bcc$(U_OPT)$(D_OPT)\ibpp.lib   import32.lib cw32mti.lib,, bcc$(U_OPT)$(D_OPT)\flamerobin_flamerobin.res
 |
 
-bcc$(U_OPT)$(R_OPT)$(D_OPT)\ibpp.lib: bcc$(U_OPT)$(R_OPT)$(D_OPT)\ibpp__ibpp.obj  $(IBPP_OBJECTS)
+bcc$(U_OPT)$(D_OPT)\ibpp.lib: bcc$(U_OPT)$(D_OPT)\ibpp__ibpp.obj  $(IBPP_OBJECTS)
 	if exist $@ del $@
 	tlib /a /p4096 $@ @&&|
 	$(IBPP_OBJECTS)
 |
 
-bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_Application.obj: .\src\Application.cpp
+bcc$(U_OPT)$(D_OPT)\flamerobin_Application.obj: .\src\Application.cpp
 	$(CXX) -q -c -P -o$@ $(FLAMEROBIN_CXXFLAGS) .\src\Application.cpp
 
-bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_PCH.obj: .\src\PCH.cpp
+bcc$(U_OPT)$(D_OPT)\flamerobin_PCH.obj: .\src\PCH.cpp
 	$(CXX) -q -c -P -o$@ $(FLAMEROBIN_CXXFLAGS) -H .\src\PCH.cpp
 
-bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_ColumnCommands.obj: .\src\commands\ColumnCommands.cpp
+bcc$(U_OPT)$(D_OPT)\flamerobin_ColumnCommands.obj: .\src\commands\ColumnCommands.cpp
 	$(CXX) -q -c -P -o$@ $(FLAMEROBIN_CXXFLAGS) .\src\commands\ColumnCommands.cpp
 
-bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_DatabaseCommands.obj: .\src\commands\DatabaseCommands.cpp
+bcc$(U_OPT)$(D_OPT)\flamerobin_DatabaseCommands.obj: .\src\commands\DatabaseCommands.cpp
 	$(CXX) -q -c -P -o$@ $(FLAMEROBIN_CXXFLAGS) .\src\commands\DatabaseCommands.cpp
 
-bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_DomainCommands.obj: .\src\commands\DomainCommands.cpp
+bcc$(U_OPT)$(D_OPT)\flamerobin_DomainCommands.obj: .\src\commands\DomainCommands.cpp
 	$(CXX) -q -c -P -o$@ $(FLAMEROBIN_CXXFLAGS) .\src\commands\DomainCommands.cpp
 
-bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_ExceptionCommands.obj: .\src\commands\ExceptionCommands.cpp
+bcc$(U_OPT)$(D_OPT)\flamerobin_ExceptionCommands.obj: .\src\commands\ExceptionCommands.cpp
 	$(CXX) -q -c -P -o$@ $(FLAMEROBIN_CXXFLAGS) .\src\commands\ExceptionCommands.cpp
 
-bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_FunctionCommands.obj: .\src\commands\FunctionCommands.cpp
+bcc$(U_OPT)$(D_OPT)\flamerobin_FunctionCommands.obj: .\src\commands\FunctionCommands.cpp
 	$(CXX) -q -c -P -o$@ $(FLAMEROBIN_CXXFLAGS) .\src\commands\FunctionCommands.cpp
 
-bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_GeneratorCommands.obj: .\src\commands\GeneratorCommands.cpp
+bcc$(U_OPT)$(D_OPT)\flamerobin_GeneratorCommands.obj: .\src\commands\GeneratorCommands.cpp
 	$(CXX) -q -c -P -o$@ $(FLAMEROBIN_CXXFLAGS) .\src\commands\GeneratorCommands.cpp
 
-bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_ItemCommands.obj: .\src\commands\ItemCommands.cpp
+bcc$(U_OPT)$(D_OPT)\flamerobin_ItemCommands.obj: .\src\commands\ItemCommands.cpp
 	$(CXX) -q -c -P -o$@ $(FLAMEROBIN_CXXFLAGS) .\src\commands\ItemCommands.cpp
 
-bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_ProcedureCommands.obj: .\src\commands\ProcedureCommands.cpp
+bcc$(U_OPT)$(D_OPT)\flamerobin_ProcedureCommands.obj: .\src\commands\ProcedureCommands.cpp
 	$(CXX) -q -c -P -o$@ $(FLAMEROBIN_CXXFLAGS) .\src\commands\ProcedureCommands.cpp
 
-bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_TableCommands.obj: .\src\commands\TableCommands.cpp
+bcc$(U_OPT)$(D_OPT)\flamerobin_TableCommands.obj: .\src\commands\TableCommands.cpp
 	$(CXX) -q -c -P -o$@ $(FLAMEROBIN_CXXFLAGS) .\src\commands\TableCommands.cpp
 
-bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_TreeFolderCommands.obj: .\src\commands\TreeFolderCommands.cpp
+bcc$(U_OPT)$(D_OPT)\flamerobin_TreeFolderCommands.obj: .\src\commands\TreeFolderCommands.cpp
 	$(CXX) -q -c -P -o$@ $(FLAMEROBIN_CXXFLAGS) .\src\commands\TreeFolderCommands.cpp
 
-bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_TriggerCommands.obj: .\src\commands\TriggerCommands.cpp
+bcc$(U_OPT)$(D_OPT)\flamerobin_TriggerCommands.obj: .\src\commands\TriggerCommands.cpp
 	$(CXX) -q -c -P -o$@ $(FLAMEROBIN_CXXFLAGS) .\src\commands\TriggerCommands.cpp
 
-bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_ViewCommands.obj: .\src\commands\ViewCommands.cpp
+bcc$(U_OPT)$(D_OPT)\flamerobin_ViewCommands.obj: .\src\commands\ViewCommands.cpp
 	$(CXX) -q -c -P -o$@ $(FLAMEROBIN_CXXFLAGS) .\src\commands\ViewCommands.cpp
 
-bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_Config.obj: .\src\config\Config.cpp
+bcc$(U_OPT)$(D_OPT)\flamerobin_Config.obj: .\src\config\Config.cpp
 	$(CXX) -q -c -P -o$@ $(FLAMEROBIN_CXXFLAGS) .\src\config\Config.cpp
 
-bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_ArtProvider.obj: .\src\core\ArtProvider.cpp
+bcc$(U_OPT)$(D_OPT)\flamerobin_ArtProvider.obj: .\src\core\ArtProvider.cpp
 	$(CXX) -q -c -P -o$@ $(FLAMEROBIN_CXXFLAGS) .\src\core\ArtProvider.cpp
 
-bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_FRError.obj: .\src\core\FRError.cpp
+bcc$(U_OPT)$(D_OPT)\flamerobin_FRError.obj: .\src\core\FRError.cpp
 	$(CXX) -q -c -P -o$@ $(FLAMEROBIN_CXXFLAGS) .\src\core\FRError.cpp
 
-bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_Observer.obj: .\src\core\Observer.cpp
+bcc$(U_OPT)$(D_OPT)\flamerobin_Observer.obj: .\src\core\Observer.cpp
 	$(CXX) -q -c -P -o$@ $(FLAMEROBIN_CXXFLAGS) .\src\core\Observer.cpp
 
-bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_StringUtils.obj: .\src\core\StringUtils.cpp
+bcc$(U_OPT)$(D_OPT)\flamerobin_StringUtils.obj: .\src\core\StringUtils.cpp
 	$(CXX) -q -c -P -o$@ $(FLAMEROBIN_CXXFLAGS) .\src\core\StringUtils.cpp
 
-bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_Subject.obj: .\src\core\Subject.cpp
+bcc$(U_OPT)$(D_OPT)\flamerobin_Subject.obj: .\src\core\Subject.cpp
 	$(CXX) -q -c -P -o$@ $(FLAMEROBIN_CXXFLAGS) .\src\core\Subject.cpp
 
-bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_DatabaseConnection.obj: .\src\engine\DatabaseConnection.cpp
+bcc$(U_OPT)$(D_OPT)\flamerobin_DatabaseConnection.obj: .\src\engine\DatabaseConnection.cpp
 	$(CXX) -q -c -P -o$@ $(FLAMEROBIN_CXXFLAGS) .\src\engine\DatabaseConnection.cpp
 
-bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_WorkerThread.obj: .\src\engine\WorkerThread.cpp
+bcc$(U_OPT)$(D_OPT)\flamerobin_WorkerThread.obj: .\src\engine\WorkerThread.cpp
 	$(CXX) -q -c -P -o$@ $(FLAMEROBIN_CXXFLAGS) .\src\engine\WorkerThread.cpp
 
-bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_AboutBox.obj: .\src\gui\AboutBox.cpp
+bcc$(U_OPT)$(D_OPT)\flamerobin_AboutBox.obj: .\src\gui\AboutBox.cpp
 	$(CXX) -q -c -P -o$@ $(FLAMEROBIN_CXXFLAGS) .\src\gui\AboutBox.cpp
 
-bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_BaseFrame.obj: .\src\gui\BaseFrame.cpp
+bcc$(U_OPT)$(D_OPT)\flamerobin_BaseFrame.obj: .\src\gui\BaseFrame.cpp
 	$(CXX) -q -c -P -o$@ $(FLAMEROBIN_CXXFLAGS) .\src\gui\BaseFrame.cpp
 
-bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_BaseViewPanel.obj: .\src\gui\BaseViewPanel.cpp
+bcc$(U_OPT)$(D_OPT)\flamerobin_BaseViewPanel.obj: .\src\gui\BaseViewPanel.cpp
 	$(CXX) -q -c -P -o$@ $(FLAMEROBIN_CXXFLAGS) .\src\gui\BaseViewPanel.cpp
 
-bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_HtmlViewPanel.obj: .\src\gui\HtmlViewPanel.cpp
+bcc$(U_OPT)$(D_OPT)\flamerobin_HtmlViewPanel.obj: .\src\gui\HtmlViewPanel.cpp
 	$(CXX) -q -c -P -o$@ $(FLAMEROBIN_CXXFLAGS) .\src\gui\HtmlViewPanel.cpp
 
-bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_MainFrame.obj: .\src\gui\MainFrame.cpp
+bcc$(U_OPT)$(D_OPT)\flamerobin_MainFrame.obj: .\src\gui\MainFrame.cpp
 	$(CXX) -q -c -P -o$@ $(FLAMEROBIN_CXXFLAGS) .\src\gui\MainFrame.cpp
 
-bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_StyleGuide.obj: .\src\gui\StyleGuide.cpp
+bcc$(U_OPT)$(D_OPT)\flamerobin_StyleGuide.obj: .\src\gui\StyleGuide.cpp
 	$(CXX) -q -c -P -o$@ $(FLAMEROBIN_CXXFLAGS) .\src\gui\StyleGuide.cpp
 
-bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_DBHTreeControl.obj: .\src\gui\controls\DBHTreeControl.cpp
+bcc$(U_OPT)$(D_OPT)\flamerobin_DBHTreeControl.obj: .\src\gui\controls\DBHTreeControl.cpp
 	$(CXX) -q -c -P -o$@ $(FLAMEROBIN_CXXFLAGS) .\src\gui\controls\DBHTreeControl.cpp
 
-bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_Column.obj: .\src\hierarchy\Column.cpp
+bcc$(U_OPT)$(D_OPT)\flamerobin_Column.obj: .\src\hierarchy\Column.cpp
 	$(CXX) -q -c -P -o$@ $(FLAMEROBIN_CXXFLAGS) .\src\hierarchy\Column.cpp
 
-bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_Database.obj: .\src\hierarchy\Database.cpp
+bcc$(U_OPT)$(D_OPT)\flamerobin_Database.obj: .\src\hierarchy\Database.cpp
 	$(CXX) -q -c -P -o$@ $(FLAMEROBIN_CXXFLAGS) .\src\hierarchy\Database.cpp
 
-bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_Domain.obj: .\src\hierarchy\Domain.cpp
+bcc$(U_OPT)$(D_OPT)\flamerobin_Domain.obj: .\src\hierarchy\Domain.cpp
 	$(CXX) -q -c -P -o$@ $(FLAMEROBIN_CXXFLAGS) .\src\hierarchy\Domain.cpp
 
-bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_Exception.obj: .\src\hierarchy\Exception.cpp
+bcc$(U_OPT)$(D_OPT)\flamerobin_Exception.obj: .\src\hierarchy\Exception.cpp
 	$(CXX) -q -c -P -o$@ $(FLAMEROBIN_CXXFLAGS) .\src\hierarchy\Exception.cpp
 
-bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_Function.obj: .\src\hierarchy\Function.cpp
+bcc$(U_OPT)$(D_OPT)\flamerobin_Function.obj: .\src\hierarchy\Function.cpp
 	$(CXX) -q -c -P -o$@ $(FLAMEROBIN_CXXFLAGS) .\src\hierarchy\Function.cpp
 
-bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_Generator.obj: .\src\hierarchy\Generator.cpp
+bcc$(U_OPT)$(D_OPT)\flamerobin_Generator.obj: .\src\hierarchy\Generator.cpp
 	$(CXX) -q -c -P -o$@ $(FLAMEROBIN_CXXFLAGS) .\src\hierarchy\Generator.cpp
 
-bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_Item.obj: .\src\hierarchy\Item.cpp
+bcc$(U_OPT)$(D_OPT)\flamerobin_Item.obj: .\src\hierarchy\Item.cpp
 	$(CXX) -q -c -P -o$@ $(FLAMEROBIN_CXXFLAGS) .\src\hierarchy\Item.cpp
 
-bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_ItemVisitor.obj: .\src\hierarchy\ItemVisitor.cpp
+bcc$(U_OPT)$(D_OPT)\flamerobin_ItemVisitor.obj: .\src\hierarchy\ItemVisitor.cpp
 	$(CXX) -q -c -P -o$@ $(FLAMEROBIN_CXXFLAGS) .\src\hierarchy\ItemVisitor.cpp
 
-bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_Procedure.obj: .\src\hierarchy\Procedure.cpp
+bcc$(U_OPT)$(D_OPT)\flamerobin_Procedure.obj: .\src\hierarchy\Procedure.cpp
 	$(CXX) -q -c -P -o$@ $(FLAMEROBIN_CXXFLAGS) .\src\hierarchy\Procedure.cpp
 
-bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_Relation.obj: .\src\hierarchy\Relation.cpp
+bcc$(U_OPT)$(D_OPT)\flamerobin_Relation.obj: .\src\hierarchy\Relation.cpp
 	$(CXX) -q -c -P -o$@ $(FLAMEROBIN_CXXFLAGS) .\src\hierarchy\Relation.cpp
 
-bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_Table.obj: .\src\hierarchy\Table.cpp
+bcc$(U_OPT)$(D_OPT)\flamerobin_Table.obj: .\src\hierarchy\Table.cpp
 	$(CXX) -q -c -P -o$@ $(FLAMEROBIN_CXXFLAGS) .\src\hierarchy\Table.cpp
 
-bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_TreeFolder.obj: .\src\hierarchy\TreeFolder.cpp
+bcc$(U_OPT)$(D_OPT)\flamerobin_TreeFolder.obj: .\src\hierarchy\TreeFolder.cpp
 	$(CXX) -q -c -P -o$@ $(FLAMEROBIN_CXXFLAGS) .\src\hierarchy\TreeFolder.cpp
 
-bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_TreeRoot.obj: .\src\hierarchy\TreeRoot.cpp
+bcc$(U_OPT)$(D_OPT)\flamerobin_TreeRoot.obj: .\src\hierarchy\TreeRoot.cpp
 	$(CXX) -q -c -P -o$@ $(FLAMEROBIN_CXXFLAGS) .\src\hierarchy\TreeRoot.cpp
 
-bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_Trigger.obj: .\src\hierarchy\Trigger.cpp
+bcc$(U_OPT)$(D_OPT)\flamerobin_Trigger.obj: .\src\hierarchy\Trigger.cpp
 	$(CXX) -q -c -P -o$@ $(FLAMEROBIN_CXXFLAGS) .\src\hierarchy\Trigger.cpp
 
-bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_View.obj: .\src\hierarchy\View.cpp
+bcc$(U_OPT)$(D_OPT)\flamerobin_View.obj: .\src\hierarchy\View.cpp
 	$(CXX) -q -c -P -o$@ $(FLAMEROBIN_CXXFLAGS) .\src\hierarchy\View.cpp
 
-bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_Identifier.obj: .\src\sql\Identifier.cpp
+bcc$(U_OPT)$(D_OPT)\flamerobin_Identifier.obj: .\src\sql\Identifier.cpp
 	$(CXX) -q -c -P -o$@ $(FLAMEROBIN_CXXFLAGS) .\src\sql\Identifier.cpp
 
-bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_SqlTokenizer.obj: .\src\sql\SqlTokenizer.cpp
+bcc$(U_OPT)$(D_OPT)\flamerobin_SqlTokenizer.obj: .\src\sql\SqlTokenizer.cpp
 	$(CXX) -q -c -P -o$@ $(FLAMEROBIN_CXXFLAGS) .\src\sql\SqlTokenizer.cpp
 
-bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_StyleGuideMSW.obj: .\src\gui\msw\StyleGuideMSW.cpp
+bcc$(U_OPT)$(D_OPT)\flamerobin_StyleGuideMSW.obj: .\src\gui\msw\StyleGuideMSW.cpp
 	$(CXX) -q -c -P -o$@ $(FLAMEROBIN_CXXFLAGS) .\src\gui\msw\StyleGuideMSW.cpp
 
-bcc$(U_OPT)$(R_OPT)$(D_OPT)\flamerobin_flamerobin.res: .\res\flamerobin.rc
+bcc$(U_OPT)$(D_OPT)\flamerobin_flamerobin.res: .\res\flamerobin.rc
 	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include  $(____flamerobin_UNICODE_DEFINE_p_1) $(____flamerobin_WXDEBUG_p_1) $(____flamerobin_DEBUGFLAG_p_1) -d_WINDOWS -d__WINDOWS__ -dWINVER=0x400 -dWIN32 -d__WIN32__ -d__WIN95__ -dSTRICT -d__WXMSW__ -dwxUSE_GUI=1 -dWIN32_LEAN_AND_MEAN -i$(____flamerobin_WX_LIB_DIR_FILENAMES)\msw$(U_OPT)$(D_OPT) -i$(WXDIR)\contrib\include -i$(WXDIR)\include -dIBPP_WINDOWS -i$(BOOST_ROOT) -i.\src -i.\src\ibpp -i.\res .\res\flamerobin.rc
 
-bcc$(U_OPT)$(R_OPT)$(D_OPT)\ibpp__dpb.obj: .\src\ibpp\_dpb.cpp
+bcc$(U_OPT)$(D_OPT)\ibpp__dpb.obj: .\src\ibpp\_dpb.cpp
 	$(CXX) -q -c -P -o$@ $(IBPP_CXXFLAGS) .\src\ibpp\_dpb.cpp
 
-bcc$(U_OPT)$(R_OPT)$(D_OPT)\ibpp__ibpp.obj: .\src\ibpp\_ibpp.cpp
+bcc$(U_OPT)$(D_OPT)\ibpp__ibpp.obj: .\src\ibpp\_ibpp.cpp
 	$(CXX) -q -c -P -o$@ $(IBPP_CXXFLAGS) -H .\src\ibpp\_ibpp.cpp
 
-bcc$(U_OPT)$(R_OPT)$(D_OPT)\ibpp__ibs.obj: .\src\ibpp\_ibs.cpp
+bcc$(U_OPT)$(D_OPT)\ibpp__ibs.obj: .\src\ibpp\_ibs.cpp
 	$(CXX) -q -c -P -o$@ $(IBPP_CXXFLAGS) .\src\ibpp\_ibs.cpp
 
-bcc$(U_OPT)$(R_OPT)$(D_OPT)\ibpp__rb.obj: .\src\ibpp\_rb.cpp
+bcc$(U_OPT)$(D_OPT)\ibpp__rb.obj: .\src\ibpp\_rb.cpp
 	$(CXX) -q -c -P -o$@ $(IBPP_CXXFLAGS) .\src\ibpp\_rb.cpp
 
-bcc$(U_OPT)$(R_OPT)$(D_OPT)\ibpp__spb.obj: .\src\ibpp\_spb.cpp
+bcc$(U_OPT)$(D_OPT)\ibpp__spb.obj: .\src\ibpp\_spb.cpp
 	$(CXX) -q -c -P -o$@ $(IBPP_CXXFLAGS) .\src\ibpp\_spb.cpp
 
-bcc$(U_OPT)$(R_OPT)$(D_OPT)\ibpp__tpb.obj: .\src\ibpp\_tpb.cpp
+bcc$(U_OPT)$(D_OPT)\ibpp__tpb.obj: .\src\ibpp\_tpb.cpp
 	$(CXX) -q -c -P -o$@ $(IBPP_CXXFLAGS) .\src\ibpp\_tpb.cpp
 
-bcc$(U_OPT)$(R_OPT)$(D_OPT)\ibpp_array.obj: .\src\ibpp\array.cpp
+bcc$(U_OPT)$(D_OPT)\ibpp_array.obj: .\src\ibpp\array.cpp
 	$(CXX) -q -c -P -o$@ $(IBPP_CXXFLAGS) .\src\ibpp\array.cpp
 
-bcc$(U_OPT)$(R_OPT)$(D_OPT)\ibpp_blob.obj: .\src\ibpp\blob.cpp
+bcc$(U_OPT)$(D_OPT)\ibpp_blob.obj: .\src\ibpp\blob.cpp
 	$(CXX) -q -c -P -o$@ $(IBPP_CXXFLAGS) .\src\ibpp\blob.cpp
 
-bcc$(U_OPT)$(R_OPT)$(D_OPT)\ibpp_database.obj: .\src\ibpp\database.cpp
+bcc$(U_OPT)$(D_OPT)\ibpp_database.obj: .\src\ibpp\database.cpp
 	$(CXX) -q -c -P -o$@ $(IBPP_CXXFLAGS) .\src\ibpp\database.cpp
 
-bcc$(U_OPT)$(R_OPT)$(D_OPT)\ibpp_date.obj: .\src\ibpp\date.cpp
+bcc$(U_OPT)$(D_OPT)\ibpp_date.obj: .\src\ibpp\date.cpp
 	$(CXX) -q -c -P -o$@ $(IBPP_CXXFLAGS) .\src\ibpp\date.cpp
 
-bcc$(U_OPT)$(R_OPT)$(D_OPT)\ibpp_dbkey.obj: .\src\ibpp\dbkey.cpp
+bcc$(U_OPT)$(D_OPT)\ibpp_dbkey.obj: .\src\ibpp\dbkey.cpp
 	$(CXX) -q -c -P -o$@ $(IBPP_CXXFLAGS) .\src\ibpp\dbkey.cpp
 
-bcc$(U_OPT)$(R_OPT)$(D_OPT)\ibpp_events.obj: .\src\ibpp\events.cpp
+bcc$(U_OPT)$(D_OPT)\ibpp_events.obj: .\src\ibpp\events.cpp
 	$(CXX) -q -c -P -o$@ $(IBPP_CXXFLAGS) .\src\ibpp\events.cpp
 
-bcc$(U_OPT)$(R_OPT)$(D_OPT)\ibpp_exception.obj: .\src\ibpp\exception.cpp
+bcc$(U_OPT)$(D_OPT)\ibpp_exception.obj: .\src\ibpp\exception.cpp
 	$(CXX) -q -c -P -o$@ $(IBPP_CXXFLAGS) .\src\ibpp\exception.cpp
 
-bcc$(U_OPT)$(R_OPT)$(D_OPT)\ibpp_row.obj: .\src\ibpp\row.cpp
+bcc$(U_OPT)$(D_OPT)\ibpp_row.obj: .\src\ibpp\row.cpp
 	$(CXX) -q -c -P -o$@ $(IBPP_CXXFLAGS) .\src\ibpp\row.cpp
 
-bcc$(U_OPT)$(R_OPT)$(D_OPT)\ibpp_service.obj: .\src\ibpp\service.cpp
+bcc$(U_OPT)$(D_OPT)\ibpp_service.obj: .\src\ibpp\service.cpp
 	$(CXX) -q -c -P -o$@ $(IBPP_CXXFLAGS) .\src\ibpp\service.cpp
 
-bcc$(U_OPT)$(R_OPT)$(D_OPT)\ibpp_statement.obj: .\src\ibpp\statement.cpp
+bcc$(U_OPT)$(D_OPT)\ibpp_statement.obj: .\src\ibpp\statement.cpp
 	$(CXX) -q -c -P -o$@ $(IBPP_CXXFLAGS) .\src\ibpp\statement.cpp
 
-bcc$(U_OPT)$(R_OPT)$(D_OPT)\ibpp_time.obj: .\src\ibpp\time.cpp
+bcc$(U_OPT)$(D_OPT)\ibpp_time.obj: .\src\ibpp\time.cpp
 	$(CXX) -q -c -P -o$@ $(IBPP_CXXFLAGS) .\src\ibpp\time.cpp
 
-bcc$(U_OPT)$(R_OPT)$(D_OPT)\ibpp_transaction.obj: .\src\ibpp\transaction.cpp
+bcc$(U_OPT)$(D_OPT)\ibpp_transaction.obj: .\src\ibpp\transaction.cpp
 	$(CXX) -q -c -P -o$@ $(IBPP_CXXFLAGS) .\src\ibpp\transaction.cpp
 
-bcc$(U_OPT)$(R_OPT)$(D_OPT)\ibpp_user.obj: .\src\ibpp\user.cpp
+bcc$(U_OPT)$(D_OPT)\ibpp_user.obj: .\src\ibpp\user.cpp
 	$(CXX) -q -c -P -o$@ $(IBPP_CXXFLAGS) .\src\ibpp\user.cpp
 

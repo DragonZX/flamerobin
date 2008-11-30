@@ -80,18 +80,6 @@ dnl ### begin block 20_COND_PLATFORM_WIN32_1[flamerobin.bkl] ###
         COND_PLATFORM_WIN32_1=""
     fi
     AC_SUBST(COND_PLATFORM_WIN32_1)
-dnl ### begin block 20_COND_STATICRTL_0[flamerobin.bkl] ###
-    COND_STATICRTL_0="#"
-    if test "x$STATICRTL" = "x0" ; then
-        COND_STATICRTL_0=""
-    fi
-    AC_SUBST(COND_STATICRTL_0)
-dnl ### begin block 20_COND_STATICRTL_1[flamerobin.bkl] ###
-    COND_STATICRTL_1="#"
-    if test "x$STATICRTL" = "x1" ; then
-        COND_STATICRTL_1=""
-    fi
-    AC_SUBST(COND_STATICRTL_1)
 dnl ### begin block 20_COND_UNICODE_1[flamerobin.bkl] ###
     COND_UNICODE_1="#"
     if test "x$UNICODE" = "x1" ; then

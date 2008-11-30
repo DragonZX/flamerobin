@@ -4,7 +4,7 @@
 
 # TARGTYPE "Win32 (x86) Static Library" 0x0104
 
-CFG=ibpp - Win32 Debug Dynamic
+CFG=ibpp - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
@@ -13,26 +13,18 @@ CFG=ibpp - Win32 Debug Dynamic
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "flamerobin_ibpp.mak" CFG="ibpp - Win32 Debug Dynamic"
+!MESSAGE NMAKE /f "flamerobin_ibpp.mak" CFG="ibpp - Win32 Debug"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "ibpp - Win32 DLL Unicode Release Static" (based on "Win32 (x86) Static Library")
-!MESSAGE "ibpp - Win32 DLL Unicode Release Dynamic" (based on "Win32 (x86) Static Library")
-!MESSAGE "ibpp - Win32 DLL Unicode Debug Static" (based on "Win32 (x86) Static Library")
-!MESSAGE "ibpp - Win32 DLL Unicode Debug Dynamic" (based on "Win32 (x86) Static Library")
-!MESSAGE "ibpp - Win32 DLL Release Static" (based on "Win32 (x86) Static Library")
-!MESSAGE "ibpp - Win32 DLL Release Dynamic" (based on "Win32 (x86) Static Library")
-!MESSAGE "ibpp - Win32 DLL Debug Static" (based on "Win32 (x86) Static Library")
-!MESSAGE "ibpp - Win32 DLL Debug Dynamic" (based on "Win32 (x86) Static Library")
-!MESSAGE "ibpp - Win32 Unicode Release Static" (based on "Win32 (x86) Static Library")
-!MESSAGE "ibpp - Win32 Unicode Release Dynamic" (based on "Win32 (x86) Static Library")
-!MESSAGE "ibpp - Win32 Unicode Debug Static" (based on "Win32 (x86) Static Library")
-!MESSAGE "ibpp - Win32 Unicode Debug Dynamic" (based on "Win32 (x86) Static Library")
-!MESSAGE "ibpp - Win32 Release Static" (based on "Win32 (x86) Static Library")
-!MESSAGE "ibpp - Win32 Release Dynamic" (based on "Win32 (x86) Static Library")
-!MESSAGE "ibpp - Win32 Debug Static" (based on "Win32 (x86) Static Library")
-!MESSAGE "ibpp - Win32 Debug Dynamic" (based on "Win32 (x86) Static Library")
+!MESSAGE "ibpp - Win32 DLL Unicode Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "ibpp - Win32 DLL Unicode Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE "ibpp - Win32 DLL Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "ibpp - Win32 DLL Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE "ibpp - Win32 Unicode Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "ibpp - Win32 Unicode Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE "ibpp - Win32 Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "ibpp - Win32 Debug" (based on "Win32 (x86) Static Library")
 !MESSAGE 
 
 # Begin Project
@@ -42,30 +34,7 @@ CFG=ibpp - Win32 Debug Dynamic
 CPP=cl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "ibpp - Win32 DLL Unicode Release Static"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "vcus"
-# PROP BASE Intermediate_Dir "vcus\ibpp"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 0
-# PROP Output_Dir "vcus"
-# PROP Intermediate_Dir "vcus\ibpp"
-# PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MT /Fdvcus\ibpp.pdb /O1 /GR /EHsc /W4 /Yu"_ibpp.h" /Fp"vcus\ibpp.pch" /I ".\src\ibpp" /D "WIN32" /D "_LIB" /D "IBPP_WINDOWS" /c
-# ADD CPP /nologo /FD /MT /Fdvcus\ibpp.pdb /O1 /GR /EHsc /W4 /Yu"_ibpp.h" /Fp"vcus\ibpp.pch" /I ".\src\ibpp" /D "WIN32" /D "_LIB" /D "IBPP_WINDOWS" /c
-# ADD BASE RSC /l 0x409
-# ADD RSC /l 0x409
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"vcus\ibpp.lib"
-# ADD LIB32 /nologo /out:"vcus\ibpp.lib"
-
-!ELSEIF  "$(CFG)" == "ibpp - Win32 DLL Unicode Release Dynamic"
+!IF  "$(CFG)" == "ibpp - Win32 DLL Unicode Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -88,30 +57,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"vcu\ibpp.lib"
 # ADD LIB32 /nologo /out:"vcu\ibpp.lib"
 
-!ELSEIF  "$(CFG)" == "ibpp - Win32 DLL Unicode Debug Static"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "vcusd"
-# PROP BASE Intermediate_Dir "vcusd\ibpp"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 1
-# PROP Output_Dir "vcusd"
-# PROP Intermediate_Dir "vcusd\ibpp"
-# PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MTd /Zi /Fdvcusd\ibpp.pdb /Od /Gm /GR /EHsc /W4 /Yu"_ibpp.h" /Fp"vcusd\ibpp.pch" /I ".\src\ibpp" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "IBPP_WINDOWS" /c
-# ADD CPP /nologo /FD /MTd /Zi /Fdvcusd\ibpp.pdb /Od /Gm /GR /EHsc /W4 /Yu"_ibpp.h" /Fp"vcusd\ibpp.pch" /I ".\src\ibpp" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "IBPP_WINDOWS" /c
-# ADD BASE RSC /l 0x409
-# ADD RSC /l 0x409
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"vcusd\ibpp.lib"
-# ADD LIB32 /nologo /out:"vcusd\ibpp.lib"
-
-!ELSEIF  "$(CFG)" == "ibpp - Win32 DLL Unicode Debug Dynamic"
+!ELSEIF  "$(CFG)" == "ibpp - Win32 DLL Unicode Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -134,30 +80,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"vcud\ibpp.lib"
 # ADD LIB32 /nologo /out:"vcud\ibpp.lib"
 
-!ELSEIF  "$(CFG)" == "ibpp - Win32 DLL Release Static"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "vcs"
-# PROP BASE Intermediate_Dir "vcs\ibpp"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 0
-# PROP Output_Dir "vcs"
-# PROP Intermediate_Dir "vcs\ibpp"
-# PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MT /Fdvcs\ibpp.pdb /O1 /GR /EHsc /W4 /Yu"_ibpp.h" /Fp"vcs\ibpp.pch" /I ".\src\ibpp" /D "WIN32" /D "_LIB" /D "IBPP_WINDOWS" /c
-# ADD CPP /nologo /FD /MT /Fdvcs\ibpp.pdb /O1 /GR /EHsc /W4 /Yu"_ibpp.h" /Fp"vcs\ibpp.pch" /I ".\src\ibpp" /D "WIN32" /D "_LIB" /D "IBPP_WINDOWS" /c
-# ADD BASE RSC /l 0x409
-# ADD RSC /l 0x409
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"vcs\ibpp.lib"
-# ADD LIB32 /nologo /out:"vcs\ibpp.lib"
-
-!ELSEIF  "$(CFG)" == "ibpp - Win32 DLL Release Dynamic"
+!ELSEIF  "$(CFG)" == "ibpp - Win32 DLL Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -180,30 +103,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"vc\ibpp.lib"
 # ADD LIB32 /nologo /out:"vc\ibpp.lib"
 
-!ELSEIF  "$(CFG)" == "ibpp - Win32 DLL Debug Static"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "vcsd"
-# PROP BASE Intermediate_Dir "vcsd\ibpp"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 1
-# PROP Output_Dir "vcsd"
-# PROP Intermediate_Dir "vcsd\ibpp"
-# PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MTd /Zi /Fdvcsd\ibpp.pdb /Od /Gm /GR /EHsc /W4 /Yu"_ibpp.h" /Fp"vcsd\ibpp.pch" /I ".\src\ibpp" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "IBPP_WINDOWS" /c
-# ADD CPP /nologo /FD /MTd /Zi /Fdvcsd\ibpp.pdb /Od /Gm /GR /EHsc /W4 /Yu"_ibpp.h" /Fp"vcsd\ibpp.pch" /I ".\src\ibpp" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "IBPP_WINDOWS" /c
-# ADD BASE RSC /l 0x409
-# ADD RSC /l 0x409
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"vcsd\ibpp.lib"
-# ADD LIB32 /nologo /out:"vcsd\ibpp.lib"
-
-!ELSEIF  "$(CFG)" == "ibpp - Win32 DLL Debug Dynamic"
+!ELSEIF  "$(CFG)" == "ibpp - Win32 DLL Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -226,30 +126,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"vcd\ibpp.lib"
 # ADD LIB32 /nologo /out:"vcd\ibpp.lib"
 
-!ELSEIF  "$(CFG)" == "ibpp - Win32 Unicode Release Static"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "vcus"
-# PROP BASE Intermediate_Dir "vcus\ibpp"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 0
-# PROP Output_Dir "vcus"
-# PROP Intermediate_Dir "vcus\ibpp"
-# PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MT /Fdvcus\ibpp.pdb /O1 /GR /EHsc /W4 /Yu"_ibpp.h" /Fp"vcus\ibpp.pch" /I ".\src\ibpp" /D "WIN32" /D "_LIB" /D "IBPP_WINDOWS" /c
-# ADD CPP /nologo /FD /MT /Fdvcus\ibpp.pdb /O1 /GR /EHsc /W4 /Yu"_ibpp.h" /Fp"vcus\ibpp.pch" /I ".\src\ibpp" /D "WIN32" /D "_LIB" /D "IBPP_WINDOWS" /c
-# ADD BASE RSC /l 0x409
-# ADD RSC /l 0x409
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"vcus\ibpp.lib"
-# ADD LIB32 /nologo /out:"vcus\ibpp.lib"
-
-!ELSEIF  "$(CFG)" == "ibpp - Win32 Unicode Release Dynamic"
+!ELSEIF  "$(CFG)" == "ibpp - Win32 Unicode Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -272,30 +149,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"vcu\ibpp.lib"
 # ADD LIB32 /nologo /out:"vcu\ibpp.lib"
 
-!ELSEIF  "$(CFG)" == "ibpp - Win32 Unicode Debug Static"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "vcusd"
-# PROP BASE Intermediate_Dir "vcusd\ibpp"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 1
-# PROP Output_Dir "vcusd"
-# PROP Intermediate_Dir "vcusd\ibpp"
-# PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MTd /Zi /Fdvcusd\ibpp.pdb /Od /Gm /GR /EHsc /W4 /Yu"_ibpp.h" /Fp"vcusd\ibpp.pch" /I ".\src\ibpp" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "IBPP_WINDOWS" /c
-# ADD CPP /nologo /FD /MTd /Zi /Fdvcusd\ibpp.pdb /Od /Gm /GR /EHsc /W4 /Yu"_ibpp.h" /Fp"vcusd\ibpp.pch" /I ".\src\ibpp" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "IBPP_WINDOWS" /c
-# ADD BASE RSC /l 0x409
-# ADD RSC /l 0x409
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"vcusd\ibpp.lib"
-# ADD LIB32 /nologo /out:"vcusd\ibpp.lib"
-
-!ELSEIF  "$(CFG)" == "ibpp - Win32 Unicode Debug Dynamic"
+!ELSEIF  "$(CFG)" == "ibpp - Win32 Unicode Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -318,30 +172,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"vcud\ibpp.lib"
 # ADD LIB32 /nologo /out:"vcud\ibpp.lib"
 
-!ELSEIF  "$(CFG)" == "ibpp - Win32 Release Static"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "vcs"
-# PROP BASE Intermediate_Dir "vcs\ibpp"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 0
-# PROP Output_Dir "vcs"
-# PROP Intermediate_Dir "vcs\ibpp"
-# PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MT /Fdvcs\ibpp.pdb /O1 /GR /EHsc /W4 /Yu"_ibpp.h" /Fp"vcs\ibpp.pch" /I ".\src\ibpp" /D "WIN32" /D "_LIB" /D "IBPP_WINDOWS" /c
-# ADD CPP /nologo /FD /MT /Fdvcs\ibpp.pdb /O1 /GR /EHsc /W4 /Yu"_ibpp.h" /Fp"vcs\ibpp.pch" /I ".\src\ibpp" /D "WIN32" /D "_LIB" /D "IBPP_WINDOWS" /c
-# ADD BASE RSC /l 0x409
-# ADD RSC /l 0x409
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"vcs\ibpp.lib"
-# ADD LIB32 /nologo /out:"vcs\ibpp.lib"
-
-!ELSEIF  "$(CFG)" == "ibpp - Win32 Release Dynamic"
+!ELSEIF  "$(CFG)" == "ibpp - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -364,30 +195,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"vc\ibpp.lib"
 # ADD LIB32 /nologo /out:"vc\ibpp.lib"
 
-!ELSEIF  "$(CFG)" == "ibpp - Win32 Debug Static"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "vcsd"
-# PROP BASE Intermediate_Dir "vcsd\ibpp"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 1
-# PROP Output_Dir "vcsd"
-# PROP Intermediate_Dir "vcsd\ibpp"
-# PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MTd /Zi /Fdvcsd\ibpp.pdb /Od /Gm /GR /EHsc /W4 /Yu"_ibpp.h" /Fp"vcsd\ibpp.pch" /I ".\src\ibpp" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "IBPP_WINDOWS" /c
-# ADD CPP /nologo /FD /MTd /Zi /Fdvcsd\ibpp.pdb /Od /Gm /GR /EHsc /W4 /Yu"_ibpp.h" /Fp"vcsd\ibpp.pch" /I ".\src\ibpp" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "IBPP_WINDOWS" /c
-# ADD BASE RSC /l 0x409
-# ADD RSC /l 0x409
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"vcsd\ibpp.lib"
-# ADD LIB32 /nologo /out:"vcsd\ibpp.lib"
-
-!ELSEIF  "$(CFG)" == "ibpp - Win32 Debug Dynamic"
+!ELSEIF  "$(CFG)" == "ibpp - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -414,22 +222,14 @@ LIB32=link.exe -lib
 
 # Begin Target
 
-# Name "ibpp - Win32 DLL Unicode Release Static"
-# Name "ibpp - Win32 DLL Unicode Release Dynamic"
-# Name "ibpp - Win32 DLL Unicode Debug Static"
-# Name "ibpp - Win32 DLL Unicode Debug Dynamic"
-# Name "ibpp - Win32 DLL Release Static"
-# Name "ibpp - Win32 DLL Release Dynamic"
-# Name "ibpp - Win32 DLL Debug Static"
-# Name "ibpp - Win32 DLL Debug Dynamic"
-# Name "ibpp - Win32 Unicode Release Static"
-# Name "ibpp - Win32 Unicode Release Dynamic"
-# Name "ibpp - Win32 Unicode Debug Static"
-# Name "ibpp - Win32 Unicode Debug Dynamic"
-# Name "ibpp - Win32 Release Static"
-# Name "ibpp - Win32 Release Dynamic"
-# Name "ibpp - Win32 Debug Static"
-# Name "ibpp - Win32 Debug Dynamic"
+# Name "ibpp - Win32 DLL Unicode Release"
+# Name "ibpp - Win32 DLL Unicode Debug"
+# Name "ibpp - Win32 DLL Release"
+# Name "ibpp - Win32 DLL Debug"
+# Name "ibpp - Win32 Unicode Release"
+# Name "ibpp - Win32 Unicode Debug"
+# Name "ibpp - Win32 Release"
+# Name "ibpp - Win32 Debug"
 # Begin Group "Source Files"
 
 # PROP Default_Filter ""

@@ -54,6 +54,7 @@
 
 <!-- this option allows to build the application with either the
      dynamic or static runtime libraries -->
+<!--
     <option name="STATICRTL">
         <values>0,1</values>
         <values-description>Dynamic,Static</values-description>
@@ -66,6 +67,9 @@
         <if cond="STATICRTL=='0'">dynamic</if>
         <if cond="STATICRTL=='1'">static</if>
     </set>
+-->
+    <set var="R_OPT"></set>
+    <set var="RTL_TYPE">dynamic</set>
 
 
     <define-tag name="headers" rules="dll,lib,exe">
@@ -167,7 +171,7 @@
 
             <set var="WX_PORT">wxmsw</set>
 <!-- set this to 29 for wxWidgets CVS HEAD -->
-            <set var="WX_VERSION">28</set>
+            <set var="WX_VERSION">29</set>
 
             <set var="WX_LIB_DIR" make_var="1">
                 <if cond="USEDLL=='1'">$(WXDIR)/lib/$(COMPILER)_dll</if>
@@ -459,6 +463,17 @@
             <command>rm -rf FlameRobin.app</command>
         </modify-target>
     </define-tag>
+
+    <if cond="FORMAT!='msvc6prj'">
+        <set var="SVN_REV_SCRIPT">
+            <if cond="FORMAT=='autoconf'">cd $(DOLLAR)(srcdir) &amp;&amp; ./update-svn-rev.sh</if>
+            <if cond="FORMAT!='autoconf'">update-svn-rev.cmd</if>
+        </set>
+        <action id="svn-rev">
+            <command>$(SVN_REV_SCRIPT)</command>
+            <dependency-of>all</dependency-of>
+        </action>
+    </if>
 
     <exe id="flamerobin" template="fr_common,wx">
         <app-type>gui</app-type>
