@@ -61,6 +61,8 @@
 // MainFrame class
 MainFrame::MainFrame(wxWindow* parent, int id, PSharedItem treeRootItem)
     : BaseFrame(parent, id, _("FlameRobin Database Admin [Multithreaded]")),
+        auiManagerM(), auiToolbarM(0), treeRegisteredDatabasesM(0),
+        treeUnregisteredDatabasesM(0), auiNotebookM(0),
         selectedItemCommandsM(0)
 {
     isMainFrameM = TreeRoot::get() == treeRootItem;
@@ -312,20 +314,29 @@ bool MainFrame::openUnregisteredDatabase(const wxString& /*dbpath*/)
     return false;
 }
 //-----------------------------------------------------------------------------
-void MainFrame::openHtmlFileIntern(const wxString& caption,
+void MainFrame::openHtmlFileView(const wxString& caption,
     const wxString& filename)
 {
+    wxString id(HtmlViewPanel::getIdFromFileName(filename));
+    if (BaseViewPanel::activateViewPanel(id))
+        return;
+
     wxFileName fullname(config().getDocsPath(), filename);
     if (fullname.FileExists())
     {
-        HtmlViewPanel* panel = new HtmlViewPanel(auiNotebookM);
-        auiNotebookM->AddPage(panel, caption, true);
-        auiNotebookM->Update();
+#if 0
+        HtmlViewPanel* panel = HtmlViewPanel::createViewInFrame(id, this,
+            caption);
+#else
+        HtmlViewPanel* panel = HtmlViewPanel::createViewInNotebook(id,
+            auiNotebookM, caption);
+#endif
+        // the html view shows "please wait while the page is being loaded..."
         panel->loadFromFile(fullname);
     }
 }
 //-----------------------------------------------------------------------------
-void MainFrame::openUrlExtern(const wxString& url)
+void MainFrame::openUrlExternal(const wxString& url)
 {
     if (!wxLaunchDefaultBrowser(url))
         wxLogError(_T("Failed to open URL \"%s\""), url.c_str());
@@ -391,39 +402,39 @@ void MainFrame::OnHelpAbout(wxCommandEvent& /*event*/)
 //-----------------------------------------------------------------------------
 void MainFrame::OnHelpLicense(wxCommandEvent& /*event*/)
 {
-    openHtmlFileIntern(_("License"), wxT("fr_license.html"));
+    openHtmlFileView(_("License"), wxT("fr_license.html"));
 }
 //-----------------------------------------------------------------------------
 void MainFrame::OnHelpManual(wxCommandEvent& /*event*/)
 {
-    openHtmlFileIntern(_("User Manual"), wxT("fr_manual.html"));
+    openHtmlFileView(_("User Manual"), wxT("fr_manual.html"));
 }
 //-----------------------------------------------------------------------------
 void MainFrame::OnHelpReleaseNotes(wxCommandEvent& /*event*/)
 {
-    openHtmlFileIntern(_("Release Notes"), wxT("fr_whatsnew.html"));
+    openHtmlFileView(_("Release Notes"), wxT("fr_whatsnew.html"));
 }
 //-----------------------------------------------------------------------------
 void MainFrame::OnHelpUrlBugReport(wxCommandEvent& /*event*/)
 {
-    openUrlExtern(
+    openUrlExternal(
         wxT("http://sourceforge.net/tracker/?atid=699234&group_id=124340"));
 }
 //-----------------------------------------------------------------------------
 void MainFrame::OnHelpUrlFeatureRequest(wxCommandEvent& /*event*/)
 {
-    openUrlExtern(
+    openUrlExternal(
         wxT("http://sourceforge.net/tracker/?atid=699237&group_id=124340"));
 }
 //-----------------------------------------------------------------------------
 void MainFrame::OnHelpUrlHomePage(wxCommandEvent& /*event*/)
 {
-    openUrlExtern(wxT("http://www.flamerobin.org"));
+    openUrlExternal(wxT("http://www.flamerobin.org"));
 }
 //-----------------------------------------------------------------------------
 void MainFrame::OnHelpUrlProjectPage(wxCommandEvent& /*event*/)
 {
-    openUrlExtern(wxT("http://sourceforge.net/projects/flamerobin"));
+    openUrlExternal(wxT("http://sourceforge.net/projects/flamerobin"));
 }
 //-----------------------------------------------------------------------------
 void MainFrame::OnMenuOpenInNewFrame(wxCommandEvent& /*event*/)

@@ -38,16 +38,80 @@
     #include "wx/wx.h"
 #endif
 
+#include <wx/aui/aui.h>
+
+#include <algorithm>
+#include <list>
+
 #include "gui/BaseViewPanel.h"
+//-----------------------------------------------------------------------------
+typedef std::list<BaseViewPanel*> BaseViewPanelList;
+
+BaseViewPanelList viewPanels;
 //-----------------------------------------------------------------------------
 BaseViewPanel::BaseViewPanel(wxWindow* parent, wxWindowID id,
         const wxPoint& pos, const wxSize& size, long style,
         const wxString& name)
-    : wxPanel(parent, id, pos, size, style, name)
+    : wxPanel()
 {
+    Hide();
+    Create(parent, id, pos, size, style, name);
+    viewPanels.push_back(this);
 }
 //-----------------------------------------------------------------------------
 BaseViewPanel::~BaseViewPanel()
 {
+    BaseViewPanelList::iterator it = std::find(viewPanels.begin(),
+        viewPanels.end(), this);
+    if (it != viewPanels.end())
+        viewPanels.erase(it);
+}
+//-----------------------------------------------------------------------------
+wxString BaseViewPanel::getId() const
+{
+    return idM;
+}
+//-----------------------------------------------------------------------------
+void BaseViewPanel::setId(const wxString& id)
+{
+    idM = id;
+}
+//-----------------------------------------------------------------------------
+/*static*/
+bool BaseViewPanel::activateViewPanel(const wxString& id)
+{
+    if (BaseViewPanel* panel = findViewPanel(id))
+    {
+        wxWindow* tlw = wxGetTopLevelParent(panel);
+        wxCHECK_MSG(tlw, false, wxT("view panel has no top level parent"));
+
+        wxWindow* parent = panel->GetParent();
+        while (parent && parent != tlw)
+        {
+            if (wxAuiNotebook* nb = wxDynamicCast(parent, wxAuiNotebook))
+            {
+                int page = nb->GetPageIndex(panel);
+                if (page != wxNOT_FOUND && page != nb->GetSelection())
+                    nb->SetSelection(page);
+            }
+            parent = parent->GetParent();
+        }
+        tlw->Raise();
+        return true;
+    }
+    return false;
+}
+//-----------------------------------------------------------------------------
+/*static*/
+BaseViewPanel* BaseViewPanel::findViewPanel(const wxString& id)
+{
+    for (BaseViewPanelList::iterator it = viewPanels.begin();
+        it != viewPanels.end(); ++it)
+    {
+        wxASSERT((*it) != 0);
+        if (id == (*it)->getId())
+            return *it;
+    }
+    return 0;
 }
 //-----------------------------------------------------------------------------

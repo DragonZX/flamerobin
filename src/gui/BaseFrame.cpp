@@ -45,17 +45,13 @@
 #include "config/Config.h"
 #include "gui/BaseFrame.h"
 //-----------------------------------------------------------------------------
-BaseFrame::FrameIdMap BaseFrame::frameIdsM;
-//-----------------------------------------------------------------------------
 BaseFrame::BaseFrame(wxWindow* parent, int id, const wxString& title)
     : wxFrame(parent, id, title)
 {
-    frameIdsM.insert(FrameIdPair(this, wxEmptyString));
 }
 //-----------------------------------------------------------------------------
 BaseFrame::~BaseFrame()
 {
-    frameIdsM.erase(this);
 }
 //-----------------------------------------------------------------------------
 bool BaseFrame::Show(bool show)
@@ -170,29 +166,6 @@ const wxString BaseFrame::getStorageName() const
 const wxRect BaseFrame::getDefaultRect() const
 {
     return wxRect(wxDefaultPosition, wxDefaultSize);
-}
-//-----------------------------------------------------------------------------
-/* static */
-void BaseFrame::setIdString(BaseFrame* frame, const wxString& id)
-{
-    FrameIdMap::iterator it = frameIdsM.find(frame);
-    if (it != frameIdsM.end())
-        (*it).second = id;
-}
-//-----------------------------------------------------------------------------
-/* static */
-BaseFrame* BaseFrame::frameFromIdString(const wxString& id)
-{
-    if (!id.IsEmpty())
-    {
-        FrameIdMap::iterator it;
-        for (it = frameIdsM.begin(); it != frameIdsM.end(); it++)
-        {
-            if ((*it).second == id)
-                return (*it).first;
-        }
-    }
-    return 0;
 }
 //-----------------------------------------------------------------------------
 BEGIN_EVENT_TABLE(BaseFrame, wxFrame)

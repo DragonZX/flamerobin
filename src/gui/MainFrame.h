@@ -73,8 +73,8 @@ private:
     void layoutControls();
     void updateStatusBar();
 
-    void openHtmlFileIntern(const wxString& caption, const wxString& filename);
-    void openUrlExtern(const wxString& url);
+    void openHtmlFileView(const wxString& caption, const wxString& filename);
+    void openUrlExternal(const wxString& url);
 
 private:
     // event handler methods

@@ -33,12 +33,20 @@
 //-----------------------------------------------------------------------------
 class BaseViewPanel: public wxPanel
 {
+private:
+    wxString idM;
 public:
     BaseViewPanel(wxWindow* parent, wxWindowID id = wxID_ANY,
         const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize,
         long style = wxTAB_TRAVERSAL, const wxString& name = wxT("panel"));
     virtual ~BaseViewPanel();
+
+    virtual wxString getId() const;
+    virtual void setId(const wxString& id);
+
+    static bool activateViewPanel(const wxString& id);
+    static BaseViewPanel* findViewPanel(const wxString& id);
 };
 //-----------------------------------------------------------------------------
 #endif // FR_BASEVIEWPANEL_H

@@ -38,6 +38,7 @@
     #include "wx/wx.h"
 #endif
 
+#include <wx/aui/aui.h>
 #include <wx/html/htmlwin.h>
 
 #include <memory>
@@ -66,6 +67,48 @@ HtmlViewPanel::~HtmlViewPanel()
 //-----------------------------------------------------------------------------
 bool HtmlViewPanel::loadFromFile(const wxFileName& filename)
 {
-    return htmlWindowM->LoadFile(filename);
+    fileNameM.Clear();
+    bool success = htmlWindowM->LoadFile(filename);
+    if (success)
+        fileNameM = filename;
+    return success;
+}
+//-----------------------------------------------------------------------------
+/*static*/
+HtmlViewPanel* HtmlViewPanel::createViewInFrame(const wxString& id,
+    wxWindow* parent, const wxString& caption)
+{
+    // use two step creation for minimal flicker
+    wxFrame* frame = new wxFrame();
+    frame->Hide();
+    frame->Create(parent, wxID_ANY, caption);
+
+    HtmlViewPanel* panel = new HtmlViewPanel(frame);
+    panel->setId(id);
+    panel->Show();
+
+    frame->Show();
+    frame->Update();
+    return panel;
+}
+//-----------------------------------------------------------------------------
+/*static*/
+HtmlViewPanel* HtmlViewPanel::createViewInNotebook(const wxString& id,
+    wxAuiNotebook* notebook, const wxString& caption)
+{
+    wxCHECK_MSG(notebook, 0,
+        wxT("HtmlViewPanel::createViewInNotebook called without notebook"));
+
+    HtmlViewPanel* panel = new HtmlViewPanel(notebook);
+    panel->setId(id);
+    notebook->AddPage(panel, caption, true);
+    notebook->Update();
+    return panel;
+}
+//-----------------------------------------------------------------------------
+/*static*/
+wxString HtmlViewPanel::getIdFromFileName(const wxString& filename)
+{
+    return wxT("HtmlView/File/") + filename;
 }
 //-----------------------------------------------------------------------------

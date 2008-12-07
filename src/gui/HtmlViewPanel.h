@@ -30,10 +30,14 @@
 #define FR_HTMLVIEWPANEL_H
 
 #include "gui/BaseViewPanel.h"
+
+class wxAuiNotebook;
 //-----------------------------------------------------------------------------
 class HtmlViewPanel: public BaseViewPanel
 {
 private:
+    wxFileName fileNameM;
+
     wxHtmlWindow* htmlWindowM;
 public:
     HtmlViewPanel(wxWindow* parent, wxWindowID id = wxID_ANY,
@@ -43,6 +47,12 @@ public:
     virtual ~HtmlViewPanel();
 
     bool loadFromFile(const wxFileName& filename);
+
+    static HtmlViewPanel* createViewInFrame(const wxString& id,
+        wxWindow* parent, const wxString& caption);
+    static HtmlViewPanel* createViewInNotebook(const wxString& id,
+        wxAuiNotebook* notebook, const wxString& caption);
+    static wxString getIdFromFileName(const wxString& filename);
 };
 //-----------------------------------------------------------------------------
 #endif // FR_HTMLVIEWPANEL_H

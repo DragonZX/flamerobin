@@ -36,10 +36,6 @@
 // Base class for all the frames in FlameRobin. Implements storing and restoring
 // of settings in config and other commonalities.
 class BaseFrame: public wxFrame {
-private:
-    typedef std::map<BaseFrame*, wxString> FrameIdMap;
-    typedef FrameIdMap::value_type FrameIdPair;
-    static FrameIdMap frameIdsM;
 protected:
     // Reads any settings from config. The predefined implementation reads
     // size and position of the frame based on getStorageName(). No need to call
@@ -68,22 +64,13 @@ protected:
     // readConfigSettings() to get first-time default position and size.
     // The predefined implementation returns -1 for all 4 items.
     virtual const wxRect getDefaultRect() const;
-    // Maintains the connection between the frame object and its id string.
-    // The id string may be constant over the lifetime of the frame
-    // (e.g. "BackupFrame/database_42"), or it may change with the content
-    // of the frame (e.g. different property pages in the same MIPFrame may
-    // have different id strings).
-    static void setIdString(BaseFrame* frame, const wxString& id);
-    // Returns the first frame with a given id string. Note that more than
-    // one frame can exist for a given id string.
-    static BaseFrame* frameFromIdString(const wxString& id);
 public:
     BaseFrame(wxWindow* parent, int id, const wxString& title);
     virtual ~BaseFrame();
 
     virtual bool Show(bool show = TRUE);
     virtual bool Destroy();
-protected:
+private:
     // event handling
     void OnClose(wxCloseEvent& event);
 
