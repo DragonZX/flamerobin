@@ -171,7 +171,7 @@
 
             <set var="WX_PORT">wxmsw</set>
 <!-- set this to 29 for wxWidgets CVS HEAD -->
-            <set var="WX_VERSION">29</set>
+            <set var="WX_VERSION">28</set>
 
             <set var="WX_LIB_DIR" make_var="1">
                 <if cond="USEDLL=='1'">$(WXDIR)/lib/$(COMPILER)_dll</if>
@@ -235,11 +235,14 @@
         $(SOURCEDIR)/core/Visitor.h
 
         $(SOURCEDIR)/engine/DatabaseConnection.h
+        $(SOURCEDIR)/engine/ServiceConnection.h
         $(SOURCEDIR)/engine/WorkerThread.h
 
         $(SOURCEDIR)/gui/AboutBox.h
         $(SOURCEDIR)/gui/BaseFrame.h
         $(SOURCEDIR)/gui/BaseViewPanel.h
+        $(SOURCEDIR)/gui/DatabaseBackupPanel.h
+        $(SOURCEDIR)/gui/DatabaseRestorePanel.h
         $(SOURCEDIR)/gui/HtmlViewPanel.h
         $(SOURCEDIR)/gui/MainFrame.h
         $(SOURCEDIR)/gui/StyleGuide.h
@@ -305,11 +308,14 @@
         $(SOURCEDIR)/core/Subject.cpp
 
         $(SOURCEDIR)/engine/DatabaseConnection.cpp
+        $(SOURCEDIR)/engine/ServiceConnection.cpp
         $(SOURCEDIR)/engine/WorkerThread.cpp
 
         $(SOURCEDIR)/gui/AboutBox.cpp
         $(SOURCEDIR)/gui/BaseFrame.cpp
         $(SOURCEDIR)/gui/BaseViewPanel.cpp
+        $(SOURCEDIR)/gui/DatabaseBackupPanel.cpp
+        $(SOURCEDIR)/gui/DatabaseRestorePanel.cpp
         $(SOURCEDIR)/gui/HtmlViewPanel.cpp
         $(SOURCEDIR)/gui/MainFrame.cpp
         $(SOURCEDIR)/gui/StyleGuide.cpp

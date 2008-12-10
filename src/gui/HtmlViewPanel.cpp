@@ -45,10 +45,8 @@
 
 #include "gui/HtmlViewPanel.h"
 //-----------------------------------------------------------------------------
-HtmlViewPanel::HtmlViewPanel(wxWindow* parent, wxWindowID id,
-        const wxPoint& pos, const wxSize& size, long style,
-        const wxString& name)
-    : BaseViewPanel(parent, id, pos, size, style, name)
+HtmlViewPanel::HtmlViewPanel(wxWindow* parent, wxWindowID id)
+    : BaseViewPanel(parent, id)
 {
     htmlWindowM = new wxHtmlWindow(this);
     wxString htmlSource(wxT("<html><body>"));
@@ -59,10 +57,6 @@ HtmlViewPanel::HtmlViewPanel(wxWindow* parent, wxWindowID id,
     std::auto_ptr<wxBoxSizer> sizer(new wxBoxSizer(wxHORIZONTAL));
     sizer->Add(htmlWindowM, 1, wxEXPAND);
     SetSizerAndFit(sizer.release());
-}
-//-----------------------------------------------------------------------------
-HtmlViewPanel::~HtmlViewPanel()
-{
 }
 //-----------------------------------------------------------------------------
 bool HtmlViewPanel::loadFromFile(const wxFileName& filename)

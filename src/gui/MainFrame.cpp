@@ -150,7 +150,13 @@ void MainFrame::createMenu()
     bar->Append(menu.release(), _("&View"));
     // Database menu
     menu.reset(new wxMenu);
-
+    // use a dummy database and matching commands object to populate
+    // the database menu
+    PSharedDatabase db(new Database);
+    std::auto_ptr<ItemCommands> dbCmds(ItemCommands::createItemCommands(db));
+    dbCmds->addCommandsTo(menu.get(), false);
+    dbCmds.reset();
+    db.reset();
     bar->Append(menu.release(), _("&Database"));
     // Object menu
     menu.reset(new wxMenu);

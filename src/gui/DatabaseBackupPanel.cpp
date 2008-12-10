@@ -25,31 +25,27 @@
 
 */
 
-//-----------------------------------------------------------------------------
-#ifndef FR_HTMLVIEWPANEL_H
-#define FR_HTMLVIEWPANEL_H
+// For compilers that support precompilation, includes "wx/wx.h".
+#include "wx/wxprec.h"
 
-#include "gui/BaseViewPanel.h"
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
 
-class wxAuiNotebook;
+// for all others, include the necessary headers (this file is usually all you
+// need because it includes almost all "standard" wxWindows headers
+#ifndef WX_PRECOMP
+    #include "wx/wx.h"
+#endif
+
+#include <wx/aui/aui.h>
+
+#include "gui/DatabaseBackupPanel.h"
+#include "hierarchy/Database.h"
 //-----------------------------------------------------------------------------
-class HtmlViewPanel: public BaseViewPanel
+DatabaseBackupPanel::DatabaseBackupPanel(wxWindow* parent,
+        PSharedDatabase database)
+    : BaseViewPanel(parent), databaseM(database)
 {
-private:
-    wxFileName fileNameM;
-
-    wxHtmlWindow* htmlWindowM;
-
-    HtmlViewPanel(wxWindow* parent, wxWindowID id = wxID_ANY);
-public:
-    bool loadFromFile(const wxFileName& filename);
-
-    static HtmlViewPanel* createViewInFrame(const wxString& id,
-        wxWindow* parent, const wxString& caption);
-    static HtmlViewPanel* createViewInNotebook(const wxString& id,
-        wxAuiNotebook* notebook, const wxString& caption);
-
-    static wxString getIdFromFileName(const wxString& filename);
-};
+}
 //-----------------------------------------------------------------------------
-#endif // FR_HTMLVIEWPANEL_H

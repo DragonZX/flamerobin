@@ -64,10 +64,13 @@ FLAMEROBIN_OBJECTS =  \
 	flamerobin_StringUtils.o \
 	flamerobin_Subject.o \
 	flamerobin_DatabaseConnection.o \
+	flamerobin_ServiceConnection.o \
 	flamerobin_WorkerThread.o \
 	flamerobin_AboutBox.o \
 	flamerobin_BaseFrame.o \
 	flamerobin_BaseViewPanel.o \
+	flamerobin_DatabaseBackupPanel.o \
+	flamerobin_DatabaseRestorePanel.o \
 	flamerobin_HtmlViewPanel.o \
 	flamerobin_MainFrame.o \
 	flamerobin_StyleGuide.o \
@@ -313,6 +316,9 @@ flamerobin_Subject.o: $(srcdir)/src/core/Subject.cpp $(FLAMEROBIN_ODEP)
 flamerobin_DatabaseConnection.o: $(srcdir)/src/engine/DatabaseConnection.cpp $(FLAMEROBIN_ODEP)
 	$(CXXC) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(srcdir)/src/engine/DatabaseConnection.cpp
 
+flamerobin_ServiceConnection.o: $(srcdir)/src/engine/ServiceConnection.cpp $(FLAMEROBIN_ODEP)
+	$(CXXC) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(srcdir)/src/engine/ServiceConnection.cpp
+
 flamerobin_WorkerThread.o: $(srcdir)/src/engine/WorkerThread.cpp $(FLAMEROBIN_ODEP)
 	$(CXXC) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(srcdir)/src/engine/WorkerThread.cpp
 
@@ -324,6 +330,12 @@ flamerobin_BaseFrame.o: $(srcdir)/src/gui/BaseFrame.cpp $(FLAMEROBIN_ODEP)
 
 flamerobin_BaseViewPanel.o: $(srcdir)/src/gui/BaseViewPanel.cpp $(FLAMEROBIN_ODEP)
 	$(CXXC) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(srcdir)/src/gui/BaseViewPanel.cpp
+
+flamerobin_DatabaseBackupPanel.o: $(srcdir)/src/gui/DatabaseBackupPanel.cpp $(FLAMEROBIN_ODEP)
+	$(CXXC) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(srcdir)/src/gui/DatabaseBackupPanel.cpp
+
+flamerobin_DatabaseRestorePanel.o: $(srcdir)/src/gui/DatabaseRestorePanel.cpp $(FLAMEROBIN_ODEP)
+	$(CXXC) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(srcdir)/src/gui/DatabaseRestorePanel.cpp
 
 flamerobin_HtmlViewPanel.o: $(srcdir)/src/gui/HtmlViewPanel.cpp $(FLAMEROBIN_ODEP)
 	$(CXXC) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(srcdir)/src/gui/HtmlViewPanel.cpp

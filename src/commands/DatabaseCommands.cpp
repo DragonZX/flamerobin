@@ -46,9 +46,13 @@ class DatabaseCommands : public ItemCommands
 private:
     Database* databaseM;
 
+    void OnBackupDatabase(wxCommandEvent& event);
     void OnConnectDatabase(wxCommandEvent& event);
     void OnDisconnectDatabase(wxCommandEvent& event);
+    void OnRestoreDatabase(wxCommandEvent& event);
+
     void DatabaseCanConnect(wxUpdateUIEvent& event);
+    void DatabaseCanRestore(wxUpdateUIEvent& event);
     void DatabaseIsConnected(wxUpdateUIEvent& event);
 
     DECLARE_EVENT_TABLE()
@@ -74,7 +78,7 @@ void DatabaseCommands::addCommandsTo(wxMenu* menu, bool isContextMenu)
     // do not show any popup menu for database nodes that are being connected
     // or disconnected right now
     bool connected = databaseM->isConnected();
-    bool canConnect = databaseM->canConnect();
+    bool canConnect = !connected && databaseM->canConnect();
     if (isContextMenu && !connected && !canConnect)
         return;
 
@@ -92,11 +96,12 @@ void DatabaseCommands::addCommandsTo(wxMenu* menu, bool isContextMenu)
         addSep = true;
     }
 
-    if (addSep)
-        menu->AppendSeparator();
-    menu->Append(CmdDatabase_ExecuteStatement, _("&Execute SQL statements"));
     if (isContextMenu)
     {
+        if (addSep)
+            menu->AppendSeparator();
+        menu->Append(CmdDatabase_ExecuteStatement,
+            _("&Execute SQL statements"));
         menu->AppendSeparator();
         menu->Append(CmdView_OpenInNewFrame, _("&Open in new frame"));
     }
@@ -104,6 +109,8 @@ void DatabaseCommands::addCommandsTo(wxMenu* menu, bool isContextMenu)
 //-----------------------------------------------------------------------------
 BEGIN_EVENT_TABLE(DatabaseCommands, ItemCommands)
     EVT_MENU(CmdObject_DefaultAction, DatabaseCommands::OnConnectDatabase)
+// ???    EVT_UPDATE_UI(CmdObject_DefaultAction, DatabaseCommands::DatabaseCanConnect)
+    EVT_UPDATE_UI(CmdDatabase_Backup, ItemCommands::CommandIsEnabled)
     EVT_MENU(CmdDatabase_Connect, DatabaseCommands::OnConnectDatabase)
     EVT_UPDATE_UI(CmdDatabase_Connect, DatabaseCommands::DatabaseCanConnect)
     EVT_MENU(CmdDatabase_ConnectAs, DatabaseCommands::OnConnectDatabase)
@@ -111,6 +118,7 @@ BEGIN_EVENT_TABLE(DatabaseCommands, ItemCommands)
     EVT_MENU(CmdDatabase_Disconnect, DatabaseCommands::OnDisconnectDatabase)
     EVT_UPDATE_UI(CmdDatabase_Disconnect, DatabaseCommands::DatabaseIsConnected)
     EVT_UPDATE_UI(CmdView_OpenInNewFrame, ItemCommands::CommandIsEnabled)
+    EVT_UPDATE_UI(CmdDatabase_Restore, DatabaseCommands::DatabaseCanRestore)
 END_EVENT_TABLE()
 //-----------------------------------------------------------------------------
 void DatabaseCommands::OnConnectDatabase(wxCommandEvent& event)
@@ -134,6 +142,22 @@ void DatabaseCommands::OnDisconnectDatabase(wxCommandEvent& /*event*/)
 void DatabaseCommands::DatabaseCanConnect(wxUpdateUIEvent& event)
 {
     event.Enable(databaseM && databaseM->canConnect());
+}
+//-----------------------------------------------------------------------------
+void DatabaseCommands::DatabaseCanRestore(wxUpdateUIEvent& event)
+{
+    if (databaseM)
+    {
+        switch (databaseM->getConnectionState())
+        {
+            case Database::csDisconnected:
+            case Database::csConnectionFailed:
+            case Database::csRestoreFailed:
+                event.Enable(true);
+                return;
+        }
+    }
+    event.Enable(false);
 }
 //-----------------------------------------------------------------------------
 void DatabaseCommands::DatabaseIsConnected(wxUpdateUIEvent& event)

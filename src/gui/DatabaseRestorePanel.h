@@ -26,30 +26,20 @@
 */
 
 //-----------------------------------------------------------------------------
-#ifndef FR_HTMLVIEWPANEL_H
-#define FR_HTMLVIEWPANEL_H
+#ifndef FR_DATABASERESTOREPANEL_H
+#define FR_DATABASERESTOREPANEL_H
 
 #include "gui/BaseViewPanel.h"
+#include "hierarchy/SharedItems.h"
 
 class wxAuiNotebook;
 //-----------------------------------------------------------------------------
-class HtmlViewPanel: public BaseViewPanel
+class DatabaseRestorePanel: public BaseViewPanel
 {
 private:
-    wxFileName fileNameM;
-
-    wxHtmlWindow* htmlWindowM;
-
-    HtmlViewPanel(wxWindow* parent, wxWindowID id = wxID_ANY);
+    PSharedDatabase databaseM;
 public:
-    bool loadFromFile(const wxFileName& filename);
-
-    static HtmlViewPanel* createViewInFrame(const wxString& id,
-        wxWindow* parent, const wxString& caption);
-    static HtmlViewPanel* createViewInNotebook(const wxString& id,
-        wxAuiNotebook* notebook, const wxString& caption);
-
-    static wxString getIdFromFileName(const wxString& filename);
+    DatabaseRestorePanel(wxWindow* parent, PSharedDatabase database);
 };
 //-----------------------------------------------------------------------------
-#endif // FR_HTMLVIEWPANEL_H
+#endif // FR_DATABASERESTOREPANEL_H

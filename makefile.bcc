@@ -93,10 +93,13 @@ FLAMEROBIN_OBJECTS =  \
 	bcc$(U_OPT)$(D_OPT)\flamerobin_StringUtils.obj \
 	bcc$(U_OPT)$(D_OPT)\flamerobin_Subject.obj \
 	bcc$(U_OPT)$(D_OPT)\flamerobin_DatabaseConnection.obj \
+	bcc$(U_OPT)$(D_OPT)\flamerobin_ServiceConnection.obj \
 	bcc$(U_OPT)$(D_OPT)\flamerobin_WorkerThread.obj \
 	bcc$(U_OPT)$(D_OPT)\flamerobin_AboutBox.obj \
 	bcc$(U_OPT)$(D_OPT)\flamerobin_BaseFrame.obj \
 	bcc$(U_OPT)$(D_OPT)\flamerobin_BaseViewPanel.obj \
+	bcc$(U_OPT)$(D_OPT)\flamerobin_DatabaseBackupPanel.obj \
+	bcc$(U_OPT)$(D_OPT)\flamerobin_DatabaseRestorePanel.obj \
 	bcc$(U_OPT)$(D_OPT)\flamerobin_HtmlViewPanel.obj \
 	bcc$(U_OPT)$(D_OPT)\flamerobin_MainFrame.obj \
 	bcc$(U_OPT)$(D_OPT)\flamerobin_StyleGuide.obj \
@@ -220,7 +223,7 @@ svn-rev:
 
 bcc$(U_OPT)$(D_OPT)\flamerobin.exe: bcc$(U_OPT)$(D_OPT)\flamerobin_PCH.obj  $(FLAMEROBIN_OBJECTS) bcc$(U_OPT)$(D_OPT)\ibpp.lib  bcc$(U_OPT)$(D_OPT)\flamerobin_flamerobin.res bcc$(U_OPT)$(D_OPT)\ibpp.lib
 	ilink32 -Tpe -q  -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk  $(__DEBUGINFO) $(______flamerobin_WX_LIB_DIR_FILENAMES_2_p) -aa $(LDFLAGS) @&&|
-	c0w32.obj $(FLAMEROBIN_OBJECTS),$@,, wxmsw29$(U_OPT)$(D_OPT)_aui.lib wxmsw29$(U_OPT)$(D_OPT)_stc.lib wxmsw29$(U_OPT)$(D_OPT)_html.lib wxmsw29$(U_OPT)$(D_OPT)_adv.lib wxmsw29$(U_OPT)$(D_OPT)_core.lib wxbase29$(U_OPT)$(D_OPT)_xml.lib wxbase29$(U_OPT)$(D_OPT).lib wxscintilla$(D_OPT).lib wxregex$(U_OPT)$(D_OPT).lib wxexpat$(D_OPT).lib wxtiff$(D_OPT).lib wxjpeg$(D_OPT).lib wxpng$(D_OPT).lib wxzlib$(D_OPT).lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comctl32.lib rpcrt4.lib wsock32.lib bcc$(U_OPT)$(D_OPT)\ibpp.lib   import32.lib cw32mti.lib,, bcc$(U_OPT)$(D_OPT)\flamerobin_flamerobin.res
+	c0w32.obj $(FLAMEROBIN_OBJECTS),$@,, wxmsw28$(U_OPT)$(D_OPT)_aui.lib wxmsw28$(U_OPT)$(D_OPT)_stc.lib wxmsw28$(U_OPT)$(D_OPT)_html.lib wxmsw28$(U_OPT)$(D_OPT)_adv.lib wxmsw28$(U_OPT)$(D_OPT)_core.lib wxbase28$(U_OPT)$(D_OPT)_xml.lib wxbase28$(U_OPT)$(D_OPT).lib wxregex$(U_OPT)$(D_OPT).lib wxexpat$(D_OPT).lib wxtiff$(D_OPT).lib wxjpeg$(D_OPT).lib wxpng$(D_OPT).lib wxzlib$(D_OPT).lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comctl32.lib rpcrt4.lib wsock32.lib bcc$(U_OPT)$(D_OPT)\ibpp.lib   import32.lib cw32mti.lib,, bcc$(U_OPT)$(D_OPT)\flamerobin_flamerobin.res
 |
 
 bcc$(U_OPT)$(D_OPT)\ibpp.lib: bcc$(U_OPT)$(D_OPT)\ibpp__ibpp.obj  $(IBPP_OBJECTS)
@@ -292,6 +295,9 @@ bcc$(U_OPT)$(D_OPT)\flamerobin_Subject.obj: .\src\core\Subject.cpp
 bcc$(U_OPT)$(D_OPT)\flamerobin_DatabaseConnection.obj: .\src\engine\DatabaseConnection.cpp
 	$(CXX) -q -c -P -o$@ $(FLAMEROBIN_CXXFLAGS) .\src\engine\DatabaseConnection.cpp
 
+bcc$(U_OPT)$(D_OPT)\flamerobin_ServiceConnection.obj: .\src\engine\ServiceConnection.cpp
+	$(CXX) -q -c -P -o$@ $(FLAMEROBIN_CXXFLAGS) .\src\engine\ServiceConnection.cpp
+
 bcc$(U_OPT)$(D_OPT)\flamerobin_WorkerThread.obj: .\src\engine\WorkerThread.cpp
 	$(CXX) -q -c -P -o$@ $(FLAMEROBIN_CXXFLAGS) .\src\engine\WorkerThread.cpp
 
@@ -303,6 +309,12 @@ bcc$(U_OPT)$(D_OPT)\flamerobin_BaseFrame.obj: .\src\gui\BaseFrame.cpp
 
 bcc$(U_OPT)$(D_OPT)\flamerobin_BaseViewPanel.obj: .\src\gui\BaseViewPanel.cpp
 	$(CXX) -q -c -P -o$@ $(FLAMEROBIN_CXXFLAGS) .\src\gui\BaseViewPanel.cpp
+
+bcc$(U_OPT)$(D_OPT)\flamerobin_DatabaseBackupPanel.obj: .\src\gui\DatabaseBackupPanel.cpp
+	$(CXX) -q -c -P -o$@ $(FLAMEROBIN_CXXFLAGS) .\src\gui\DatabaseBackupPanel.cpp
+
+bcc$(U_OPT)$(D_OPT)\flamerobin_DatabaseRestorePanel.obj: .\src\gui\DatabaseRestorePanel.cpp
+	$(CXX) -q -c -P -o$@ $(FLAMEROBIN_CXXFLAGS) .\src\gui\DatabaseRestorePanel.cpp
 
 bcc$(U_OPT)$(D_OPT)\flamerobin_HtmlViewPanel.obj: .\src\gui\HtmlViewPanel.cpp
 	$(CXX) -q -c -P -o$@ $(FLAMEROBIN_CXXFLAGS) .\src\gui\HtmlViewPanel.cpp

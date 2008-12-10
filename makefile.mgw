@@ -70,10 +70,13 @@ FLAMEROBIN_OBJECTS =  \
 	gcc$(U_OPT)$(D_OPT)\flamerobin_StringUtils.o \
 	gcc$(U_OPT)$(D_OPT)\flamerobin_Subject.o \
 	gcc$(U_OPT)$(D_OPT)\flamerobin_DatabaseConnection.o \
+	gcc$(U_OPT)$(D_OPT)\flamerobin_ServiceConnection.o \
 	gcc$(U_OPT)$(D_OPT)\flamerobin_WorkerThread.o \
 	gcc$(U_OPT)$(D_OPT)\flamerobin_AboutBox.o \
 	gcc$(U_OPT)$(D_OPT)\flamerobin_BaseFrame.o \
 	gcc$(U_OPT)$(D_OPT)\flamerobin_BaseViewPanel.o \
+	gcc$(U_OPT)$(D_OPT)\flamerobin_DatabaseBackupPanel.o \
+	gcc$(U_OPT)$(D_OPT)\flamerobin_DatabaseRestorePanel.o \
 	gcc$(U_OPT)$(D_OPT)\flamerobin_HtmlViewPanel.o \
 	gcc$(U_OPT)$(D_OPT)\flamerobin_MainFrame.o \
 	gcc$(U_OPT)$(D_OPT)\flamerobin_StyleGuide.o \
@@ -196,7 +199,7 @@ svn-rev:
 	update-svn-rev.cmd
 
 gcc$(U_OPT)$(D_OPT)\flamerobin.exe: $(FLAMEROBIN_OBJECTS) gcc$(U_OPT)$(D_OPT)\libibpp.a gcc$(U_OPT)$(D_OPT)\flamerobin_flamerobin_rc.o gcc$(U_OPT)$(D_OPT)\libibpp.a
-	$(CXX) -o $@ $(FLAMEROBIN_OBJECTS)  -mthreads $(__DEBUGINFO) $(______flamerobin_WX_LIB_DIR_FILENAMES_1_p) -Wl,--subsystem,windows -mwindows $(LDFLAGS)  -lwxmsw29$(U_OPT)$(D_OPT)_aui -lwxmsw29$(U_OPT)$(D_OPT)_stc -lwxmsw29$(U_OPT)$(D_OPT)_html -lwxmsw29$(U_OPT)$(D_OPT)_adv -lwxmsw29$(U_OPT)$(D_OPT)_core -lwxbase29$(U_OPT)$(D_OPT)_xml -lwxbase29$(U_OPT)$(D_OPT) -lwxscintilla$(D_OPT) -lwxregex$(U_OPT)$(D_OPT) -lwxexpat$(D_OPT) -lwxtiff$(D_OPT) -lwxjpeg$(D_OPT) -lwxpng$(D_OPT) -lwxzlib$(D_OPT) -lkernel32 -luser32 -lgdi32 -lwinspool -lcomdlg32 -ladvapi32 -lshell32 -lole32 -loleaut32 -luuid -lcomctl32 -lrpcrt4 -lwsock32 gcc$(U_OPT)$(D_OPT)\libibpp.a
+	$(CXX) -o $@ $(FLAMEROBIN_OBJECTS)  -mthreads $(__DEBUGINFO) $(______flamerobin_WX_LIB_DIR_FILENAMES_1_p) -Wl,--subsystem,windows -mwindows $(LDFLAGS)  -lwxmsw28$(U_OPT)$(D_OPT)_aui -lwxmsw28$(U_OPT)$(D_OPT)_stc -lwxmsw28$(U_OPT)$(D_OPT)_html -lwxmsw28$(U_OPT)$(D_OPT)_adv -lwxmsw28$(U_OPT)$(D_OPT)_core -lwxbase28$(U_OPT)$(D_OPT)_xml -lwxbase28$(U_OPT)$(D_OPT) -lwxregex$(U_OPT)$(D_OPT) -lwxexpat$(D_OPT) -lwxtiff$(D_OPT) -lwxjpeg$(D_OPT) -lwxpng$(D_OPT) -lwxzlib$(D_OPT) -lkernel32 -luser32 -lgdi32 -lwinspool -lcomdlg32 -ladvapi32 -lshell32 -lole32 -loleaut32 -luuid -lcomctl32 -lrpcrt4 -lwsock32 gcc$(U_OPT)$(D_OPT)\libibpp.a
 
 gcc$(U_OPT)$(D_OPT)\libibpp.a: $(IBPP_OBJECTS)
 	if exist $@ del $@
@@ -266,6 +269,9 @@ gcc$(U_OPT)$(D_OPT)\flamerobin_Subject.o: ./src/core/Subject.cpp
 gcc$(U_OPT)$(D_OPT)\flamerobin_DatabaseConnection.o: ./src/engine/DatabaseConnection.cpp
 	$(CXX) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(CPPDEPS) $<
 
+gcc$(U_OPT)$(D_OPT)\flamerobin_ServiceConnection.o: ./src/engine/ServiceConnection.cpp
+	$(CXX) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(CPPDEPS) $<
+
 gcc$(U_OPT)$(D_OPT)\flamerobin_WorkerThread.o: ./src/engine/WorkerThread.cpp
 	$(CXX) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(CPPDEPS) $<
 
@@ -276,6 +282,12 @@ gcc$(U_OPT)$(D_OPT)\flamerobin_BaseFrame.o: ./src/gui/BaseFrame.cpp
 	$(CXX) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(CPPDEPS) $<
 
 gcc$(U_OPT)$(D_OPT)\flamerobin_BaseViewPanel.o: ./src/gui/BaseViewPanel.cpp
+	$(CXX) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(CPPDEPS) $<
+
+gcc$(U_OPT)$(D_OPT)\flamerobin_DatabaseBackupPanel.o: ./src/gui/DatabaseBackupPanel.cpp
+	$(CXX) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(CPPDEPS) $<
+
+gcc$(U_OPT)$(D_OPT)\flamerobin_DatabaseRestorePanel.o: ./src/gui/DatabaseRestorePanel.cpp
 	$(CXX) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(CPPDEPS) $<
 
 gcc$(U_OPT)$(D_OPT)\flamerobin_HtmlViewPanel.o: ./src/gui/HtmlViewPanel.cpp

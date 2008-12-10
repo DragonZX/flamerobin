@@ -57,8 +57,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmsw29u_aui.lib wxmsw29u_stc.lib wxmsw29u_html.lib wxmsw29u_adv.lib wxmsw29u_core.lib wxbase29u_xml.lib wxbase29u.lib wxscintilla.lib wxregexu.lib wxexpat.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comctl32.lib rpcrt4.lib wsock32.lib vcu\ibpp.lib /nologo /machine:i386 /out:"vcu\flamerobin.exe" /pdb:"vcu\flamerobin.pdb" /nologo /subsystem:windows /machine:I386 /libpath:"$(WXDIR)\lib\vc_dll" /subsystem:windows
-# ADD LINK32 wxmsw29u_aui.lib wxmsw29u_stc.lib wxmsw29u_html.lib wxmsw29u_adv.lib wxmsw29u_core.lib wxbase29u_xml.lib wxbase29u.lib wxscintilla.lib wxregexu.lib wxexpat.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comctl32.lib rpcrt4.lib wsock32.lib vcu\ibpp.lib /nologo /machine:i386 /out:"vcu\flamerobin.exe" /pdb:"vcu\flamerobin.pdb" /nologo /subsystem:windows /machine:I386 /libpath:"$(WXDIR)\lib\vc_dll" /subsystem:windows
+# ADD BASE LINK32 wxmsw28u_aui.lib wxmsw28u_stc.lib wxmsw28u_html.lib wxmsw28u_adv.lib wxmsw28u_core.lib wxbase28u_xml.lib wxbase28u.lib wxregexu.lib wxexpat.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comctl32.lib rpcrt4.lib wsock32.lib vcu\ibpp.lib /nologo /machine:i386 /out:"vcu\flamerobin.exe" /pdb:"vcu\flamerobin.pdb" /nologo /subsystem:windows /machine:I386 /libpath:"$(WXDIR)\lib\vc_dll" /subsystem:windows
+# ADD LINK32 wxmsw28u_aui.lib wxmsw28u_stc.lib wxmsw28u_html.lib wxmsw28u_adv.lib wxmsw28u_core.lib wxbase28u_xml.lib wxbase28u.lib wxregexu.lib wxexpat.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comctl32.lib rpcrt4.lib wsock32.lib vcu\ibpp.lib /nologo /machine:i386 /out:"vcu\flamerobin.exe" /pdb:"vcu\flamerobin.pdb" /nologo /subsystem:windows /machine:I386 /libpath:"$(WXDIR)\lib\vc_dll" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "flamerobin - Win32 DLL Unicode Debug"
 
@@ -82,8 +82,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmsw29ud_aui.lib wxmsw29ud_stc.lib wxmsw29ud_html.lib wxmsw29ud_adv.lib wxmsw29ud_core.lib wxbase29ud_xml.lib wxbase29ud.lib wxscintillad.lib wxregexud.lib wxexpatd.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comctl32.lib rpcrt4.lib wsock32.lib vcud\ibpp.lib /nologo /machine:i386 /out:"vcud\flamerobin.exe" /debug /pdb:"vcud\flamerobin.pdb" /nologo /subsystem:windows /machine:I386 /libpath:"$(WXDIR)\lib\vc_dll" /subsystem:windows
-# ADD LINK32 wxmsw29ud_aui.lib wxmsw29ud_stc.lib wxmsw29ud_html.lib wxmsw29ud_adv.lib wxmsw29ud_core.lib wxbase29ud_xml.lib wxbase29ud.lib wxscintillad.lib wxregexud.lib wxexpatd.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comctl32.lib rpcrt4.lib wsock32.lib vcud\ibpp.lib /nologo /machine:i386 /out:"vcud\flamerobin.exe" /debug /pdb:"vcud\flamerobin.pdb" /nologo /subsystem:windows /machine:I386 /libpath:"$(WXDIR)\lib\vc_dll" /subsystem:windows
+# ADD BASE LINK32 wxmsw28ud_aui.lib wxmsw28ud_stc.lib wxmsw28ud_html.lib wxmsw28ud_adv.lib wxmsw28ud_core.lib wxbase28ud_xml.lib wxbase28ud.lib wxregexud.lib wxexpatd.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comctl32.lib rpcrt4.lib wsock32.lib vcud\ibpp.lib /nologo /machine:i386 /out:"vcud\flamerobin.exe" /debug /pdb:"vcud\flamerobin.pdb" /nologo /subsystem:windows /machine:I386 /libpath:"$(WXDIR)\lib\vc_dll" /subsystem:windows
+# ADD LINK32 wxmsw28ud_aui.lib wxmsw28ud_stc.lib wxmsw28ud_html.lib wxmsw28ud_adv.lib wxmsw28ud_core.lib wxbase28ud_xml.lib wxbase28ud.lib wxregexud.lib wxexpatd.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comctl32.lib rpcrt4.lib wsock32.lib vcud\ibpp.lib /nologo /machine:i386 /out:"vcud\flamerobin.exe" /debug /pdb:"vcud\flamerobin.pdb" /nologo /subsystem:windows /machine:I386 /libpath:"$(WXDIR)\lib\vc_dll" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "flamerobin - Win32 DLL Release"
 
@@ -107,8 +107,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmsw29_aui.lib wxmsw29_stc.lib wxmsw29_html.lib wxmsw29_adv.lib wxmsw29_core.lib wxbase29_xml.lib wxbase29.lib wxscintilla.lib wxregex.lib wxexpat.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comctl32.lib rpcrt4.lib wsock32.lib vc\ibpp.lib /nologo /machine:i386 /out:"vc\flamerobin.exe" /pdb:"vc\flamerobin.pdb" /nologo /subsystem:windows /machine:I386 /libpath:"$(WXDIR)\lib\vc_dll" /subsystem:windows
-# ADD LINK32 wxmsw29_aui.lib wxmsw29_stc.lib wxmsw29_html.lib wxmsw29_adv.lib wxmsw29_core.lib wxbase29_xml.lib wxbase29.lib wxscintilla.lib wxregex.lib wxexpat.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comctl32.lib rpcrt4.lib wsock32.lib vc\ibpp.lib /nologo /machine:i386 /out:"vc\flamerobin.exe" /pdb:"vc\flamerobin.pdb" /nologo /subsystem:windows /machine:I386 /libpath:"$(WXDIR)\lib\vc_dll" /subsystem:windows
+# ADD BASE LINK32 wxmsw28_aui.lib wxmsw28_stc.lib wxmsw28_html.lib wxmsw28_adv.lib wxmsw28_core.lib wxbase28_xml.lib wxbase28.lib wxregex.lib wxexpat.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comctl32.lib rpcrt4.lib wsock32.lib vc\ibpp.lib /nologo /machine:i386 /out:"vc\flamerobin.exe" /pdb:"vc\flamerobin.pdb" /nologo /subsystem:windows /machine:I386 /libpath:"$(WXDIR)\lib\vc_dll" /subsystem:windows
+# ADD LINK32 wxmsw28_aui.lib wxmsw28_stc.lib wxmsw28_html.lib wxmsw28_adv.lib wxmsw28_core.lib wxbase28_xml.lib wxbase28.lib wxregex.lib wxexpat.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comctl32.lib rpcrt4.lib wsock32.lib vc\ibpp.lib /nologo /machine:i386 /out:"vc\flamerobin.exe" /pdb:"vc\flamerobin.pdb" /nologo /subsystem:windows /machine:I386 /libpath:"$(WXDIR)\lib\vc_dll" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "flamerobin - Win32 DLL Debug"
 
@@ -132,8 +132,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmsw29d_aui.lib wxmsw29d_stc.lib wxmsw29d_html.lib wxmsw29d_adv.lib wxmsw29d_core.lib wxbase29d_xml.lib wxbase29d.lib wxscintillad.lib wxregexd.lib wxexpatd.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comctl32.lib rpcrt4.lib wsock32.lib vcd\ibpp.lib /nologo /machine:i386 /out:"vcd\flamerobin.exe" /debug /pdb:"vcd\flamerobin.pdb" /nologo /subsystem:windows /machine:I386 /libpath:"$(WXDIR)\lib\vc_dll" /subsystem:windows
-# ADD LINK32 wxmsw29d_aui.lib wxmsw29d_stc.lib wxmsw29d_html.lib wxmsw29d_adv.lib wxmsw29d_core.lib wxbase29d_xml.lib wxbase29d.lib wxscintillad.lib wxregexd.lib wxexpatd.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comctl32.lib rpcrt4.lib wsock32.lib vcd\ibpp.lib /nologo /machine:i386 /out:"vcd\flamerobin.exe" /debug /pdb:"vcd\flamerobin.pdb" /nologo /subsystem:windows /machine:I386 /libpath:"$(WXDIR)\lib\vc_dll" /subsystem:windows
+# ADD BASE LINK32 wxmsw28d_aui.lib wxmsw28d_stc.lib wxmsw28d_html.lib wxmsw28d_adv.lib wxmsw28d_core.lib wxbase28d_xml.lib wxbase28d.lib wxregexd.lib wxexpatd.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comctl32.lib rpcrt4.lib wsock32.lib vcd\ibpp.lib /nologo /machine:i386 /out:"vcd\flamerobin.exe" /debug /pdb:"vcd\flamerobin.pdb" /nologo /subsystem:windows /machine:I386 /libpath:"$(WXDIR)\lib\vc_dll" /subsystem:windows
+# ADD LINK32 wxmsw28d_aui.lib wxmsw28d_stc.lib wxmsw28d_html.lib wxmsw28d_adv.lib wxmsw28d_core.lib wxbase28d_xml.lib wxbase28d.lib wxregexd.lib wxexpatd.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comctl32.lib rpcrt4.lib wsock32.lib vcd\ibpp.lib /nologo /machine:i386 /out:"vcd\flamerobin.exe" /debug /pdb:"vcd\flamerobin.pdb" /nologo /subsystem:windows /machine:I386 /libpath:"$(WXDIR)\lib\vc_dll" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "flamerobin - Win32 Unicode Release"
 
@@ -157,8 +157,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmsw29u_aui.lib wxmsw29u_stc.lib wxmsw29u_html.lib wxmsw29u_adv.lib wxmsw29u_core.lib wxbase29u_xml.lib wxbase29u.lib wxscintilla.lib wxregexu.lib wxexpat.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comctl32.lib rpcrt4.lib wsock32.lib vcu\ibpp.lib /nologo /machine:i386 /out:"vcu\flamerobin.exe" /pdb:"vcu\flamerobin.pdb" /nologo /subsystem:windows /machine:I386 /libpath:"$(WXDIR)\lib\vc_lib" /subsystem:windows
-# ADD LINK32 wxmsw29u_aui.lib wxmsw29u_stc.lib wxmsw29u_html.lib wxmsw29u_adv.lib wxmsw29u_core.lib wxbase29u_xml.lib wxbase29u.lib wxscintilla.lib wxregexu.lib wxexpat.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comctl32.lib rpcrt4.lib wsock32.lib vcu\ibpp.lib /nologo /machine:i386 /out:"vcu\flamerobin.exe" /pdb:"vcu\flamerobin.pdb" /nologo /subsystem:windows /machine:I386 /libpath:"$(WXDIR)\lib\vc_lib" /subsystem:windows
+# ADD BASE LINK32 wxmsw28u_aui.lib wxmsw28u_stc.lib wxmsw28u_html.lib wxmsw28u_adv.lib wxmsw28u_core.lib wxbase28u_xml.lib wxbase28u.lib wxregexu.lib wxexpat.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comctl32.lib rpcrt4.lib wsock32.lib vcu\ibpp.lib /nologo /machine:i386 /out:"vcu\flamerobin.exe" /pdb:"vcu\flamerobin.pdb" /nologo /subsystem:windows /machine:I386 /libpath:"$(WXDIR)\lib\vc_lib" /subsystem:windows
+# ADD LINK32 wxmsw28u_aui.lib wxmsw28u_stc.lib wxmsw28u_html.lib wxmsw28u_adv.lib wxmsw28u_core.lib wxbase28u_xml.lib wxbase28u.lib wxregexu.lib wxexpat.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comctl32.lib rpcrt4.lib wsock32.lib vcu\ibpp.lib /nologo /machine:i386 /out:"vcu\flamerobin.exe" /pdb:"vcu\flamerobin.pdb" /nologo /subsystem:windows /machine:I386 /libpath:"$(WXDIR)\lib\vc_lib" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "flamerobin - Win32 Unicode Debug"
 
@@ -182,8 +182,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmsw29ud_aui.lib wxmsw29ud_stc.lib wxmsw29ud_html.lib wxmsw29ud_adv.lib wxmsw29ud_core.lib wxbase29ud_xml.lib wxbase29ud.lib wxscintillad.lib wxregexud.lib wxexpatd.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comctl32.lib rpcrt4.lib wsock32.lib vcud\ibpp.lib /nologo /machine:i386 /out:"vcud\flamerobin.exe" /debug /pdb:"vcud\flamerobin.pdb" /nologo /subsystem:windows /machine:I386 /libpath:"$(WXDIR)\lib\vc_lib" /subsystem:windows
-# ADD LINK32 wxmsw29ud_aui.lib wxmsw29ud_stc.lib wxmsw29ud_html.lib wxmsw29ud_adv.lib wxmsw29ud_core.lib wxbase29ud_xml.lib wxbase29ud.lib wxscintillad.lib wxregexud.lib wxexpatd.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comctl32.lib rpcrt4.lib wsock32.lib vcud\ibpp.lib /nologo /machine:i386 /out:"vcud\flamerobin.exe" /debug /pdb:"vcud\flamerobin.pdb" /nologo /subsystem:windows /machine:I386 /libpath:"$(WXDIR)\lib\vc_lib" /subsystem:windows
+# ADD BASE LINK32 wxmsw28ud_aui.lib wxmsw28ud_stc.lib wxmsw28ud_html.lib wxmsw28ud_adv.lib wxmsw28ud_core.lib wxbase28ud_xml.lib wxbase28ud.lib wxregexud.lib wxexpatd.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comctl32.lib rpcrt4.lib wsock32.lib vcud\ibpp.lib /nologo /machine:i386 /out:"vcud\flamerobin.exe" /debug /pdb:"vcud\flamerobin.pdb" /nologo /subsystem:windows /machine:I386 /libpath:"$(WXDIR)\lib\vc_lib" /subsystem:windows
+# ADD LINK32 wxmsw28ud_aui.lib wxmsw28ud_stc.lib wxmsw28ud_html.lib wxmsw28ud_adv.lib wxmsw28ud_core.lib wxbase28ud_xml.lib wxbase28ud.lib wxregexud.lib wxexpatd.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comctl32.lib rpcrt4.lib wsock32.lib vcud\ibpp.lib /nologo /machine:i386 /out:"vcud\flamerobin.exe" /debug /pdb:"vcud\flamerobin.pdb" /nologo /subsystem:windows /machine:I386 /libpath:"$(WXDIR)\lib\vc_lib" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "flamerobin - Win32 Release"
 
@@ -207,8 +207,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmsw29_aui.lib wxmsw29_stc.lib wxmsw29_html.lib wxmsw29_adv.lib wxmsw29_core.lib wxbase29_xml.lib wxbase29.lib wxscintilla.lib wxregex.lib wxexpat.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comctl32.lib rpcrt4.lib wsock32.lib vc\ibpp.lib /nologo /machine:i386 /out:"vc\flamerobin.exe" /pdb:"vc\flamerobin.pdb" /nologo /subsystem:windows /machine:I386 /libpath:"$(WXDIR)\lib\vc_lib" /subsystem:windows
-# ADD LINK32 wxmsw29_aui.lib wxmsw29_stc.lib wxmsw29_html.lib wxmsw29_adv.lib wxmsw29_core.lib wxbase29_xml.lib wxbase29.lib wxscintilla.lib wxregex.lib wxexpat.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comctl32.lib rpcrt4.lib wsock32.lib vc\ibpp.lib /nologo /machine:i386 /out:"vc\flamerobin.exe" /pdb:"vc\flamerobin.pdb" /nologo /subsystem:windows /machine:I386 /libpath:"$(WXDIR)\lib\vc_lib" /subsystem:windows
+# ADD BASE LINK32 wxmsw28_aui.lib wxmsw28_stc.lib wxmsw28_html.lib wxmsw28_adv.lib wxmsw28_core.lib wxbase28_xml.lib wxbase28.lib wxregex.lib wxexpat.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comctl32.lib rpcrt4.lib wsock32.lib vc\ibpp.lib /nologo /machine:i386 /out:"vc\flamerobin.exe" /pdb:"vc\flamerobin.pdb" /nologo /subsystem:windows /machine:I386 /libpath:"$(WXDIR)\lib\vc_lib" /subsystem:windows
+# ADD LINK32 wxmsw28_aui.lib wxmsw28_stc.lib wxmsw28_html.lib wxmsw28_adv.lib wxmsw28_core.lib wxbase28_xml.lib wxbase28.lib wxregex.lib wxexpat.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comctl32.lib rpcrt4.lib wsock32.lib vc\ibpp.lib /nologo /machine:i386 /out:"vc\flamerobin.exe" /pdb:"vc\flamerobin.pdb" /nologo /subsystem:windows /machine:I386 /libpath:"$(WXDIR)\lib\vc_lib" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "flamerobin - Win32 Debug"
 
@@ -232,8 +232,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmsw29d_aui.lib wxmsw29d_stc.lib wxmsw29d_html.lib wxmsw29d_adv.lib wxmsw29d_core.lib wxbase29d_xml.lib wxbase29d.lib wxscintillad.lib wxregexd.lib wxexpatd.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comctl32.lib rpcrt4.lib wsock32.lib vcd\ibpp.lib /nologo /machine:i386 /out:"vcd\flamerobin.exe" /debug /pdb:"vcd\flamerobin.pdb" /nologo /subsystem:windows /machine:I386 /libpath:"$(WXDIR)\lib\vc_lib" /subsystem:windows
-# ADD LINK32 wxmsw29d_aui.lib wxmsw29d_stc.lib wxmsw29d_html.lib wxmsw29d_adv.lib wxmsw29d_core.lib wxbase29d_xml.lib wxbase29d.lib wxscintillad.lib wxregexd.lib wxexpatd.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comctl32.lib rpcrt4.lib wsock32.lib vcd\ibpp.lib /nologo /machine:i386 /out:"vcd\flamerobin.exe" /debug /pdb:"vcd\flamerobin.pdb" /nologo /subsystem:windows /machine:I386 /libpath:"$(WXDIR)\lib\vc_lib" /subsystem:windows
+# ADD BASE LINK32 wxmsw28d_aui.lib wxmsw28d_stc.lib wxmsw28d_html.lib wxmsw28d_adv.lib wxmsw28d_core.lib wxbase28d_xml.lib wxbase28d.lib wxregexd.lib wxexpatd.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comctl32.lib rpcrt4.lib wsock32.lib vcd\ibpp.lib /nologo /machine:i386 /out:"vcd\flamerobin.exe" /debug /pdb:"vcd\flamerobin.pdb" /nologo /subsystem:windows /machine:I386 /libpath:"$(WXDIR)\lib\vc_lib" /subsystem:windows
+# ADD LINK32 wxmsw28d_aui.lib wxmsw28d_stc.lib wxmsw28d_html.lib wxmsw28d_adv.lib wxmsw28d_core.lib wxbase28d_xml.lib wxbase28d.lib wxregexd.lib wxexpatd.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comctl32.lib rpcrt4.lib wsock32.lib vcd\ibpp.lib /nologo /machine:i386 /out:"vcd\flamerobin.exe" /debug /pdb:"vcd\flamerobin.pdb" /nologo /subsystem:windows /machine:I386 /libpath:"$(WXDIR)\lib\vc_lib" /subsystem:windows
 
 !ENDIF
 
@@ -292,11 +292,19 @@ SOURCE=.\src\hierarchy\Database.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\gui\DatabaseBackupPanel.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\commands\DatabaseCommands.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=.\src\engine\DatabaseConnection.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\gui\DatabaseRestorePanel.cpp
 # End Source File
 # Begin Source File
 
@@ -379,6 +387,10 @@ SOURCE=.\src\commands\ProcedureCommands.cpp
 # Begin Source File
 
 SOURCE=.\src\hierarchy\Relation.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\engine\ServiceConnection.cpp
 # End Source File
 # Begin Source File
 
@@ -490,7 +502,15 @@ SOURCE=.\src\hierarchy\Database.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\gui\DatabaseBackupPanel.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\engine\DatabaseConnection.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\gui\DatabaseRestorePanel.h
 # End Source File
 # Begin Source File
 
@@ -547,6 +567,10 @@ SOURCE=.\src\hierarchy\Procedure.h
 # Begin Source File
 
 SOURCE=.\src\hierarchy\Relation.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\engine\ServiceConnection.h
 # End Source File
 # Begin Source File
 
