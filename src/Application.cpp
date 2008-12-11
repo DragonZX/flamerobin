@@ -116,11 +116,10 @@ bool Application::OnInit()
 
     // first frame shows complete DBH, starting with global root node
     PSharedTreeRoot root = TreeRoot::get();
-    MainFrame* mf = new MainFrame(0, wxID_ANY, root);
-
     if (!root->loadHierarchy())
         root->createDefaultHierarchy();
 
+    MainFrame* mf = new MainFrame(0, wxID_ANY, root);
     SetTopWindow(mf);
     mf->Show();
 

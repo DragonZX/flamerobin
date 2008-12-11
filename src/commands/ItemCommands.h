@@ -34,14 +34,27 @@
 
 #include "hierarchy/SharedItems.h"
 //-----------------------------------------------------------------------------
-class ItemCommands;
+class wxAuiNotebook;
+class wxFrame;
 
+class ItemCommands;
+typedef boost::shared_ptr<ItemCommands> PSharedItemCommands;
+//-----------------------------------------------------------------------------
 class ItemCommandsFactory
 {
 protected:
     virtual ~ItemCommandsFactory() {};
 public:
-    virtual ItemCommands* createItemCommands(PSharedItem item) = 0;
+    virtual PSharedItemCommands createItemCommands(PSharedItem item) = 0;
+};
+//-----------------------------------------------------------------------------
+class ItemCommandsGUIAccessor
+{
+protected:
+    virtual ~ItemCommandsGUIAccessor();
+public:
+    virtual wxAuiNotebook* getNotebookForViews() = 0;
+    virtual wxFrame* getParentForViews() = 0;
 };
 //-----------------------------------------------------------------------------
 class ItemCommands : public wxEvtHandler
@@ -51,6 +64,7 @@ private:
     typedef TypeInfoFactoryMap::value_type TypeInfoFactoryPair;
     static TypeInfoFactoryMap& getFactories();
 
+    ItemCommandsGUIAccessor* accessorM;
     PSharedItem itemM;
 protected:
     ItemCommands(PSharedItem item);
@@ -65,10 +79,13 @@ public:
         ItemCommandsFactory* factory);
     static bool unregisterFactory(const std::type_info& info,
         ItemCommandsFactory* factory);
-    static ItemCommands* createItemCommands(PSharedItem item);
+    static PSharedItemCommands createItemCommands(PSharedItem item);
 
     virtual void addCommandsTo(wxMenu* menu, bool isContextMenu);
     PSharedItem getItem();
+
+    ItemCommandsGUIAccessor* getGUIAccessor() const;
+    void setGUIAccessor(ItemCommandsGUIAccessor* accessor);
 };
 //-----------------------------------------------------------------------------
 template<class T, class TC>
@@ -83,9 +100,9 @@ public:
     {
         ItemCommands::unregisterFactory(typeid(T), this);
     };
-    virtual ItemCommands* createItemCommands(PSharedItem item)
+    virtual PSharedItemCommands createItemCommands(PSharedItem item)
     {
-        return new TC(item);
+        return PSharedItemCommands(new TC(item));
     };
 };
 //-----------------------------------------------------------------------------

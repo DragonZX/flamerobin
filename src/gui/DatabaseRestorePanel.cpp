@@ -47,5 +47,38 @@ DatabaseRestorePanel::DatabaseRestorePanel(wxWindow* parent,
         PSharedDatabase database)
     : BaseViewPanel(parent), databaseM(database)
 {
+    new wxStaticText(this, wxID_ANY, wxT("ToDo: all controls need to go here..."));
+}
+//-----------------------------------------------------------------------------
+/*static*/
+DatabaseRestorePanel* DatabaseRestorePanel::createViewPanel(const wxString& id,
+    PSharedDatabase database, ItemCommandsGUIAccessor* accessor)
+{
+    wxCHECK_MSG(database, 0,
+        wxT("DatabaseRestorePanel::createViewPanel() called without database"));
+    wxCHECK_MSG(accessor, 0,
+        wxT("DatabaseRestorePanel::createViewPanel() called without GUI accessor"));
+
+// TODO: create panel in frame instead of notebook depending on user preference
+    wxAuiNotebook* notebook = accessor->getNotebookForViews();
+    wxCHECK_MSG(notebook, 0,
+        wxT("GUI accessor in DatabaseRestorePanel::createViewPanel() has no notebook"));
+
+    DatabaseRestorePanel* panel = new DatabaseRestorePanel(notebook, database);
+    panel->setId(id);
+
+    wxString caption(wxString::Format(_("Restore Database \"%s\""),
+        database->getName().c_str()));
+    notebook->AddPage(panel, caption, true);
+    notebook->Update();
+    return panel;
+}
+//-----------------------------------------------------------------------------
+/*static*/
+wxString DatabaseRestorePanel::getIdFromDatabase(const Database* database)
+{
+    wxCHECK_MSG(database != 0, wxT(""),
+        wxT("DatabaseRestorePanel::getIdFromDatabase() called without database"));
+    return wxT("DatabaseRestore/") + database->getItemPath();
 }
 //-----------------------------------------------------------------------------

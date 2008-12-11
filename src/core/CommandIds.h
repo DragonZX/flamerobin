@@ -31,8 +31,10 @@
 enum CmdIds {
   CmdIdFirst = 100,
 
-  CmdView_StatusBar = CmdIdFirst,
-  CmdView_SearchBar, CmdView_DisconnectedDatabases,
+  CmdView_ToolBarFirst = CmdIdFirst,
+  CmdView_ToolBarStandard = CmdView_ToolBarFirst,
+  // add IDs for other toolbars here
+  CmdView_ToolBarLast, CmdView_StatusBar,
   CmdView_RegisteredDatabases, CmdView_UnregisteredDatabases,
   CmdView_OpenInNewFrame,
 
@@ -42,8 +44,8 @@ enum CmdIds {
   CmdURL_HomePage = 150,
   CmdURL_ProjectPage, CmdURL_FeatureRequest, CmdURL_BugReport,
 
-  CmdFolder_ConnectAllDatabases = 160,
-  CmdFolder_DisconnectAllDatabases,
+  CmdFolder_Create = 160,
+  CmdFolder_ConnectAllDatabases, CmdFolder_DisconnectAllDatabases,
 
   CmdDatabase_Register = 200,
   CmdDatabase_Properties, CmdDatabase_RegistrationInfo, CmdDatabase_Unregister,

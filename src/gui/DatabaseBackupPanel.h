@@ -29,10 +29,9 @@
 #ifndef FR_DATABASEBACKUPPANEL_H
 #define FR_DATABASEBACKUPPANEL_H
 
+#include "commands/ItemCommands.h"
 #include "gui/BaseViewPanel.h"
 #include "hierarchy/SharedItems.h"
-
-class wxAuiNotebook;
 //-----------------------------------------------------------------------------
 class DatabaseBackupPanel: public BaseViewPanel
 {
@@ -40,6 +39,10 @@ private:
     PSharedDatabase databaseM;
 public:
     DatabaseBackupPanel(wxWindow* parent, PSharedDatabase database);
+
+    static DatabaseBackupPanel* createViewPanel(const wxString& id,
+        PSharedDatabase database, ItemCommandsGUIAccessor* accessor);
+    static wxString getIdFromDatabase(const Database* database);
 };
 //-----------------------------------------------------------------------------
 #endif // FR_DATABASEBACKUPPANEL_H

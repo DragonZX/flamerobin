@@ -711,6 +711,8 @@ void DBHTreeControl::createRootNode(PSharedItem rootItem)
     wxTreeItemId id = AppendItem(hiddenRootNodeM, wxEmptyString, -1, -1,
         nodeData);
     nodeData->setSharedItem(rootItem);
+    SelectItem(id);
+    Expand(id);
 }
 //-----------------------------------------------------------------------------
 PSharedItem DBHTreeControl::getItemFromId(wxTreeItemId id)
@@ -781,9 +783,8 @@ void DBHTreeControl::OnContextMenu(wxContextMenuEvent& event)
     if (!item)
         return;
     // make sure the ItemCommands object will be properly freed
-    boost::shared_ptr<ItemCommands> commands(
-        ItemCommands::createItemCommands(item));
-    if (commands)
+    PSharedItemCommands commands(ItemCommands::createItemCommands(item));
+    if (commands != 0)
     {
         // compute the menu coordinates if the event does not contain them
         if (useSelected)

@@ -38,6 +38,10 @@
 
 #include "commands/ItemCommands.h"
 #include "core/CommandIds.h"
+
+#include "gui/DatabaseBackupPanel.h"
+#include "gui/DatabaseRestorePanel.h"
+
 #include "hierarchy/Database.h"
 //-----------------------------------------------------------------------------
 // DatabaseCommands class
@@ -51,6 +55,7 @@ private:
     void OnDisconnectDatabase(wxCommandEvent& event);
     void OnRestoreDatabase(wxCommandEvent& event);
 
+    void DatabaseCanBackup(wxUpdateUIEvent& event);
     void DatabaseCanConnect(wxUpdateUIEvent& event);
     void DatabaseCanRestore(wxUpdateUIEvent& event);
     void DatabaseIsConnected(wxUpdateUIEvent& event);
@@ -95,11 +100,14 @@ void DatabaseCommands::addCommandsTo(wxMenu* menu, bool isContextMenu)
         menu->Append(CmdDatabase_Reconnect, _("Reconnec&t"));
         addSep = true;
     }
+    if (addSep)
+        menu->AppendSeparator();
+    menu->Append(CmdDatabase_Backup, _("&Backup database..."));
+    menu->Append(CmdDatabase_Restore, _("Rest&ore database..."));
 
     if (isContextMenu)
     {
-        if (addSep)
-            menu->AppendSeparator();
+        menu->AppendSeparator();
         menu->Append(CmdDatabase_ExecuteStatement,
             _("&Execute SQL statements"));
         menu->AppendSeparator();
@@ -110,7 +118,8 @@ void DatabaseCommands::addCommandsTo(wxMenu* menu, bool isContextMenu)
 BEGIN_EVENT_TABLE(DatabaseCommands, ItemCommands)
     EVT_MENU(CmdObject_DefaultAction, DatabaseCommands::OnConnectDatabase)
 // ???    EVT_UPDATE_UI(CmdObject_DefaultAction, DatabaseCommands::DatabaseCanConnect)
-    EVT_UPDATE_UI(CmdDatabase_Backup, ItemCommands::CommandIsEnabled)
+    EVT_MENU(CmdDatabase_Backup, DatabaseCommands::OnBackupDatabase)
+    EVT_UPDATE_UI(CmdDatabase_Backup, DatabaseCommands::DatabaseCanBackup)
     EVT_MENU(CmdDatabase_Connect, DatabaseCommands::OnConnectDatabase)
     EVT_UPDATE_UI(CmdDatabase_Connect, DatabaseCommands::DatabaseCanConnect)
     EVT_MENU(CmdDatabase_ConnectAs, DatabaseCommands::OnConnectDatabase)
@@ -118,8 +127,27 @@ BEGIN_EVENT_TABLE(DatabaseCommands, ItemCommands)
     EVT_MENU(CmdDatabase_Disconnect, DatabaseCommands::OnDisconnectDatabase)
     EVT_UPDATE_UI(CmdDatabase_Disconnect, DatabaseCommands::DatabaseIsConnected)
     EVT_UPDATE_UI(CmdView_OpenInNewFrame, ItemCommands::CommandIsEnabled)
+    EVT_MENU(CmdDatabase_Restore, DatabaseCommands::OnRestoreDatabase)
     EVT_UPDATE_UI(CmdDatabase_Restore, DatabaseCommands::DatabaseCanRestore)
 END_EVENT_TABLE()
+//-----------------------------------------------------------------------------
+void DatabaseCommands::OnBackupDatabase(wxCommandEvent& /*event*/)
+{
+    wxCHECK_RET(databaseM != 0,
+        wxT("DatabaseCommands::OnBackupDatabase() called without database"));
+
+    wxString id(DatabaseBackupPanel::getIdFromDatabase(databaseM));
+    if (BaseViewPanel::activateViewPanel(id))
+        return;
+
+    DatabaseBackupPanel::createViewPanel(id,
+        boost::dynamic_pointer_cast<Database>(getItem()), getGUIAccessor());
+}
+//-----------------------------------------------------------------------------
+void DatabaseCommands::DatabaseCanBackup(wxUpdateUIEvent& event)
+{
+    event.Enable(databaseM != 0);
+}
 //-----------------------------------------------------------------------------
 void DatabaseCommands::OnConnectDatabase(wxCommandEvent& event)
 {
@@ -144,6 +172,24 @@ void DatabaseCommands::DatabaseCanConnect(wxUpdateUIEvent& event)
     event.Enable(databaseM && databaseM->canConnect());
 }
 //-----------------------------------------------------------------------------
+void DatabaseCommands::DatabaseIsConnected(wxUpdateUIEvent& event)
+{
+    event.Enable(databaseM && databaseM->isConnected());
+}
+//-----------------------------------------------------------------------------
+void DatabaseCommands::OnRestoreDatabase(wxCommandEvent& /*event*/)
+{
+    wxCHECK_RET(databaseM != 0,
+        wxT("DatabaseCommands::OnRestoreDatabase() called without database"));
+
+    wxString id(DatabaseRestorePanel::getIdFromDatabase(databaseM));
+    if (BaseViewPanel::activateViewPanel(id))
+        return;
+
+    DatabaseRestorePanel::createViewPanel(id,
+        boost::dynamic_pointer_cast<Database>(getItem()), getGUIAccessor());
+}
+//-----------------------------------------------------------------------------
 void DatabaseCommands::DatabaseCanRestore(wxUpdateUIEvent& event)
 {
     if (databaseM)
@@ -158,11 +204,6 @@ void DatabaseCommands::DatabaseCanRestore(wxUpdateUIEvent& event)
         }
     }
     event.Enable(false);
-}
-//-----------------------------------------------------------------------------
-void DatabaseCommands::DatabaseIsConnected(wxUpdateUIEvent& event)
-{
-    event.Enable(databaseM && databaseM->isConnected());
 }
 //-----------------------------------------------------------------------------
 static const ItemCommandsFactoryImpl<Database, DatabaseCommands> factory;

@@ -37,9 +37,15 @@
 #endif
 
 #include "commands/ItemCommands.h"
-
+// ATTENTION: These are *VERY* important, even though the classes are not
+//            directly used here - mapping between concrete item classes and
+//            the command factories requires inclusion of the headers !!!
 #include "hierarchy/Database.h"
 #include "hierarchy/Table.h"
+//-----------------------------------------------------------------------------
+ItemCommandsGUIAccessor::~ItemCommandsGUIAccessor()
+{
+}
 //-----------------------------------------------------------------------------
 /*static*/
 ItemCommands::TypeInfoFactoryMap& ItemCommands::getFactories()
@@ -75,21 +81,22 @@ bool ItemCommands::unregisterFactory(const std::type_info& info,
 }
 //-----------------------------------------------------------------------------
 /*static*/
-ItemCommands* ItemCommands::createItemCommands(PSharedItem item)
+PSharedItemCommands ItemCommands::createItemCommands(PSharedItem item)
 {
-    if (!item)
-        return 0;
-    const std::type_info& info = typeid(*item.get());
-    TypeInfoFactoryMap& factories(getFactories());
+    if (item != 0)
+    {
+        const std::type_info& info = typeid(*item.get());
+        TypeInfoFactoryMap& factories(getFactories());
 
-    TypeInfoFactoryMap::iterator it = factories.find((void*)&info);
-    if (it != factories.end())
-        return ((*it).second)->createItemCommands(item);
-    return 0;
+        TypeInfoFactoryMap::iterator it = factories.find((void*)&info);
+        if (it != factories.end())
+            return ((*it).second)->createItemCommands(item);
+    }
+    return PSharedItemCommands();
 }
 //-----------------------------------------------------------------------------
 ItemCommands::ItemCommands(PSharedItem item)
-    : wxEvtHandler(), itemM(item)
+    : wxEvtHandler(), accessorM(0), itemM(item)
 {
 }
 //-----------------------------------------------------------------------------
@@ -120,5 +127,15 @@ void ItemCommands::CommandIsEnabled(wxUpdateUIEvent& event)
 void ItemCommands::CommandIsEnabledIfHasChildItems(wxUpdateUIEvent& event)
 {
     event.Enable(hasChildItems());
+}
+//-----------------------------------------------------------------------------
+ItemCommandsGUIAccessor* ItemCommands::getGUIAccessor() const
+{
+    return accessorM;
+}
+//-----------------------------------------------------------------------------
+void ItemCommands::setGUIAccessor(ItemCommandsGUIAccessor* accessor)
+{
+    accessorM = accessor;
 }
 //-----------------------------------------------------------------------------

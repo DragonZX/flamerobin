@@ -34,11 +34,9 @@
 #include "gui/BaseFrame.h"
 #include "gui/controls/DBHTreeControl.h"
 
-#include "hierarchy/SharedItems.h"
-
-class ItemCommands;
+#include "commands/ItemCommands.h"
 //-----------------------------------------------------------------------------
-class MainFrame : public BaseFrame
+class MainFrame : public BaseFrame, ItemCommandsGUIAccessor
 {
 public:
     // the treeRootItem parameter could be used to open secondary instances
@@ -49,6 +47,10 @@ public:
 
     bool openUnregisteredDatabase(const wxString& dbpath);
 
+public:
+    // ItemCommandsGUIAccessor
+    virtual wxAuiNotebook* getNotebookForViews();
+    virtual wxFrame* getParentForViews();
 protected:
     virtual void doReadConfigSettings(const wxString& prefix);
     virtual void doWriteConfigSettings(const wxString& prefix) const;
@@ -61,7 +63,7 @@ private:
     DBHTreeControl* treeUnregisteredDatabasesM;
     wxAuiNotebook* auiNotebookM;
 
-    ItemCommands* selectedItemCommandsM;
+    PSharedItemCommands selectedItemCommandsM;
     void setSelectedItem(PSharedItem selectedItem);
     Database* getSelectedDatabase();
     bool isMainFrameM;
@@ -82,6 +84,10 @@ private:
 
     // View menu
     void OnViewPane(wxCommandEvent& event);
+    void OnViewStatusBar(wxCommandEvent& event);
+    void OnUpdateViewStatusBar(wxUpdateUIEvent& event);
+    void OnViewToolBar(wxCommandEvent& event);
+    void OnUpdateViewToolBar(wxUpdateUIEvent& event);
 
     // Help menu
     void OnHelpAbout(wxCommandEvent& event);

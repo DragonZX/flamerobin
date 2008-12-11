@@ -42,8 +42,6 @@
 
 #include <memory>
 
-#include "commands/ItemCommands.h"
-
 #include "config/Config.h"
 
 #include "core/ArtProvider.h"
@@ -63,7 +61,7 @@ MainFrame::MainFrame(wxWindow* parent, int id, PSharedItem treeRootItem)
     : BaseFrame(parent, id, _("FlameRobin Database Admin [Multithreaded]")),
         auiManagerM(), auiToolbarM(0), treeRegisteredDatabasesM(0),
         treeUnregisteredDatabasesM(0), auiNotebookM(0),
-        selectedItemCommandsM(0)
+        selectedItemCommandsM()
 {
     isMainFrameM = TreeRoot::get() == treeRootItem;
 
@@ -83,6 +81,7 @@ MainFrame::MainFrame(wxWindow* parent, int id, PSharedItem treeRootItem)
         if (!rootName.empty())
             SetTitle(GetTitle() + wxT(" - ") + rootName);
     }
+    updateStatusBar();
 
 //    treeUnregisteredDatabasesM->createRootNode(PSharedItem());
 }
@@ -143,17 +142,25 @@ void MainFrame::createMenu()
     bar->Append(menu.release(), _("&Edit"));
     // View menu
     menu.reset(new wxMenu);
+/* FIXME: this does not work, for whatever reason... find out later!
+    std::auto_ptr<wxMenu> subMenu(new wxMenu);
+    subMenu->AppendCheckItem(CmdView_ToolBarStandard, _("&Standard"));
+    menu->Append(CmdView_ToolBarSubMenu, _("&Tool Bars"), subMenu.release());
+*/
+    menu->AppendCheckItem(CmdView_ToolBarStandard, _("&Tool Bar"));
+
+    menu->AppendSeparator();
     menu->Append(CmdView_RegisteredDatabases, _("&Registered Databases"));
     menu->Append(CmdView_UnregisteredDatabases, _("&Unregistered Databases"));
     menu->AppendSeparator();
-    menu->Append(CmdView_StatusBar, _("&Status Bar"));
+    menu->AppendCheckItem(CmdView_StatusBar, _("&Status Bar"));
     bar->Append(menu.release(), _("&View"));
     // Database menu
     menu.reset(new wxMenu);
     // use a dummy database and matching commands object to populate
     // the database menu
     PSharedDatabase db(new Database);
-    std::auto_ptr<ItemCommands> dbCmds(ItemCommands::createItemCommands(db));
+    PSharedItemCommands dbCmds = ItemCommands::createItemCommands(db);
     dbCmds->addCommandsTo(menu.get(), false);
     dbCmds.reset();
     db.reset();
@@ -298,18 +305,23 @@ void MainFrame::setSelectedItem(PSharedItem selectedItem)
         // delete event handler for previously selected item
         if (selectedItemCommandsM)
         {
+            wxASSERT(this == selectedItemCommandsM->getGUIAccessor());
+            selectedItemCommandsM->setGUIAccessor(0);
+
             wxEvtHandler* handler = PopEventHandler();
-            wxASSERT(handler == selectedItemCommandsM);
-            delete selectedItemCommandsM;
-            selectedItemCommandsM = 0;
+            wxASSERT(handler == selectedItemCommandsM.get());
+            selectedItemCommandsM = PSharedItemCommands();
         }
         // create and push event handler for newly selected item
         if (selectedItem)
         {
             selectedItemCommandsM =
                 ItemCommands::createItemCommands(selectedItem);
-            if (selectedItemCommandsM)
-                PushEventHandler(selectedItemCommandsM);
+            if (selectedItemCommandsM != 0)
+            {
+                selectedItemCommandsM->setGUIAccessor(this);
+                PushEventHandler(selectedItemCommandsM.get());
+            }
         }
         updateStatusBar();
     }
@@ -348,6 +360,17 @@ void MainFrame::openUrlExternal(const wxString& url)
         wxLogError(_T("Failed to open URL \"%s\""), url.c_str());
 }
 //-----------------------------------------------------------------------------
+// ItemCommandsGUIAccessor
+wxAuiNotebook* MainFrame::getNotebookForViews()
+{
+    return auiNotebookM;
+}
+//-----------------------------------------------------------------------------
+wxFrame* MainFrame::getParentForViews()
+{
+    return this;
+}
+//-----------------------------------------------------------------------------
 // static event table
 BEGIN_EVENT_TABLE(MainFrame, wxFrame)
     // File menu
@@ -357,6 +380,10 @@ BEGIN_EVENT_TABLE(MainFrame, wxFrame)
     // View menu
     EVT_MENU_RANGE(CmdView_RegisteredDatabases, CmdView_UnregisteredDatabases, MainFrame::OnViewPane)
     EVT_UPDATE_UI_RANGE(CmdView_RegisteredDatabases, CmdView_UnregisteredDatabases, MainFrame::OnUpdateUIEnable)
+    EVT_MENU(CmdView_StatusBar, MainFrame::OnViewStatusBar)
+    EVT_UPDATE_UI(CmdView_StatusBar, MainFrame::OnUpdateViewStatusBar)
+    EVT_MENU_RANGE(CmdView_ToolBarFirst, CmdView_ToolBarLast, MainFrame::OnViewToolBar)
+    EVT_UPDATE_UI_RANGE(CmdView_ToolBarFirst, CmdView_ToolBarLast, MainFrame::OnUpdateViewToolBar)
 
     // Help menu
     EVT_MENU(CmdHelp_Manual, MainFrame::OnHelpManual)
@@ -377,7 +404,7 @@ BEGIN_EVENT_TABLE(MainFrame, wxFrame)
     EVT_UPDATE_UI(CmdView_OpenInNewFrame, MainFrame::OnUpdateUIEnable)
 END_EVENT_TABLE()
 //-----------------------------------------------------------------------------
-// event handler methods
+// event handler methods: File menu
 void MainFrame::OnFileExit(wxCommandEvent& /*event*/)
 {
     Close();
@@ -397,7 +424,49 @@ void MainFrame::OnViewPane(wxCommandEvent& event)
     {
         info.Show();
         auiManagerM.Update();
+        pane->SetFocus();
     }
+}
+//-----------------------------------------------------------------------------
+void MainFrame::OnViewStatusBar(wxCommandEvent& /*event*/)
+{
+    if (wxStatusBar* sbar = GetStatusBar())
+    {
+        sbar->Show(!sbar->IsShown());
+        SendSizeEvent();
+    }
+}
+//-----------------------------------------------------------------------------
+void MainFrame::OnUpdateViewStatusBar(wxUpdateUIEvent& event)
+{
+    wxStatusBar* sbar = GetStatusBar();
+    event.Enable(sbar != 0);
+    event.Check(sbar && sbar->IsShown());
+}
+//-----------------------------------------------------------------------------
+void MainFrame::OnViewToolBar(wxCommandEvent& event)
+{
+    wxWindow* tbar = 0;
+    if (event.GetId() == CmdView_ToolBarStandard)
+        tbar = auiToolbarM;
+
+    wxAuiPaneInfo& info = auiManagerM.GetPane(tbar);
+    if (info.IsOk())
+    {
+        info.Show(!info.IsShown());
+        auiManagerM.Update();
+    }
+}
+//-----------------------------------------------------------------------------
+void MainFrame::OnUpdateViewToolBar(wxUpdateUIEvent& event)
+{
+    wxWindow* tbar = 0;
+    if (event.GetId() == CmdView_ToolBarStandard)
+        tbar = auiToolbarM;
+
+    wxAuiPaneInfo& info = auiManagerM.GetPane(tbar);
+    event.Enable(info.IsOk());
+    event.Check(info.IsOk() && info.IsShown());
 }
 //-----------------------------------------------------------------------------
 // Help menu

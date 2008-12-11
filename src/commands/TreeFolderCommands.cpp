@@ -77,8 +77,11 @@ void TreeFolderCommands::addCommandsTo(wxMenu* menu, bool isContextMenu)
         wxT("TreeFolderCommands::addCommandsTo() called without menu"));
     wxCHECK_RET(folderM,
         wxT("TreeFolderCommands::addCommandsTo() called without folder"));
+    // code needs to be adjusted if there ever is a main menu for folders
     wxASSERT(isContextMenu);
 
+    menu->Append(CmdFolder_Create, _("Create new &folder..."));
+    menu->AppendSeparator();
     menu->Append(CmdDatabase_Create, _("Create &new database..."));
     menu->Append(CmdDatabase_RestoreIntoNew,
         _("Restore bac&kup into new database..."));
@@ -94,6 +97,7 @@ void TreeFolderCommands::addCommandsTo(wxMenu* menu, bool isContextMenu)
 }
 //-----------------------------------------------------------------------------
 BEGIN_EVENT_TABLE(TreeFolderCommands, ItemCommands)
+    EVT_UPDATE_UI(CmdFolder_Create, ItemCommands::CommandIsEnabled)
     EVT_MENU(CmdDatabase_Create, TreeFolderCommands::OnCreateDatabase)
     EVT_UPDATE_UI(CmdDatabase_Create, ItemCommands::CommandIsEnabled)
     EVT_MENU(CmdDatabase_RestoreIntoNew, TreeFolderCommands::OnCreateDatabaseRestoreBackup)
