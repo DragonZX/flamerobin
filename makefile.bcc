@@ -104,6 +104,9 @@ FLAMEROBIN_OBJECTS =  \
 	bcc$(U_OPT)$(D_OPT)\flamerobin_MainFrame.obj \
 	bcc$(U_OPT)$(D_OPT)\flamerobin_StyleGuide.obj \
 	bcc$(U_OPT)$(D_OPT)\flamerobin_DBHTreeControl.obj \
+	bcc$(U_OPT)$(D_OPT)\flamerobin_DndTextControls.obj \
+	bcc$(U_OPT)$(D_OPT)\flamerobin_LogTextControl.obj \
+	bcc$(U_OPT)$(D_OPT)\flamerobin_TextControl.obj \
 	bcc$(U_OPT)$(D_OPT)\flamerobin_Column.obj \
 	bcc$(U_OPT)$(D_OPT)\flamerobin_Database.obj \
 	bcc$(U_OPT)$(D_OPT)\flamerobin_Domain.obj \
@@ -327,6 +330,15 @@ bcc$(U_OPT)$(D_OPT)\flamerobin_StyleGuide.obj: .\src\gui\StyleGuide.cpp
 
 bcc$(U_OPT)$(D_OPT)\flamerobin_DBHTreeControl.obj: .\src\gui\controls\DBHTreeControl.cpp
 	$(CXX) -q -c -P -o$@ $(FLAMEROBIN_CXXFLAGS) .\src\gui\controls\DBHTreeControl.cpp
+
+bcc$(U_OPT)$(D_OPT)\flamerobin_DndTextControls.obj: .\src\gui\controls\DndTextControls.cpp
+	$(CXX) -q -c -P -o$@ $(FLAMEROBIN_CXXFLAGS) .\src\gui\controls\DndTextControls.cpp
+
+bcc$(U_OPT)$(D_OPT)\flamerobin_LogTextControl.obj: .\src\gui\controls\LogTextControl.cpp
+	$(CXX) -q -c -P -o$@ $(FLAMEROBIN_CXXFLAGS) .\src\gui\controls\LogTextControl.cpp
+
+bcc$(U_OPT)$(D_OPT)\flamerobin_TextControl.obj: .\src\gui\controls\TextControl.cpp
+	$(CXX) -q -c -P -o$@ $(FLAMEROBIN_CXXFLAGS) .\src\gui\controls\TextControl.cpp
 
 bcc$(U_OPT)$(D_OPT)\flamerobin_Column.obj: .\src\hierarchy\Column.cpp
 	$(CXX) -q -c -P -o$@ $(FLAMEROBIN_CXXFLAGS) .\src\hierarchy\Column.cpp

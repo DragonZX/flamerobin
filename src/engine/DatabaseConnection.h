@@ -90,11 +90,11 @@ class DatabaseConnection: public WorkerThreadEngine<SharedDBCThreadJob>
 {
 private:
     Database& databaseM;
+    DatabaseConnection(Database& database);
+    friend class Database;
 protected:
     virtual WorkerThread<SharedDBCThreadJob>* createWorkerThread();
 public:
-    DatabaseConnection(Database& database);
-
     void connect();
     void disconnect();
 

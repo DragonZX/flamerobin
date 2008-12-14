@@ -75,6 +75,9 @@ FLAMEROBIN_OBJECTS =  \
 	flamerobin_MainFrame.o \
 	flamerobin_StyleGuide.o \
 	flamerobin_DBHTreeControl.o \
+	flamerobin_DndTextControls.o \
+	flamerobin_LogTextControl.o \
+	flamerobin_TextControl.o \
 	flamerobin_Column.o \
 	flamerobin_Database.o \
 	flamerobin_Domain.o \
@@ -348,6 +351,15 @@ flamerobin_StyleGuide.o: $(srcdir)/src/gui/StyleGuide.cpp $(FLAMEROBIN_ODEP)
 
 flamerobin_DBHTreeControl.o: $(srcdir)/src/gui/controls/DBHTreeControl.cpp $(FLAMEROBIN_ODEP)
 	$(CXXC) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(srcdir)/src/gui/controls/DBHTreeControl.cpp
+
+flamerobin_DndTextControls.o: $(srcdir)/src/gui/controls/DndTextControls.cpp $(FLAMEROBIN_ODEP)
+	$(CXXC) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(srcdir)/src/gui/controls/DndTextControls.cpp
+
+flamerobin_LogTextControl.o: $(srcdir)/src/gui/controls/LogTextControl.cpp $(FLAMEROBIN_ODEP)
+	$(CXXC) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(srcdir)/src/gui/controls/LogTextControl.cpp
+
+flamerobin_TextControl.o: $(srcdir)/src/gui/controls/TextControl.cpp $(FLAMEROBIN_ODEP)
+	$(CXXC) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(srcdir)/src/gui/controls/TextControl.cpp
 
 flamerobin_Column.o: $(srcdir)/src/hierarchy/Column.cpp $(FLAMEROBIN_ODEP)
 	$(CXXC) -c -o $@ $(FLAMEROBIN_CXXFLAGS) $(srcdir)/src/hierarchy/Column.cpp

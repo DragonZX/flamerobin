@@ -44,6 +44,7 @@
 #include <sstream>
 #include <vector>
 #include <boost/shared_ptr.hpp>
+#include <boost/lexical_cast.hpp>
 
 #include "commands/ItemCommands.h"
 
@@ -420,9 +421,8 @@ void DBHItemTreeNodeProperties::visit(Generator& generator)
     visitItem(&generator);
     if (generator.isValueLoaded())
     {
-        std::ostringstream ss;
-        ss << " = " << generator.getValue();
-        captionM += std2wx(ss.str());
+        std::string v = boost::lexical_cast<std::string>(generator.getValue());
+        captionM += std2wx(" = " + v);
     }
     imageIndexM = DBHTreeImageList::get().getImageIndex(ART_Generator);
 }
@@ -632,11 +632,11 @@ void DBHTreeNode::update()
         wxTreeItemId childItemId = findChildIdForItem(childItem);
         if (!childItemId.IsOk())
         {
-            DBHTreeNode* nodeData = new DBHTreeNode(treeM);
             if (prevChildId.IsOk())
                 prevChildId = treeM.InsertItem(id, prevChildId, wxEmptyString);
             else
                 prevChildId = treeM.PrependItem(id, wxEmptyString);
+            DBHTreeNode* nodeData = new DBHTreeNode(treeM);
             treeM.SetItemData(prevChildId, nodeData);
             // this will call update()
             nodeData->setSharedItem(childItem);

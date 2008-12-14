@@ -156,7 +156,7 @@ DatabaseConnectJob::DatabaseConnectJob(Database& database)
 {
     wxASSERT(wxIsMainThread());
 
-    DatabaseCredentials dbc(database.getCredentials());
+    const DatabaseCredentials& dbc = database.getCredentials();
     charsetM = wx2std(dbc.getCharset());
     connectionStringM = wx2std(getDatabase().getConnectionString());
     passwordM = wx2std(dbc.getRawPassword());

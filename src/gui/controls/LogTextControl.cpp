@@ -38,71 +38,49 @@
     #include "wx/wx.h"
 #endif
 
-#include <wx/aui/aui.h>
-#include <wx/html/htmlwin.h>
-
-#include <memory>
-
-#include "gui/HtmlViewPanel.h"
+#include "gui/controls/LogTextControl.h"
 //-----------------------------------------------------------------------------
-/*static*/
-HtmlViewPanel* HtmlViewPanel::createViewInFrame(const wxString& id,
-    wxWindow* parent, const wxString& caption)
+LogTextControl::LogTextControl(wxWindow *parent, wxWindowID id, long style)
+    : TextControl(parent, id, style)
 {
-    // use two step creation for minimal flicker
-    wxFrame* frame = new wxFrame();
-    frame->Hide();
-    frame->Create(parent, wxID_ANY, caption);
-
-    HtmlViewPanel* panel = new HtmlViewPanel(frame);
-    panel->setId(id);
-    panel->Show();
-
-    frame->Show();
-    frame->Update();
-    return panel;
+    setDefaultStyles();
 }
 //-----------------------------------------------------------------------------
-/*static*/
-HtmlViewPanel* HtmlViewPanel::createViewInNotebook(const wxString& id,
-    wxAuiNotebook* notebook, const wxString& caption)
+void LogTextControl::addStyledText(const wxString& message, LogStyle style)
 {
-    wxCHECK_MSG(notebook, 0,
-        wxT("HtmlViewPanel::createViewInNotebook called without notebook"));
-
-    HtmlViewPanel* panel = new HtmlViewPanel(notebook);
-    panel->setId(id);
-    notebook->AddPage(panel, caption, true);
-    notebook->Update();
-    return panel;
+    // This implements the typical behaviour for log text controls:
+    // When the caret is at the end of the text it will be kept there, keeping
+    // the last logged text visible.
+    // Otherwise the caret position is not altered, so user can navigate
+    // in the already logged text.
+    int lenBefore = GetLength();
+    bool atEnd = lenBefore == GetCurrentPos();
+    AppendText(message);
+    int len = GetLength();
+    StartStyling(lenBefore, 255);
+    SetStyling(len - lenBefore - 1, int(style));
+    if (atEnd)
+        GotoPos(len);
 }
 //-----------------------------------------------------------------------------
-/*static*/
-wxString HtmlViewPanel::getIdFromFileName(const wxString& filename)
+void LogTextControl::logErrorMsg(const wxString& message)
 {
-    return wxT("HtmlView/File/") + filename;
+    addStyledText(message, logStyleError);
 }
 //-----------------------------------------------------------------------------
-HtmlViewPanel::HtmlViewPanel(wxWindow* parent, wxWindowID id)
-    : BaseViewPanel(parent, id)
+void LogTextControl::logImportantMsg(const wxString& message)
 {
-    htmlWindowM = new wxHtmlWindow(this);
-    wxString htmlSource(wxT("<html><body>"));
-    htmlSource += _("Please wait while the page is being loaded...");
-    htmlSource += wxT("</body></html>");
-    htmlWindowM->SetPage(htmlSource);
-
-    std::auto_ptr<wxBoxSizer> sizer(new wxBoxSizer(wxHORIZONTAL));
-    sizer->Add(htmlWindowM, 1, wxEXPAND);
-    SetSizerAndFit(sizer.release());
+    addStyledText(message, logStyleImportant);
 }
 //-----------------------------------------------------------------------------
-bool HtmlViewPanel::loadFromFile(const wxFileName& filename)
+void LogTextControl::logMsg(const wxString& message)
 {
-    fileNameM.Clear();
-    bool success = htmlWindowM->LoadFile(filename);
-    if (success)
-        fileNameM = filename;
-    return success;
+    addStyledText(message, logStyleDefault);
+}
+//-----------------------------------------------------------------------------
+void LogTextControl::setDefaultStyles()
+{
+    StyleSetForeground(int(logStyleImportant), *wxBLUE);
+    StyleSetForeground(int(logStyleError), *wxRED);
 }
 //-----------------------------------------------------------------------------

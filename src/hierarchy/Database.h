@@ -71,7 +71,7 @@ public:
     void setRawPassword(const wxString& password);
     void setAskForPassword(bool askForPassword);
     void setRole(const wxString& role);
-    bool operator!= (DatabaseCredentials& rhs) const;
+    bool operator!= (const DatabaseCredentials& rhs) const;
 };
 //-----------------------------------------------------------------------------
 // Database class
@@ -100,7 +100,7 @@ public:
 
     const DatabaseCredentials& getCredentials() const;
     void setCredentials(DatabaseCredentials dbc);
-    void setTemporaryCredentials(DatabaseCredentials dbc);
+    void setTemporaryCredentials(const DatabaseCredentials& dbc);
     void resetTemporaryCredentials();
     void setStoreEncryptedPassword(bool encrypted);
 
@@ -114,22 +114,25 @@ public:
     bool isConnected() const;
     ConnectionState getConnectionState() const;
     void setConnectionState(ConnectionState state);
+    bool canRestoreFromBackup() const;
 
     void setServerVersion(const wxString& versionString);
 
     DatabaseConnection* getMetadataConnection();
 
     virtual void accept(ItemVisitor* visitor);
+
+    static wxArrayString getAvailablePageSizes();
 private:
     mutable unsigned idM;
     DatabaseCredentials credentialsM;
-    DatabaseCredentials* tempCredentialsM;
+    boost::shared_ptr<DatabaseCredentials> tempCredentialsM;
     bool encryptedPasswordM;
 
     wxString connectionStringM;
 
     ConnectionState connectionStateM;
-    DatabaseConnection* metadataConnectionM;
+    boost::shared_ptr<DatabaseConnection> metadataConnectionM;
     ServerVersion serverVersionM;
 
     PSharedDomainCollection domainsM;

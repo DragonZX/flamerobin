@@ -241,6 +241,7 @@ void Application::OnUpdateUIDisable(wxUpdateUIEvent& event)
     }
     // disable FlameRobin commands that have not been enabled yet,
     // enable everything else
-    event.Enable(evtId < CmdIdFirst || evtId > CmdIdLast);
+    if (evtId >= CmdIdFirst && evtId <= CmdIdLast)
+        event.Enable(false);
 }
 //-----------------------------------------------------------------------------

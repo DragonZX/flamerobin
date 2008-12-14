@@ -41,6 +41,7 @@
 #include "core/StringUtils.h"
 
 #include "engine/DatabaseConnection.h"
+#include "engine/ServiceConnection.h"
 
 #include "hierarchy/Database.h"
 #include "hierarchy/Domain.h"
@@ -159,7 +160,7 @@ void DatabaseCredentials::setRole(const wxString& role)
     roleM = role;
 }
 //-----------------------------------------------------------------------------
-bool DatabaseCredentials::operator!= (DatabaseCredentials& rhs) const
+bool DatabaseCredentials::operator!= (const DatabaseCredentials& rhs) const
 {
     return (rhs.charsetM != charsetM) || (rhs.usernameM != usernameM)
         || (rhs.passwordM != passwordM) || (rhs.roleM != roleM);
@@ -167,21 +168,17 @@ bool DatabaseCredentials::operator!= (DatabaseCredentials& rhs) const
 //-----------------------------------------------------------------------------
 // Database class
 Database::Database()
-    : ItemWithChildrenBase(), idM(0), tempCredentialsM(0),
-        encryptedPasswordM(false), connectionStateM(csDisconnected),
-        metadataConnectionM(0)
+    : ItemWithChildrenBase(), idM(0), encryptedPasswordM(false),
+        connectionStateM(csDisconnected)
 {
+    // children are all static collections of metadata objects
     setLoadChildrenState(lcsLoaded);
 }
 //-----------------------------------------------------------------------------
 Database::~Database()
 {
-    if (metadataConnectionM)
-    {
-        delete metadataConnectionM;
-        metadataConnectionM = 0;
-        setConnectionState(csDisconnected);
-    }
+    metadataConnectionM.reset();
+    setConnectionState(csDisconnected);
 
     detachAllObservers();
     resetTemporaryCredentials();
@@ -268,20 +265,14 @@ void Database::setCredentials(DatabaseCredentials dbc)
     }
 }
 //-----------------------------------------------------------------------------
-void Database::setTemporaryCredentials(DatabaseCredentials dbc)
+void Database::setTemporaryCredentials(const DatabaseCredentials& dbc)
 {
     wxCHECK_RET(!isConnected(), 
         wxT("Database::setTemporaryCredentials() called while connected"));
-    if (!tempCredentialsM)
+    // if no existing or different temporary credentials, then create new
+    if (!tempCredentialsM || *tempCredentialsM != dbc)
     {
-        // create new temporary Credentials
-        tempCredentialsM = new DatabaseCredentials(dbc);
-        notifyObservers();
-    }
-    else if (*tempCredentialsM != dbc)
-    {
-        // assign to already existing temporary Credentials
-        *tempCredentialsM = dbc;
+        tempCredentialsM.reset(new DatabaseCredentials(dbc));
         notifyObservers();
     }
 }
@@ -292,8 +283,7 @@ void Database::resetTemporaryCredentials()
         wxT("Database::resetTemporaryCredentials() called while connected"));
     if (tempCredentialsM)
     {
-        delete tempCredentialsM;
-        tempCredentialsM = 0;
+        tempCredentialsM.reset();
         notifyObservers();
     }
 }
@@ -305,7 +295,7 @@ void Database::setStoreEncryptedPassword(bool encrypted)
 //-----------------------------------------------------------------------------
 DatabaseConnection* Database::getMetadataConnection()
 {
-    return metadataConnectionM;
+    return metadataConnectionM.get();
 }
 //-----------------------------------------------------------------------------
 void Database::accept(ItemVisitor* visitor)
@@ -328,7 +318,7 @@ void Database::connect()
     {
         // setConnectionState() checks for valid metadataConnectionM...
         if (!metadataConnectionM)
-            metadataConnectionM = new DatabaseConnection(*this);
+            metadataConnectionM.reset(new DatabaseConnection(*this));
         setConnectionState(csConnecting);
         metadataConnectionM->connect();
     }
@@ -373,6 +363,13 @@ void Database::setConnectionState(ConnectionState state)
         }
         notifyObservers();
     }
+}
+//-----------------------------------------------------------------------------
+bool Database::canRestoreFromBackup() const
+{
+    return connectionStateM == csDisconnected
+        || connectionStateM == csConnectionFailed
+        || connectionStateM == csRestoreFailed;
 }
 //-----------------------------------------------------------------------------
 void Database::setServerVersion(const wxString& versionString)
@@ -455,5 +452,19 @@ Domain* Database::getDomain(const Identifier& identifier)
     if (systemDomainsM)
         domain = systemDomainsM->getDomain(identifier);
     return domain;
+}
+//-----------------------------------------------------------------------------
+/*static*/
+wxArrayString Database::getAvailablePageSizes()
+{
+    wxArrayString sizes;
+    sizes.reserve(6);
+    sizes.push_back(_("Default"));
+    sizes.push_back(wxT("1024"));
+    sizes.push_back(wxT("2048"));
+    sizes.push_back(wxT("4096"));
+    sizes.push_back(wxT("8192"));
+    sizes.push_back(wxT("16384"));
+    return sizes;
 }
 //-----------------------------------------------------------------------------

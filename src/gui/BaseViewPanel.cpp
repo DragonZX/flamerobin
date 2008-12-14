@@ -49,34 +49,6 @@ typedef std::list<BaseViewPanel*> BaseViewPanelList;
 
 BaseViewPanelList viewPanels;
 //-----------------------------------------------------------------------------
-BaseViewPanel::BaseViewPanel(wxWindow* parent, wxWindowID id,
-        const wxPoint& pos, const wxSize& size, long style,
-        const wxString& name)
-    : wxPanel()
-{
-    Hide();
-    Create(parent, id, pos, size, style, name);
-    viewPanels.push_back(this);
-}
-//-----------------------------------------------------------------------------
-BaseViewPanel::~BaseViewPanel()
-{
-    BaseViewPanelList::iterator it = std::find(viewPanels.begin(),
-        viewPanels.end(), this);
-    if (it != viewPanels.end())
-        viewPanels.erase(it);
-}
-//-----------------------------------------------------------------------------
-wxString BaseViewPanel::getId() const
-{
-    return idM;
-}
-//-----------------------------------------------------------------------------
-void BaseViewPanel::setId(const wxString& id)
-{
-    idM = id;
-}
-//-----------------------------------------------------------------------------
 /*static*/
 bool BaseViewPanel::activateViewPanel(const wxString& id)
 {
@@ -113,5 +85,31 @@ BaseViewPanel* BaseViewPanel::findViewPanel(const wxString& id)
             return *it;
     }
     return 0;
+}
+//-----------------------------------------------------------------------------
+BaseViewPanel::BaseViewPanel(wxWindow* parent, wxWindowID id,
+        const wxPoint& pos, const wxSize& size, long style,
+        const wxString& name)
+    : wxPanel()
+{
+    // use two step creation for minimal flicker
+    Hide();
+    Create(parent, id, pos, size, style, name);
+    viewPanels.push_back(this);
+}
+//-----------------------------------------------------------------------------
+BaseViewPanel::~BaseViewPanel()
+{
+    viewPanels.remove(this);
+}
+//-----------------------------------------------------------------------------
+wxString BaseViewPanel::getId() const
+{
+    return idM;
+}
+//-----------------------------------------------------------------------------
+void BaseViewPanel::setId(const wxString& id)
+{
+    idM = id;
 }
 //-----------------------------------------------------------------------------

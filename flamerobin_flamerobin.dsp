@@ -308,6 +308,10 @@ SOURCE=.\src\gui\DatabaseRestorePanel.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\gui\controls\DndTextControls.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\hierarchy\Domain.cpp
 # End Source File
 # Begin Source File
@@ -361,6 +365,10 @@ SOURCE=.\src\commands\ItemCommands.cpp
 # Begin Source File
 
 SOURCE=.\src\hierarchy\ItemVisitor.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\gui\controls\LogTextControl.cpp
 # End Source File
 # Begin Source File
 
@@ -419,6 +427,10 @@ SOURCE=.\src\hierarchy\Table.cpp
 # Begin Source File
 
 SOURCE=.\src\commands\TableCommands.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\gui\controls\TextControl.cpp
 # End Source File
 # Begin Source File
 
@@ -514,6 +526,10 @@ SOURCE=.\src\gui\DatabaseRestorePanel.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\gui\controls\DndTextControls.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\hierarchy\Domain.h
 # End Source File
 # Begin Source File
@@ -551,6 +567,10 @@ SOURCE=.\src\commands\ItemCommands.h
 # Begin Source File
 
 SOURCE=.\src\hierarchy\ItemVisitor.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\gui\controls\LogTextControl.h
 # End Source File
 # Begin Source File
 
@@ -595,6 +615,10 @@ SOURCE=.\src\core\Subject.h
 # Begin Source File
 
 SOURCE=.\src\hierarchy\Table.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\gui\controls\TextControl.h
 # End Source File
 # Begin Source File
 

@@ -32,17 +32,57 @@
 #include "commands/ItemCommands.h"
 #include "gui/BaseViewPanel.h"
 #include "hierarchy/SharedItems.h"
+
+class FileTextControl;
+class LogTextControl;
+
+class ServiceConnection;
 //-----------------------------------------------------------------------------
 class DatabaseRestorePanel: public BaseViewPanel
 {
 private:
     PSharedDatabase databaseM;
+
+    wxStaticText* labelFileNameM;
+    FileTextControl* textFileNameM;
+    wxButton* buttonChooseFileNameM;
+    wxCheckBox* checkReplaceDatabaseM;
+    wxCheckBox* checkDontRestoreShadowsM;
+    wxCheckBox* checkCommitPerTableM;
+    wxCheckBox* checkDeactivateIndicesM;
+    wxCheckBox* checkIgnoreValidityM;
+    wxCheckBox* checkUseAllSpaceM;
+    wxStaticText* labelPageSizeM;
+    wxChoice* choicePageSizeM;
+    wxCheckBox* checkCompleteLogM;
+    wxButton* buttonStartM;
+    wxButton* buttonCancelM;
+    LogTextControl* textLogM;
+
+    bool restoreIsActiveM;
+
+    void createControls();
+    void layoutControls();
+    void updateControls();
 public:
     DatabaseRestorePanel(wxWindow* parent, PSharedDatabase database);
 
     static DatabaseRestorePanel* createViewPanel(const wxString& id,
         PSharedDatabase database, ItemCommandsGUIAccessor* accessor);
     static wxString getIdFromDatabase(const Database* database);
+private:
+    // event handling
+    enum { ID_FileName = 2000, ID_FileNameButton, 
+        ID_CompleteLog, ID_StartRestore, ID_CancelRestore };
+
+    void OnCancelButtonClick(wxCommandEvent& event);
+    void OnCompleteLogChange(wxCommandEvent& event);
+    void OnFileNameButtonClick(wxCommandEvent& event);
+    void OnStartButtonClick(wxCommandEvent& event);
+
+    void OnIdle(wxIdleEvent& event);
+
+    DECLARE_EVENT_TABLE()
 };
 //-----------------------------------------------------------------------------
 #endif // FR_DATABASERESTOREPANEL_H

@@ -87,7 +87,8 @@ public:
 };
 //-----------------------------------------------------------------------------
 template<class ThreadJob>
-class WorkerThreadEngine: public wxEvtHandler, protected ThreadJobManager<ThreadJob>
+class WorkerThreadEngine: public wxEvtHandler,
+    protected ThreadJobManager<ThreadJob>
 {
 private:
     wxMutex mutexM;
@@ -182,9 +183,10 @@ private:
     };
 
 protected:
-    virtual WorkerThread<ThreadJob>* createWorkerThread()
+    virtual WorkerThread<ThreadJob>* createWorkerThread() = 0
     {
-        return new WorkerThread<ThreadJob>(*this);
+        // needs to be overridden, but implement it all the same...
+        return 0;
     };
 
     bool queueJob(ThreadJob job)
@@ -234,7 +236,7 @@ public:
             wxCommandEventHandler(WorkerThreadEngine::OnJobCompleted));
     };
 
-    ~WorkerThreadEngine()
+    virtual ~WorkerThreadEngine()
     {
         Disconnect(EVT_JobCompleted,
             wxCommandEventHandler(WorkerThreadEngine::OnJobCompleted));

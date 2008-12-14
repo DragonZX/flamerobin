@@ -3,6 +3,8 @@
 <!-- $Id$ -->
 
 <makefile>
+
+    <requires version="0.2.5"/>
     <using module="datafiles"/>
 
 <!-- necessary if wx-config can not be used -->
@@ -248,6 +250,9 @@
         $(SOURCEDIR)/gui/StyleGuide.h
 
         $(SOURCEDIR)/gui/controls/DBHTreeControl.h
+        $(SOURCEDIR)/gui/controls/DndTextControls.h
+        $(SOURCEDIR)/gui/controls/LogTextControl.h
+        $(SOURCEDIR)/gui/controls/TextControl.h
 
         $(SOURCEDIR)/hierarchy/Column.h
         $(SOURCEDIR)/hierarchy/Database.h
@@ -321,6 +326,9 @@
         $(SOURCEDIR)/gui/StyleGuide.cpp
 
         $(SOURCEDIR)/gui/controls/DBHTreeControl.cpp
+        $(SOURCEDIR)/gui/controls/DndTextControls.cpp
+        $(SOURCEDIR)/gui/controls/LogTextControl.cpp
+        $(SOURCEDIR)/gui/controls/TextControl.cpp
 
         $(SOURCEDIR)/hierarchy/Column.cpp
         $(SOURCEDIR)/hierarchy/Database.cpp
