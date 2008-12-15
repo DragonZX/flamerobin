@@ -74,15 +74,15 @@ void Domain::accept(ItemVisitor* visitor)
 }
 //-----------------------------------------------------------------------------
 // DomainCollectionBase class
-PSharedItem DomainCollectionBase::createCollectionItem(
+SharedItem DomainCollectionBase::createCollectionItem(
     const Identifier& identifier)
 {
-    PSharedItem domain(new Domain(identifier));
+    SharedItem domain(new Domain(identifier));
     domain->setParent(shared_from_this());
     return domain;
 }
 //-----------------------------------------------------------------------------
-void DomainCollectionBase::setCollectionItemData(PSharedItem item,
+void DomainCollectionBase::setCollectionItemData(SharedItem item,
     const VectorOfAny& data)
 {
     Domain* domain = dynamic_cast<Domain*>(item.get());
@@ -114,7 +114,7 @@ void DomainCollection::loadChildren()
     Database* db = getDatabase();
     wxCHECK_RET(db,
         wxT("DomainCollection::loadChildren() called without parent database"));
-    DatabaseConnection* dbc = db->getMetadataConnection();
+    SharedDatabaseConnection dbc = db->getMetadataConnection();
     if (dbc)
     {
         setLoadChildrenState(lcsLoading);
@@ -155,7 +155,7 @@ void SystemDomainCollection::loadChildren()
     Database* db = getDatabase();
     wxCHECK_RET(db,
         wxT("SystemDomainCollection::loadChildren() called without parent database"));
-    DatabaseConnection* dbc = db->getMetadataConnection();
+    SharedDatabaseConnection dbc = db->getMetadataConnection();
     if (dbc)
     {
         setLoadChildrenState(lcsLoading);

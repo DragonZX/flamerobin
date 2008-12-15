@@ -31,55 +31,55 @@
 #include <boost/shared_ptr.hpp>
 //-----------------------------------------------------------------------------
 class Item;
-typedef boost::shared_ptr<Item> PSharedItem;
+typedef boost::shared_ptr<Item> SharedItem;
 
 class TreeFolder;
-typedef boost::shared_ptr<TreeFolder> PSharedTreeFolder;
+typedef boost::shared_ptr<TreeFolder> SharedTreeFolder;
 class TreeRoot;
-typedef boost::shared_ptr<TreeRoot> PSharedTreeRoot;
+typedef boost::shared_ptr<TreeRoot> SharedTreeRoot;
 
 class Database;
-typedef boost::shared_ptr<Database> PSharedDatabase;
+typedef boost::shared_ptr<Database> SharedDatabase;
 
 class Column;
-typedef boost::shared_ptr<Column> PSharedColumn;
+typedef boost::shared_ptr<Column> SharedColumn;
 class ColumnCollection;
-typedef boost::shared_ptr<ColumnCollection> PSharedColumnCollection;
+typedef boost::shared_ptr<ColumnCollection> SharedColumnCollection;
 class Domain;
-typedef boost::shared_ptr<Domain> PSharedDomain;
+typedef boost::shared_ptr<Domain> SharedDomain;
 class DomainCollection;
-typedef boost::shared_ptr<DomainCollection> PSharedDomainCollection;
+typedef boost::shared_ptr<DomainCollection> SharedDomainCollection;
 class SystemDomainCollection;
-typedef boost::shared_ptr<SystemDomainCollection> PSharedSystemDomainCollection;
+typedef boost::shared_ptr<SystemDomainCollection> SharedSystemDomainCollection;
 class Exception;
-typedef boost::shared_ptr<Exception> PSharedException;
+typedef boost::shared_ptr<Exception> SharedException;
 class ExceptionCollection;
-typedef boost::shared_ptr<ExceptionCollection> PSharedExceptionCollection;
+typedef boost::shared_ptr<ExceptionCollection> SharedExceptionCollection;
 class Function;
-typedef boost::shared_ptr<Function> PSharedFunction;
+typedef boost::shared_ptr<Function> SharedFunction;
 class FunctionCollection;
-typedef boost::shared_ptr<FunctionCollection> PSharedFunctionCollection;
+typedef boost::shared_ptr<FunctionCollection> SharedFunctionCollection;
 class Generator;
-typedef boost::shared_ptr<Generator> PSharedGenerator;
+typedef boost::shared_ptr<Generator> SharedGenerator;
 class GeneratorCollection;
-typedef boost::shared_ptr<GeneratorCollection> PSharedGeneratorCollection;
+typedef boost::shared_ptr<GeneratorCollection> SharedGeneratorCollection;
 class Procedure;
-typedef boost::shared_ptr<Procedure> PSharedProcedure;
+typedef boost::shared_ptr<Procedure> SharedProcedure;
 class ProcedureCollection;
-typedef boost::shared_ptr<ProcedureCollection> PSharedProcedureCollection;
+typedef boost::shared_ptr<ProcedureCollection> SharedProcedureCollection;
 class Table;
-typedef boost::shared_ptr<Table> PSharedTable;
+typedef boost::shared_ptr<Table> SharedTable;
 class TableCollection;
-typedef boost::shared_ptr<TableCollection> PSharedTableCollection;
+typedef boost::shared_ptr<TableCollection> SharedTableCollection;
 class SystemTableCollection;
-typedef boost::shared_ptr<SystemTableCollection> PSharedSystemTableCollection;
+typedef boost::shared_ptr<SystemTableCollection> SharedSystemTableCollection;
 class Trigger;
-typedef boost::shared_ptr<Trigger> PSharedTrigger;
+typedef boost::shared_ptr<Trigger> SharedTrigger;
 class TriggerCollection;
-typedef boost::shared_ptr<TriggerCollection> PSharedTriggerCollection;
+typedef boost::shared_ptr<TriggerCollection> SharedTriggerCollection;
 class View;
-typedef boost::shared_ptr<View> PSharedView;
+typedef boost::shared_ptr<View> SharedView;
 class ViewCollection;
-typedef boost::shared_ptr<ViewCollection> PSharedViewCollection;
+typedef boost::shared_ptr<ViewCollection> SharedViewCollection;
 //-----------------------------------------------------------------------------
 #endif // FR_SHAREDITEMS_H

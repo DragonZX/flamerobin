@@ -36,12 +36,12 @@
 class DatabaseBackupPanel: public BaseViewPanel
 {
 private:
-    PSharedDatabase databaseM;
+    SharedDatabase databaseM;
 public:
-    DatabaseBackupPanel(wxWindow* parent, PSharedDatabase database);
+    DatabaseBackupPanel(wxWindow* parent, SharedDatabase database);
 
     static DatabaseBackupPanel* createViewPanel(const wxString& id,
-        PSharedDatabase database, ItemCommandsGUIAccessor* accessor);
+        SharedDatabase database, ItemCommandsGUIAccessor* accessor);
     static wxString getIdFromDatabase(const Database* database);
 };
 //-----------------------------------------------------------------------------

@@ -162,7 +162,7 @@ void Generator::loadValue()
     Database* db = getDatabase();
     wxCHECK_RET(db,
         wxT("Generator::loadValue() called without parent database"));
-    DatabaseConnection* dbc = db->getMetadataConnection();
+    SharedDatabaseConnection dbc = db->getMetadataConnection();
     if (dbc)
     {
         ItemHandleAndName me;
@@ -180,9 +180,9 @@ bool Generator::isValueLoaded() const
 }
 //-----------------------------------------------------------------------------
 // GeneratorCollection class
-PSharedItem GeneratorCollection::createCollectionItem(const Identifier& identifier)
+SharedItem GeneratorCollection::createCollectionItem(const Identifier& identifier)
 {
-    PSharedItem generator(new Generator(identifier));
+    SharedItem generator(new Generator(identifier));
     generator->setParent(shared_from_this());
     return generator;
 }
@@ -192,7 +192,7 @@ void GeneratorCollection::loadChildren()
     Database* db = getDatabase();
     wxCHECK_RET(db,
         wxT("GeneratorCollection::loadChildren() called without parent database"));
-    DatabaseConnection* dbc = db->getMetadataConnection();
+    SharedDatabaseConnection dbc = db->getMetadataConnection();
     if (dbc)
     {
         setLoadChildrenState(lcsLoading);
@@ -221,13 +221,13 @@ void GeneratorCollection::loadValues()
     Database* db = getDatabase();
     wxCHECK_RET(db,
         wxT("Generator::loadValue() called without parent database"));
-    DatabaseConnection* dbc = db->getMetadataConnection();
+    SharedDatabaseConnection dbc = db->getMetadataConnection();
     if (dbc)
     {
         std::list<ItemHandleAndName> generators;
         for (unsigned i = 0; i < getChildrenCount(); ++i)
         {
-            PSharedItem item = getChild(i);
+            SharedItem item = getChild(i);
             Generator* generator = dynamic_cast<Generator*>(item.get());
             wxASSERT(generator);
             if (generator)

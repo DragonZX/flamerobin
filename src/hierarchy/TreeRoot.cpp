@@ -65,15 +65,15 @@ TreeRoot::TreeRoot()
 }
 //-----------------------------------------------------------------------------
 /*static*/ 
-PSharedTreeRoot TreeRoot::get()
+SharedTreeRoot TreeRoot::get()
 {
-    static PSharedTreeRoot sharedRoot(new TreeRoot());
+    static SharedTreeRoot sharedRoot(new TreeRoot());
     return sharedRoot;
 }
 //-----------------------------------------------------------------------------
 void TreeRoot::createDefaultHierarchy()
 {
-    PSharedTreeFolder child = PSharedTreeFolder(new TreeFolder);
+    SharedTreeFolder child = SharedTreeFolder(new TreeFolder);
     child->setName(_("Localhost"));
     child->setParent(shared_from_this());
 }
@@ -116,7 +116,7 @@ bool TreeRoot::loadHierarchy()
     if (xmlr->GetName() != wxT("root"))
         return false;
 
-    PSharedItem me(shared_from_this());
+    SharedItem me(shared_from_this());
 
     SubjectLocker lock(this);
     for (wxXmlNode* xmln = doc.GetRoot()->GetChildren(); (xmln);
@@ -149,12 +149,12 @@ bool TreeRoot::loadHierarchy()
     return true;
 }
 //-----------------------------------------------------------------------------
-bool TreeRoot::parseDatabase(PSharedItem parent, wxXmlNode* xmln,
+bool TreeRoot::parseDatabase(SharedItem parent, wxXmlNode* xmln,
     const wxString& serverHostnamePort, bool importOldSettings)
 {
     wxASSERT(xmln);
 
-    PSharedDatabase database(new Database);
+    SharedDatabase database(new Database);
     SubjectLocker lock(database.get());
     database->setParent(parent);
 
@@ -206,11 +206,11 @@ bool TreeRoot::parseDatabase(PSharedItem parent, wxXmlNode* xmln,
     return true;
 }
 //-----------------------------------------------------------------------------
-bool TreeRoot::parseFolder(PSharedItem parent, wxXmlNode* xmln)
+bool TreeRoot::parseFolder(SharedItem parent, wxXmlNode* xmln)
 {
     wxASSERT(xmln);
 
-    PSharedTreeFolder folder(new TreeFolder);
+    SharedTreeFolder folder(new TreeFolder);
     SubjectLocker lock(folder.get());
     folder->setParent(parent);
 
@@ -234,11 +234,11 @@ bool TreeRoot::parseFolder(PSharedItem parent, wxXmlNode* xmln)
     return true;
 }
 //-----------------------------------------------------------------------------
-bool TreeRoot::parseServer(PSharedItem parent, wxXmlNode* xmln)
+bool TreeRoot::parseServer(SharedItem parent, wxXmlNode* xmln)
 {
     wxASSERT(xmln);
 
-    PSharedTreeFolder folder(new TreeFolder);
+    SharedTreeFolder folder(new TreeFolder);
     SubjectLocker lock(folder.get());
     folder->setParent(parent);
 

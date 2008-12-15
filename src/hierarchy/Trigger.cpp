@@ -63,9 +63,9 @@ void Trigger::accept(ItemVisitor* visitor)
 }
 //-----------------------------------------------------------------------------
 // TriggerCollection class
-PSharedItem TriggerCollection::createCollectionItem(const Identifier& identifier)
+SharedItem TriggerCollection::createCollectionItem(const Identifier& identifier)
 {
-    PSharedItem trigger(new Trigger(identifier));
+    SharedItem trigger(new Trigger(identifier));
     trigger->setParent(shared_from_this());
     return trigger;
 }
@@ -75,7 +75,7 @@ void TriggerCollection::loadChildren()
     Database* db = getDatabase();
     wxCHECK_RET(db,
         wxT("TriggerCollection::loadChildren() called without parent database"));
-    DatabaseConnection* dbc = db->getMetadataConnection();
+    SharedDatabaseConnection dbc = db->getMetadataConnection();
     if (dbc)
     {
         setLoadChildrenState(lcsLoading);

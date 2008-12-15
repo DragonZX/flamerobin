@@ -61,9 +61,9 @@ void View::accept(ItemVisitor* visitor)
 }
 //-----------------------------------------------------------------------------
 // ViewCollection class
-PSharedItem ViewCollection::createCollectionItem(const Identifier& identifier)
+SharedItem ViewCollection::createCollectionItem(const Identifier& identifier)
 {
-    PSharedItem view(new View(identifier));
+    SharedItem view(new View(identifier));
     view->setParent(shared_from_this());
     return view;
 }
@@ -73,7 +73,7 @@ void ViewCollection::loadChildren()
     Database* db = getDatabase();
     wxCHECK_RET(db,
         wxT("ViewCollection::loadChildren() called without parent database"));
-    DatabaseConnection* dbc = db->getMetadataConnection();
+    SharedDatabaseConnection dbc = db->getMetadataConnection();
     if (dbc)
     {
         setLoadChildrenState(lcsLoading);

@@ -49,10 +49,10 @@ class TriggerCommands : public ItemCommands
 private:
     Trigger* triggerM;
 public:
-    TriggerCommands(PSharedItem item);
+    TriggerCommands(SharedItem item);
 };
 //-----------------------------------------------------------------------------
-TriggerCommands::TriggerCommands(PSharedItem item)
+TriggerCommands::TriggerCommands(SharedItem item)
     : ItemCommands(item), triggerM(0)
 {
     triggerM = dynamic_cast<Trigger*>(item.get());
@@ -73,12 +73,12 @@ private:
 protected:
     virtual bool hasChildItems();
 public:
-    TriggerCollectionCommands(PSharedItem item);
+    TriggerCollectionCommands(SharedItem item);
 
     virtual void addCommandsTo(wxMenu* menu, bool isContextMenu);
 };
 //-----------------------------------------------------------------------------
-TriggerCollectionCommands::TriggerCollectionCommands(PSharedItem item)
+TriggerCollectionCommands::TriggerCollectionCommands(SharedItem item)
     : ItemCommands(item), triggersM(0), canCreateNewM(false)
 {
     triggersM = dynamic_cast<TriggerCollection*>(item.get());

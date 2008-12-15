@@ -28,6 +28,9 @@
 #ifndef FR_DATABASE_H
 #define FR_DATABASE_H
 //-----------------------------------------------------------------------------
+
+#include <boost/shared_ptr.hpp>
+
 #include <ibpp.h>
 
 #include "hierarchy/Item.h"
@@ -74,6 +77,8 @@ public:
     bool operator!= (const DatabaseCredentials& rhs) const;
 };
 //-----------------------------------------------------------------------------
+typedef boost::shared_ptr<DatabaseConnection> SharedDatabaseConnection;
+//-----------------------------------------------------------------------------
 // Database class
 class Database : public ItemWithChildrenBase
 {
@@ -118,7 +123,7 @@ public:
 
     void setServerVersion(const wxString& versionString);
 
-    DatabaseConnection* getMetadataConnection();
+    SharedDatabaseConnection getMetadataConnection();
 
     virtual void accept(ItemVisitor* visitor);
 
@@ -132,19 +137,19 @@ private:
     wxString connectionStringM;
 
     ConnectionState connectionStateM;
-    boost::shared_ptr<DatabaseConnection> metadataConnectionM;
+    SharedDatabaseConnection metadataConnectionM;
     ServerVersion serverVersionM;
 
-    PSharedDomainCollection domainsM;
-    PSharedExceptionCollection exceptionsM;
-    PSharedFunctionCollection functionsM;
-    PSharedGeneratorCollection generatorsM;
-    PSharedProcedureCollection proceduresM;
-    PSharedSystemDomainCollection systemDomainsM;
-    PSharedSystemTableCollection systemTablesM;
-    PSharedTriggerCollection triggersM;
-    PSharedTableCollection tablesM;
-    PSharedViewCollection viewsM;
+    SharedDomainCollection domainsM;
+    SharedExceptionCollection exceptionsM;
+    SharedFunctionCollection functionsM;
+    SharedGeneratorCollection generatorsM;
+    SharedProcedureCollection proceduresM;
+    SharedSystemDomainCollection systemDomainsM;
+    SharedSystemTableCollection systemTablesM;
+    SharedTriggerCollection triggersM;
+    SharedTableCollection tablesM;
+    SharedViewCollection viewsM;
 
     void createCollections();
     void deleteCollections();

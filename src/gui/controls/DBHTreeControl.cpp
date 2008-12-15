@@ -513,14 +513,14 @@ public:
     void setExpandOnUpdate(bool expand);
 
     Item* getItem();
-    PSharedItem getSharedItem();
-    void setSharedItem(PSharedItem item);
+    SharedItem getSharedItem();
+    void setSharedItem(SharedItem item);
     virtual void update();
 private:
     DBHTreeControl& treeM;
-    PSharedItem itemM;
+    SharedItem itemM;
     bool expandOnUpdateM;
-    wxTreeItemId findChildIdForItem(PSharedItem item);
+    wxTreeItemId findChildIdForItem(SharedItem item);
 };
 //-----------------------------------------------------------------------------
 DBHTreeNode::DBHTreeNode(DBHTreeControl& tree)
@@ -554,19 +554,19 @@ Item* DBHTreeNode::getItem()
     return itemM.get();
 }
 //-----------------------------------------------------------------------------
-PSharedItem DBHTreeNode::getSharedItem()
+SharedItem DBHTreeNode::getSharedItem()
 {
     return itemM;
 }
 //-----------------------------------------------------------------------------
-wxTreeItemId DBHTreeNode::findChildIdForItem(PSharedItem item)
+wxTreeItemId DBHTreeNode::findChildIdForItem(SharedItem item)
 {
     wxTreeItemIdValue cookie;
     wxTreeItemId id = GetId();
     wxTreeItemId childId = treeM.GetFirstChild(id, cookie);
     while (childId.IsOk())
     {
-        PSharedItem childItem = treeM.getItemFromId(childId);
+        SharedItem childItem = treeM.getItemFromId(childId);
         if (childItem == item)
             return childId;
         childId = treeM.GetNextChild(id, cookie);
@@ -574,7 +574,7 @@ wxTreeItemId DBHTreeNode::findChildIdForItem(PSharedItem item)
     return wxTreeItemId();
 }
 //-----------------------------------------------------------------------------
-void DBHTreeNode::setSharedItem(PSharedItem item)
+void DBHTreeNode::setSharedItem(SharedItem item)
 {
     if (itemM != item)
     {
@@ -618,7 +618,7 @@ void DBHTreeNode::update()
     wxTreeItemId prevChildId;
     for (unsigned i = 0; i < itemM->getChildrenCount(); ++i)
     {
-        PSharedItem childItem = itemM->getChild(i);
+        SharedItem childItem = itemM->getChild(i);
         if (!childItem)
             continue;
 
@@ -702,7 +702,7 @@ DBHTreeControl::DBHTreeControl(wxWindow* parent, wxWindowID id)
         wxTreeEventHandler(DBHTreeControl::OnTreeItemExpanding));
 }
 //-----------------------------------------------------------------------------
-void DBHTreeControl::createRootNode(PSharedItem rootItem)
+void DBHTreeControl::createRootNode(SharedItem rootItem)
 {
     wxCHECK_RET(rootItem,
         wxT("rootItem is 0 in DBHTreeControl::createRootNode()"));
@@ -715,7 +715,7 @@ void DBHTreeControl::createRootNode(PSharedItem rootItem)
     Expand(id);
 }
 //-----------------------------------------------------------------------------
-PSharedItem DBHTreeControl::getItemFromId(wxTreeItemId id)
+SharedItem DBHTreeControl::getItemFromId(wxTreeItemId id)
 {
     if (id.IsOk())
     {
@@ -724,14 +724,14 @@ PSharedItem DBHTreeControl::getItemFromId(wxTreeItemId id)
         if (childNodeData)
             return childNodeData->getSharedItem();
     }
-    return PSharedItem();
+    return SharedItem();
 }
 //-----------------------------------------------------------------------------
 // event handlers
 void DBHTreeControl::OnBeginDrag(wxTreeEvent& event)
 {
     wxTreeItemId id = event.GetItem();
-    PSharedItem dragItem = getItemFromId(id);
+    SharedItem dragItem = getItemFromId(id);
     if (!dragItem)
     {
         event.Skip();
@@ -773,7 +773,7 @@ void DBHTreeControl::OnContextMenu(wxContextMenuEvent& event)
             SelectItem(id);
     }
 
-    PSharedItem item;
+    SharedItem item;
     if (id.IsOk())
     {
         DBHTreeNode* nodeData = DBHTreeNode::getFromTreeData(GetItemData(id));
@@ -783,7 +783,7 @@ void DBHTreeControl::OnContextMenu(wxContextMenuEvent& event)
     if (!item)
         return;
     // make sure the ItemCommands object will be properly freed
-    PSharedItemCommands commands(ItemCommands::createItemCommands(item));
+    SharedItemCommands commands(ItemCommands::createItemCommands(item));
     if (commands != 0)
     {
         // compute the menu coordinates if the event does not contain them
@@ -811,7 +811,7 @@ void DBHTreeControl::OnTreeItemExpanding(wxTreeEvent& event)
     DBHTreeNode* nodeData = DBHTreeNode::getFromTreeData(GetItemData(id));
     if (nodeData)
     {
-        PSharedItem item = nodeData->getSharedItem();
+        SharedItem item = nodeData->getSharedItem();
         // there maybe child nodes that have not been created yet
         if (item && !nodeData->hasLoadedChildren())
         {

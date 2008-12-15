@@ -51,7 +51,7 @@
 //-----------------------------------------------------------------------------
 /*static*/
 DatabaseRestorePanel* DatabaseRestorePanel::createViewPanel(const wxString& id,
-    PSharedDatabase database, ItemCommandsGUIAccessor* accessor)
+    SharedDatabase database, ItemCommandsGUIAccessor* accessor)
 {
     wxCHECK_MSG(database, 0,
         wxT("DatabaseRestorePanel::createViewPanel() called without database"));
@@ -82,7 +82,7 @@ wxString DatabaseRestorePanel::getIdFromDatabase(const Database* database)
 }
 //-----------------------------------------------------------------------------
 DatabaseRestorePanel::DatabaseRestorePanel(wxWindow* parent,
-        PSharedDatabase database)
+        SharedDatabase database)
     : BaseViewPanel(parent), databaseM(database)
 {
     restoreIsActiveM = false;

@@ -53,7 +53,7 @@ public:
 class GeneratorCollection: public MetadataItemCollection
 {
 protected:
-    virtual PSharedItem createCollectionItem(const Identifier& identifier);
+    virtual SharedItem createCollectionItem(const Identifier& identifier);
 public:
     void loadValues();
 

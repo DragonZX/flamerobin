@@ -46,10 +46,10 @@ class DomainCommands : public ItemCommands
 private:
     Domain* domainM;
 public:
-    DomainCommands(PSharedItem item);
+    DomainCommands(SharedItem item);
 };
 //-----------------------------------------------------------------------------
-DomainCommands::DomainCommands(PSharedItem item)
+DomainCommands::DomainCommands(SharedItem item)
     : ItemCommands(item), domainM(0)
 {
     domainM = dynamic_cast<Domain*>(item.get());
@@ -69,12 +69,12 @@ private:
 protected:
     virtual bool hasChildItems();
 public:
-    DomainCollectionCommands(PSharedItem item);
+    DomainCollectionCommands(SharedItem item);
 
     virtual void addCommandsTo(wxMenu* menu, bool isContextMenu);
 };
 //-----------------------------------------------------------------------------
-DomainCollectionCommands::DomainCollectionCommands(PSharedItem item)
+DomainCollectionCommands::DomainCollectionCommands(SharedItem item)
     : ItemCommands(item), domainsM(0)
 {
     domainsM = dynamic_cast<DomainCollection*>(item.get());

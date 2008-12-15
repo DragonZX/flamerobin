@@ -66,10 +66,10 @@ void Table::accept(ItemVisitor* visitor)
 }
 //-----------------------------------------------------------------------------
 // SystemTableCollection class
-PSharedItem SystemTableCollection::createCollectionItem(
+SharedItem SystemTableCollection::createCollectionItem(
     const Identifier& identifier)
 {
-    PSharedItem table(new Table(identifier));
+    SharedItem table(new Table(identifier));
     table->setParent(shared_from_this());
     return table;
 }
@@ -84,7 +84,7 @@ void SystemTableCollection::loadChildren()
     Database* db = getDatabase();
     wxCHECK_RET(db,
         wxT("SystemTableCollection::loadChildren() called without parent database"));
-    DatabaseConnection* dbc = db->getMetadataConnection();
+    SharedDatabaseConnection dbc = db->getMetadataConnection();
     if (dbc)
     {
         setLoadChildrenState(lcsLoading);
@@ -109,9 +109,9 @@ void SystemTableCollection::accept(ItemVisitor* visitor)
 }
 //-----------------------------------------------------------------------------
 // TableCollection class
-PSharedItem TableCollection::createCollectionItem(const Identifier& identifier)
+SharedItem TableCollection::createCollectionItem(const Identifier& identifier)
 {
-    PSharedItem table(new Table(identifier));
+    SharedItem table(new Table(identifier));
     table->setParent(shared_from_this());
     return table;
 }
@@ -121,7 +121,7 @@ void TableCollection::loadChildren()
     Database* db = getDatabase();
     wxCHECK_RET(db,
         wxT("TableCollection::loadChildren() called without parent database"));
-    DatabaseConnection* dbc = db->getMetadataConnection();
+    SharedDatabaseConnection dbc = db->getMetadataConnection();
     if (dbc)
     {
         setLoadChildrenState(lcsLoading);

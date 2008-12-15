@@ -46,10 +46,10 @@ class ExceptionCommands : public ItemCommands
 private:
     Exception* exceptionM;
 public:
-    ExceptionCommands(PSharedItem item);
+    ExceptionCommands(SharedItem item);
 };
 //-----------------------------------------------------------------------------
-ExceptionCommands::ExceptionCommands(PSharedItem item)
+ExceptionCommands::ExceptionCommands(SharedItem item)
     : ItemCommands(item), exceptionM(0)
 {
     exceptionM = dynamic_cast<Exception*>(item.get());
@@ -69,12 +69,12 @@ private:
 protected:
     virtual bool hasChildItems();
 public:
-    ExceptionCollectionCommands(PSharedItem item);
+    ExceptionCollectionCommands(SharedItem item);
 
     virtual void addCommandsTo(wxMenu* menu, bool isContextMenu);
 };
 //-----------------------------------------------------------------------------
-ExceptionCollectionCommands::ExceptionCollectionCommands(PSharedItem item)
+ExceptionCollectionCommands::ExceptionCollectionCommands(SharedItem item)
     : ItemCommands(item), exceptionsM(0)
 {
     exceptionsM = dynamic_cast<ExceptionCollection*>(item.get());

@@ -39,8 +39,8 @@ class DBHTreeControl : public wxTreeCtrl
 public:
     DBHTreeControl(wxWindow* parent, wxWindowID id);
 
-    void createRootNode(PSharedItem rootItem);
-    PSharedItem getItemFromId(wxTreeItemId id);
+    void createRootNode(SharedItem rootItem);
+    SharedItem getItemFromId(wxTreeItemId id);
 private:
     wxTreeItemId hiddenRootNodeM;
 private:

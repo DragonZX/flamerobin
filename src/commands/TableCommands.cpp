@@ -46,10 +46,10 @@ class TableCommands : public ItemCommands
 private:
     Table* tableM;
 public:
-    TableCommands(PSharedItem item);
+    TableCommands(SharedItem item);
 };
 //-----------------------------------------------------------------------------
-TableCommands::TableCommands(PSharedItem item)
+TableCommands::TableCommands(SharedItem item)
     : ItemCommands(item), tableM(0)
 {
     tableM = dynamic_cast<Table*>(item.get());
@@ -66,12 +66,12 @@ private:
 
     DECLARE_EVENT_TABLE()
 public:
-    SystemTableCollectionCommands(PSharedItem item);
+    SystemTableCollectionCommands(SharedItem item);
 
     virtual void addCommandsTo(wxMenu* menu, bool isContextMenu);
 };
 //-----------------------------------------------------------------------------
-SystemTableCollectionCommands::SystemTableCollectionCommands(PSharedItem item)
+SystemTableCollectionCommands::SystemTableCollectionCommands(SharedItem item)
     : ItemCommands(item), tablesM(0)
 {
     tablesM = dynamic_cast<SystemTableCollection*>(item.get());
@@ -115,12 +115,12 @@ private:
 protected:
     virtual bool hasChildItems();
 public:
-    TableCollectionCommands(PSharedItem item);
+    TableCollectionCommands(SharedItem item);
 
     virtual void addCommandsTo(wxMenu* menu, bool isContextMenu);
 };
 //-----------------------------------------------------------------------------
-TableCollectionCommands::TableCollectionCommands(PSharedItem item)
+TableCollectionCommands::TableCollectionCommands(SharedItem item)
     : ItemCommands(item), tablesM(0)
 {
     tablesM = dynamic_cast<TableCollection*>(item.get());

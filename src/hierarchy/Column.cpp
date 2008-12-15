@@ -129,14 +129,14 @@ void Column::accept(ItemVisitor* visitor)
 }
 //-----------------------------------------------------------------------------
 // ColumnCollection class
-PSharedItem ColumnCollection::createCollectionItem(const Identifier& identifier)
+SharedItem ColumnCollection::createCollectionItem(const Identifier& identifier)
 {
-    PSharedItem column(new Column(identifier));
+    SharedItem column(new Column(identifier));
     column->setParent(shared_from_this());
     return column;
 }
 //-----------------------------------------------------------------------------
-void ColumnCollection::setCollectionItemData(PSharedItem item,
+void ColumnCollection::setCollectionItemData(SharedItem item,
     const VectorOfAny& data)
 {
     Column* column = dynamic_cast<Column*>(item.get());
@@ -172,7 +172,7 @@ void ColumnCollection::loadChildren()
     Database* db = getDatabase();
     wxCHECK_RET(db,
         wxT("ColumnCollection::loadChildren() called without parent database"));
-    DatabaseConnection* dbc = db->getMetadataConnection();
+    SharedDatabaseConnection dbc = db->getMetadataConnection();
     if (dbc)
     {
         setLoadChildrenState(lcsLoading);

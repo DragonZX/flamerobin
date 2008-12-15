@@ -202,7 +202,9 @@ void DatabaseConnectJob::processResults()
     else
     {
         getDatabase().setConnectionState(Database::csConnectionFailed);
-        reportError(_("An error occurred while connecting to the database!"));
+        wxString primaryMsg(wxString::Format(_("An error occurred while connecting to the database \"%s\"!"),
+            getDatabase().getName().c_str()));
+        reportError(primaryMsg);
     }
 }
 //-----------------------------------------------------------------------------

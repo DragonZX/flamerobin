@@ -46,8 +46,8 @@ public:
 class DomainCollectionBase: public MetadataItemCollection
 {
 protected:
-    virtual PSharedItem createCollectionItem(const Identifier& identifier);
-    virtual void setCollectionItemData(PSharedItem item,
+    virtual SharedItem createCollectionItem(const Identifier& identifier);
+    virtual void setCollectionItemData(SharedItem item,
         const VectorOfAny& data);
 public:
     Domain* getDomain(const Identifier& identifier);

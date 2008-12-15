@@ -46,10 +46,10 @@ class ViewCommands : public ItemCommands
 private:
     View* viewM;
 public:
-    ViewCommands(PSharedItem item);
+    ViewCommands(SharedItem item);
 };
 //-----------------------------------------------------------------------------
-ViewCommands::ViewCommands(PSharedItem item)
+ViewCommands::ViewCommands(SharedItem item)
     : ItemCommands(item), viewM(0)
 {
     viewM = dynamic_cast<View*>(item.get());
@@ -69,12 +69,12 @@ private:
 protected:
     virtual bool hasChildItems();
 public:
-    ViewCollectionCommands(PSharedItem item);
+    ViewCollectionCommands(SharedItem item);
 
     virtual void addCommandsTo(wxMenu* menu, bool isContextMenu);
 };
 //-----------------------------------------------------------------------------
-ViewCollectionCommands::ViewCollectionCommands(PSharedItem item)
+ViewCollectionCommands::ViewCollectionCommands(SharedItem item)
     : ItemCommands(item), viewsM(0)
 {
     viewsM = dynamic_cast<ViewCollection*>(item.get());

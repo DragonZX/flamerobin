@@ -39,7 +39,7 @@ class TreeRoot : public TreeFolder
 public:
     TreeRoot();
 
-    static PSharedTreeRoot get();
+    static SharedTreeRoot get();
 
     void createDefaultHierarchy();
     bool loadHierarchy();
@@ -56,10 +56,10 @@ private:
 
     unsigned nextIdM;
 
-    bool parseDatabase(PSharedItem parent, wxXmlNode* xmln,
+    bool parseDatabase(SharedItem parent, wxXmlNode* xmln,
         const wxString& serverHostnamePort, bool importOldSettings);
-    bool parseFolder(PSharedItem parent, wxXmlNode* xmln);
-    bool parseServer(PSharedItem parent, wxXmlNode* xmln);
+    bool parseFolder(SharedItem parent, wxXmlNode* xmln);
+    bool parseServer(SharedItem parent, wxXmlNode* xmln);
 };
 //-----------------------------------------------------------------------------
 #endif // FR_TREEROOT_H

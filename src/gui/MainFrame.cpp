@@ -57,7 +57,7 @@
 #include "hierarchy/TreeRoot.h"
 //-----------------------------------------------------------------------------
 // MainFrame class
-MainFrame::MainFrame(wxWindow* parent, int id, PSharedItem treeRootItem)
+MainFrame::MainFrame(wxWindow* parent, int id, SharedItem treeRootItem)
     : BaseFrame(parent, id, _("FlameRobin Database Admin [Multithreaded]")),
         auiManagerM(), auiToolbarM(0), treeRegisteredDatabasesM(0),
         treeUnregisteredDatabasesM(0), auiNotebookM(0),
@@ -83,14 +83,14 @@ MainFrame::MainFrame(wxWindow* parent, int id, PSharedItem treeRootItem)
     }
     updateStatusBar();
 
-//    treeUnregisteredDatabasesM->createRootNode(PSharedItem());
+//    treeUnregisteredDatabasesM->createRootNode(SharedItem());
 }
 //-----------------------------------------------------------------------------
 MainFrame::~MainFrame()
 {
     auiManagerM.UnInit();
 
-    setSelectedItem(PSharedItem());
+    setSelectedItem(SharedItem());
 }
 //-----------------------------------------------------------------------------
 void MainFrame::connectEventHandlers()
@@ -159,8 +159,8 @@ void MainFrame::createMenu()
     menu.reset(new wxMenu);
     // use a dummy database and matching commands object to populate
     // the database menu
-    PSharedDatabase db(new Database);
-    PSharedItemCommands dbCmds = ItemCommands::createItemCommands(db);
+    SharedDatabase db(new Database);
+    SharedItemCommands dbCmds = ItemCommands::createItemCommands(db);
     dbCmds->addCommandsTo(menu.get(), false);
     dbCmds.reset();
     db.reset();
@@ -289,15 +289,15 @@ const wxString MainFrame::getName() const
 //-----------------------------------------------------------------------------
 Database* MainFrame::getSelectedDatabase()
 {
-    PSharedItem selectedItem;
+    SharedItem selectedItem;
     if (selectedItemCommandsM)
         selectedItem = selectedItemCommandsM->getItem();
     return (selectedItem) ? selectedItem->getDatabase() : 0;
 }
 //-----------------------------------------------------------------------------
-void MainFrame::setSelectedItem(PSharedItem selectedItem)
+void MainFrame::setSelectedItem(SharedItem selectedItem)
 {
-    PSharedItem lastSelectedItem;
+    SharedItem lastSelectedItem;
     if (selectedItemCommandsM)
         lastSelectedItem = selectedItemCommandsM->getItem();
     if (lastSelectedItem != selectedItem)
@@ -310,7 +310,7 @@ void MainFrame::setSelectedItem(PSharedItem selectedItem)
 
             wxEvtHandler* handler = PopEventHandler();
             wxASSERT(handler == selectedItemCommandsM.get());
-            selectedItemCommandsM = PSharedItemCommands();
+            selectedItemCommandsM = SharedItemCommands();
         }
         // create and push event handler for newly selected item
         if (selectedItem)
@@ -514,7 +514,7 @@ void MainFrame::OnHelpUrlProjectPage(wxCommandEvent& /*event*/)
 //-----------------------------------------------------------------------------
 void MainFrame::OnMenuOpenInNewFrame(wxCommandEvent& /*event*/)
 {
-    PSharedItem selectedItem;
+    SharedItem selectedItem;
     if (selectedItemCommandsM)
         selectedItem = selectedItemCommandsM->getItem();
     if (selectedItem)

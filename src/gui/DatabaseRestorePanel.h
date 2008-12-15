@@ -41,7 +41,8 @@ class ServiceConnection;
 class DatabaseRestorePanel: public BaseViewPanel
 {
 private:
-    PSharedDatabase databaseM;
+    SharedDatabase databaseM;
+    boost::shared_ptr<ServiceConnection> serviceConnectionM;
 
     wxStaticText* labelFileNameM;
     FileTextControl* textFileNameM;
@@ -65,10 +66,10 @@ private:
     void layoutControls();
     void updateControls();
 public:
-    DatabaseRestorePanel(wxWindow* parent, PSharedDatabase database);
+    DatabaseRestorePanel(wxWindow* parent, SharedDatabase database);
 
     static DatabaseRestorePanel* createViewPanel(const wxString& id,
-        PSharedDatabase database, ItemCommandsGUIAccessor* accessor);
+        SharedDatabase database, ItemCommandsGUIAccessor* accessor);
     static wxString getIdFromDatabase(const Database* database);
 private:
     // event handling

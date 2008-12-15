@@ -78,7 +78,7 @@ void Application::OnFatalException()
 //-----------------------------------------------------------------------------
 int Application::OnExit()
 {
-    PSharedTreeRoot root = TreeRoot::get();
+    SharedTreeRoot root = TreeRoot::get();
     // make sure that all background threads are freed, otherwise shutdown
     // will not always work properly on Linux
     if (root)
@@ -115,7 +115,7 @@ bool Application::OnInit()
         wxUpdateUIEventHandler(Application::OnUpdateUIDisable));
 
     // first frame shows complete DBH, starting with global root node
-    PSharedTreeRoot root = TreeRoot::get();
+    SharedTreeRoot root = TreeRoot::get();
     if (!root->loadHierarchy())
         root->createDefaultHierarchy();
 

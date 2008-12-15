@@ -60,9 +60,9 @@ void Procedure::accept(ItemVisitor* visitor)
 }
 //-----------------------------------------------------------------------------
 // ProcedureCollection class
-PSharedItem ProcedureCollection::createCollectionItem(const Identifier& identifier)
+SharedItem ProcedureCollection::createCollectionItem(const Identifier& identifier)
 {
-    PSharedItem procedure(new Procedure(identifier));
+    SharedItem procedure(new Procedure(identifier));
     procedure->setParent(shared_from_this());
     return procedure;
 }
@@ -72,7 +72,7 @@ void ProcedureCollection::loadChildren()
     Database* db = getDatabase();
     wxCHECK_RET(db,
         wxT("ProcedureCollection::loadChildren() called without parent database"));
-    DatabaseConnection* dbc = db->getMetadataConnection();
+    SharedDatabaseConnection dbc = db->getMetadataConnection();
     if (dbc)
     {
         setLoadChildrenState(lcsLoading);

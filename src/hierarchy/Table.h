@@ -45,7 +45,7 @@ public:
 class SystemTableCollection: public MetadataItemCollection
 {
 protected:
-    virtual PSharedItem createCollectionItem(const Identifier& identifier);
+    virtual SharedItem createCollectionItem(const Identifier& identifier);
 public:
     virtual bool isSystem();
     virtual void loadChildren();
@@ -55,7 +55,7 @@ public:
 class TableCollection: public MetadataItemCollection
 {
 protected:
-    virtual PSharedItem createCollectionItem(const Identifier& identifier);
+    virtual SharedItem createCollectionItem(const Identifier& identifier);
 public:
     virtual void loadChildren();
     virtual void accept(ItemVisitor* visitor);

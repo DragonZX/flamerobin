@@ -83,14 +83,14 @@ Item* Item::getFromHandle(Handle handle)
     return (it != itemHandles.end()) ? it->second : 0;
 }
 //-----------------------------------------------------------------------------
-PSharedItem Item::getParent() const
+SharedItem Item::getParent() const
 {
     return parentM.lock();
 }
 //-----------------------------------------------------------------------------
-void Item::setParent(PSharedItem parent)
+void Item::setParent(SharedItem parent)
 {
-    PSharedItem oldParent = parentM.lock();
+    SharedItem oldParent = parentM.lock();
     if (parent != oldParent)
     {
         if (oldParent)
@@ -106,14 +106,14 @@ void Item::setParent(PSharedItem parent)
 //-----------------------------------------------------------------------------
 Database* Item::getDatabase()
 {
-    if (PSharedItem parent = getParent())
+    if (SharedItem parent = getParent())
         return parent->getDatabase();
     return 0;
 }
 //-----------------------------------------------------------------------------
 Relation* Item::getRelation()
 {
-    if (PSharedItem parent = getParent())
+    if (SharedItem parent = getParent())
         return parent->getRelation();
     return 0;
 }
@@ -128,12 +128,12 @@ unsigned Item::getChildrenCount() const
     return 0;
 }
 //-----------------------------------------------------------------------------
-PSharedItem Item::getChild(unsigned /*index*/) const
+SharedItem Item::getChild(unsigned /*index*/) const
 {
     // we can only arrive here when the index is invalid, or the class
     // has overridden getChildrenCount() but not getChild()
     wxFAIL_MSG(wxT("Item::getChild()"));
-    return PSharedItem();
+    return SharedItem();
 }
 //-----------------------------------------------------------------------------
 void Item::loadChildren()
@@ -158,7 +158,7 @@ const wxString Item::getTypeName() const
 const wxString Item::getItemPath() const
 {
     wxString result = getTypeName() + wxT("_") + getPathId();
-    if (PSharedItem parent = parentM.lock())
+    if (SharedItem parent = parentM.lock())
     {
         wxString parentItemPath = parent->getItemPath();
         if (!parentItemPath.empty())
@@ -219,7 +219,7 @@ bool ItemNameIsIdentifier::isSystem()
     return false;
 }
 //-----------------------------------------------------------------------------
-bool ItemHasNoChildren::containsChildImpl(PSharedItem /*child*/) const
+bool ItemHasNoChildren::containsChildImpl(SharedItem /*child*/) const
 {
     return false;
 }
@@ -229,14 +229,14 @@ unsigned ItemHasNoChildren::getChildrenCountImpl() const
     return 0;
 }
 //-----------------------------------------------------------------------------
-PSharedItem ItemHasNoChildren::getChildImpl(unsigned /*index*/) const
+SharedItem ItemHasNoChildren::getChildImpl(unsigned /*index*/) const
 {
-    return PSharedItem();
+    return SharedItem();
 }
 //-----------------------------------------------------------------------------
-PSharedItem ItemHasNoChildren::getChildImpl(const wxString& /*name*/) const
+SharedItem ItemHasNoChildren::getChildImpl(const wxString& /*name*/) const
 {
-    return PSharedItem();
+    return SharedItem();
 }
 //-----------------------------------------------------------------------------
 Item::LoadChildrenState ItemHasNoChildren::getLoadChildrenStateImpl() const
@@ -248,13 +248,13 @@ void ItemHasNoChildren::setLoadChildrenStateImpl(Item::LoadChildrenState)
 {
 }
 //-----------------------------------------------------------------------------
-bool ItemHasNoChildren::addChildImpl(PSharedItem child)
+bool ItemHasNoChildren::addChildImpl(SharedItem child)
 {
     wxFAIL_MSG(wxT("ItemHasNoChildren::addChildImpl()"));
     return false;
 }
 //-----------------------------------------------------------------------------
-bool ItemHasNoChildren::removeChildImpl(PSharedItem child)
+bool ItemHasNoChildren::removeChildImpl(SharedItem child)
 {
     wxFAIL_MSG(wxT("ItemHasNoChildren::removeChildImpl()"));
     return false;
@@ -273,9 +273,9 @@ ItemHasChildren::ItemHasChildren()
     loadChildrenStateM = Item::lcsNotLoaded;
 }
 //-----------------------------------------------------------------------------
-bool ItemHasChildren::containsChildImpl(PSharedItem child) const
+bool ItemHasChildren::containsChildImpl(SharedItem child) const
 {
-    std::vector<PSharedItem>::const_iterator it = std::find(childrenM.begin(),
+    std::vector<SharedItem>::const_iterator it = std::find(childrenM.begin(),
         childrenM.end(), child);
     return it != childrenM.end();
 }
@@ -285,23 +285,23 @@ unsigned ItemHasChildren::getChildrenCountImpl() const
     return childrenM.size();
 }
 //-----------------------------------------------------------------------------
-PSharedItem ItemHasChildren::getChildImpl(unsigned index) const
+SharedItem ItemHasChildren::getChildImpl(unsigned index) const
 {
     // if index is invalid this will return an empty shared_ptr<> in release
-    wxCHECK_MSG(index < childrenM.size(), PSharedItem(),
+    wxCHECK_MSG(index < childrenM.size(), SharedItem(),
         wxT("ItemHasChildren::getChildImpl()"));
     return childrenM[index];
 }
 //-----------------------------------------------------------------------------
-PSharedItem ItemHasChildren::getChildImpl(const wxString& name) const
+SharedItem ItemHasChildren::getChildImpl(const wxString& name) const
 {
-    for (std::vector<PSharedItem>::const_iterator it = childrenM.begin();
+    for (std::vector<SharedItem>::const_iterator it = childrenM.begin();
         it != childrenM.end(); ++it)
     {
         if ((*it)->getName().Cmp(name) == 0)
             return *it;
     }
-    return PSharedItem();
+    return SharedItem();
 }
 //-----------------------------------------------------------------------------
 Item::LoadChildrenState ItemHasChildren::getLoadChildrenStateImpl() const
@@ -322,9 +322,9 @@ bool ItemHasChildren::clearChildren()
     return true;
 }
 //-----------------------------------------------------------------------------
-bool ItemHasChildren::addChildImpl(PSharedItem child)
+bool ItemHasChildren::addChildImpl(SharedItem child)
 {
-    std::vector<PSharedItem>::iterator it = std::find(childrenM.begin(),
+    std::vector<SharedItem>::iterator it = std::find(childrenM.begin(),
         childrenM.end(), child);
     wxCHECK_MSG(it == childrenM.end(), false,
         wxT("ItemHasChildren::addChildImpl()"));
@@ -332,9 +332,9 @@ bool ItemHasChildren::addChildImpl(PSharedItem child)
     return true;
 }
 //-----------------------------------------------------------------------------
-bool ItemHasChildren::removeChildImpl(PSharedItem child)
+bool ItemHasChildren::removeChildImpl(SharedItem child)
 {
-    std::vector<PSharedItem>::iterator it = std::find(childrenM.begin(),
+    std::vector<SharedItem>::iterator it = std::find(childrenM.begin(),
         childrenM.end(), child);
     wxCHECK_MSG(it != childrenM.end(), false,
         wxT("ItemHasChildren::removeChildImpl()"));
@@ -344,14 +344,14 @@ bool ItemHasChildren::removeChildImpl(PSharedItem child)
 //-----------------------------------------------------------------------------
 void ItemHasChildren::lockChildrenImpl()
 {
-    std::vector<PSharedItem>::iterator it;
+    std::vector<SharedItem>::iterator it;
     for (it = childrenM.begin(); it != childrenM.end(); ++it)
         (*it)->lockSubject();
 }
 //-----------------------------------------------------------------------------
 void ItemHasChildren::unlockChildrenImpl()
 {
-    std::vector<PSharedItem>::iterator it;
+    std::vector<SharedItem>::iterator it;
     for (it = childrenM.begin(); it != childrenM.end(); ++it)
         (*it)->unlockSubject();
 }
@@ -361,18 +361,18 @@ void MetadataItemCollection::setChildrenIdentifiers(
     const std::list<Identifier>& identifiers)
 {
     SubjectLocker lock(this);
-    std::vector<PSharedItem> children;
+    std::vector<SharedItem> children;
     for (std::list<Identifier>::const_iterator it = identifiers.begin();
         it != identifiers.end(); ++it)
     {
         const Identifier& id = *it;
-        PSharedItem child = getChild(id.get());
+        SharedItem child = getChild(id.get());
         if (!child)
             child = createCollectionItem(id);
         children.push_back(child);
     }
     clearChildren();
-    for (std::vector<PSharedItem>::iterator it = children.begin();
+    for (std::vector<SharedItem>::iterator it = children.begin();
         it != children.end(); ++it)
     {
         addChildImpl(*it);
@@ -385,14 +385,14 @@ void MetadataItemCollection::setChildrenIdentifiersData(
     const std::list<IdentifierAndData>& identAndData)
 {
     bool changed = identAndData.size() != getChildrenCount();
-    std::vector<PSharedItem> children;
+    std::vector<SharedItem> children;
 
     SubjectLocker lock(this);
     std::list<IdentifierAndData>::const_iterator it;
     for (it = identAndData.begin(); it != identAndData.end(); ++it)
     {
         const Identifier& id = (*it).identifier;
-        PSharedItem child = getChild(id.get());
+        SharedItem child = getChild(id.get());
         if (!child)
         {
             child = createCollectionItem(id);
@@ -409,7 +409,7 @@ void MetadataItemCollection::setChildrenIdentifiersData(
     notifyObservers();
 }
 //-----------------------------------------------------------------------------
-void MetadataItemCollection::setCollectionItemData(PSharedItem item,
+void MetadataItemCollection::setCollectionItemData(SharedItem item,
     const VectorOfAny& /*data*/)
 {
 }

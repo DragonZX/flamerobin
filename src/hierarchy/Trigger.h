@@ -43,7 +43,7 @@ public:
 class TriggerCollection: public MetadataItemCollection
 {
 protected:
-    virtual PSharedItem createCollectionItem(const Identifier& identifier);
+    virtual SharedItem createCollectionItem(const Identifier& identifier);
 public:
     virtual void loadChildren();
     virtual void accept(ItemVisitor* visitor);

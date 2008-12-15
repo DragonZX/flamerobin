@@ -81,7 +81,7 @@ bool ItemCommands::unregisterFactory(const std::type_info& info,
 }
 //-----------------------------------------------------------------------------
 /*static*/
-PSharedItemCommands ItemCommands::createItemCommands(PSharedItem item)
+SharedItemCommands ItemCommands::createItemCommands(SharedItem item)
 {
     if (item != 0)
     {
@@ -92,10 +92,10 @@ PSharedItemCommands ItemCommands::createItemCommands(PSharedItem item)
         if (it != factories.end())
             return ((*it).second)->createItemCommands(item);
     }
-    return PSharedItemCommands();
+    return SharedItemCommands();
 }
 //-----------------------------------------------------------------------------
-ItemCommands::ItemCommands(PSharedItem item)
+ItemCommands::ItemCommands(SharedItem item)
     : wxEvtHandler(), accessorM(0), itemM(item)
 {
 }
@@ -104,7 +104,7 @@ void ItemCommands::addCommandsTo(wxMenu* /*menu*/, bool /*isContextMenu*/)
 {
 }
 //-----------------------------------------------------------------------------
-PSharedItem ItemCommands::getItem()
+SharedItem ItemCommands::getItem()
 {
     return itemM;
 }

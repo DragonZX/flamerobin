@@ -62,12 +62,12 @@ private:
 
     DECLARE_EVENT_TABLE()
 public:
-    DatabaseCommands(PSharedItem item);
+    DatabaseCommands(SharedItem item);
 
     virtual void addCommandsTo(wxMenu* menu, bool isContextMenu);
 };
 //-----------------------------------------------------------------------------
-DatabaseCommands::DatabaseCommands(PSharedItem item)
+DatabaseCommands::DatabaseCommands(SharedItem item)
     : ItemCommands(item), databaseM(0)
 {
     databaseM = dynamic_cast<Database*>(item.get());

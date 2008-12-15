@@ -50,12 +50,12 @@ private:
 
     DECLARE_EVENT_TABLE()
 public:
-    GeneratorCommands(PSharedItem item);
+    GeneratorCommands(SharedItem item);
 
     virtual void addCommandsTo(wxMenu* menu, bool isContextMenu);
 };
 //-----------------------------------------------------------------------------
-GeneratorCommands::GeneratorCommands(PSharedItem item)
+GeneratorCommands::GeneratorCommands(SharedItem item)
     : ItemCommands(item), generatorM(0)
 {
     generatorM = dynamic_cast<Generator*>(item.get());
@@ -99,12 +99,12 @@ private:
 protected:
     virtual bool hasChildItems();
 public:
-    GeneratorCollectionCommands(PSharedItem item);
+    GeneratorCollectionCommands(SharedItem item);
 
     virtual void addCommandsTo(wxMenu* menu, bool isContextMenu);
 };
 //-----------------------------------------------------------------------------
-GeneratorCollectionCommands::GeneratorCollectionCommands(PSharedItem item)
+GeneratorCollectionCommands::GeneratorCollectionCommands(SharedItem item)
     : ItemCommands(item), generatorsM(0)
 {
     generatorsM = dynamic_cast<GeneratorCollection*>(item.get());

@@ -46,10 +46,10 @@ class FunctionCommands : public ItemCommands
 private:
     Function* functionM;
 public:
-    FunctionCommands(PSharedItem item);
+    FunctionCommands(SharedItem item);
 };
 //-----------------------------------------------------------------------------
-FunctionCommands::FunctionCommands(PSharedItem item)
+FunctionCommands::FunctionCommands(SharedItem item)
     : ItemCommands(item), functionM(0)
 {
     functionM = dynamic_cast<Function*>(item.get());
@@ -69,12 +69,12 @@ private:
 protected:
     virtual bool hasChildItems();
 public:
-    FunctionCollectionCommands(PSharedItem item);
+    FunctionCollectionCommands(SharedItem item);
 
     virtual void addCommandsTo(wxMenu* menu, bool isContextMenu);
 };
 //-----------------------------------------------------------------------------
-FunctionCollectionCommands::FunctionCollectionCommands(PSharedItem item)
+FunctionCollectionCommands::FunctionCollectionCommands(SharedItem item)
     : ItemCommands(item), functionsM(0)
 {
     functionsM = dynamic_cast<FunctionCollection*>(item.get());

@@ -49,10 +49,10 @@ class ColumnCommands : public ItemCommands
 private:
     Column* columnM;
 public:
-    ColumnCommands(PSharedItem item);
+    ColumnCommands(SharedItem item);
 };
 //-----------------------------------------------------------------------------
-ColumnCommands::ColumnCommands(PSharedItem item)
+ColumnCommands::ColumnCommands(SharedItem item)
     : ItemCommands(item), columnM(0)
 {
     columnM = dynamic_cast<Column*>(item.get());
@@ -73,12 +73,12 @@ private:
 protected:
     virtual bool hasChildItems();
 public:
-    ColumnCollectionCommands(PSharedItem item);
+    ColumnCollectionCommands(SharedItem item);
 
     virtual void addCommandsTo(wxMenu* menu, bool isContextMenu);
 };
 //-----------------------------------------------------------------------------
-ColumnCollectionCommands::ColumnCollectionCommands(PSharedItem item)
+ColumnCollectionCommands::ColumnCollectionCommands(SharedItem item)
     : ItemCommands(item), columnsM(0), canCreateNewM(false)
 {
     columnsM = dynamic_cast<ColumnCollection*>(item.get());

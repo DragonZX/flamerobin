@@ -44,7 +44,7 @@
 #include "hierarchy/Database.h"
 //-----------------------------------------------------------------------------
 DatabaseBackupPanel::DatabaseBackupPanel(wxWindow* parent,
-        PSharedDatabase database)
+        SharedDatabase database)
     : BaseViewPanel(parent), databaseM(database)
 {
     new wxStaticText(this, wxID_ANY, wxT("ToDo: all controls need to go here..."));
@@ -52,7 +52,7 @@ DatabaseBackupPanel::DatabaseBackupPanel(wxWindow* parent,
 //-----------------------------------------------------------------------------
 /*static*/
 DatabaseBackupPanel* DatabaseBackupPanel::createViewPanel(const wxString& id,
-    PSharedDatabase database, ItemCommandsGUIAccessor* accessor)
+    SharedDatabase database, ItemCommandsGUIAccessor* accessor)
 {
     wxCHECK_MSG(database, 0,
         wxT("DatabaseBackupPanel::createViewPanel() called without database"));

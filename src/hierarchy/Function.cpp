@@ -60,9 +60,9 @@ void Function::accept(ItemVisitor* visitor)
 }
 //-----------------------------------------------------------------------------
 // FunctionCollection class
-PSharedItem FunctionCollection::createCollectionItem(const Identifier& identifier)
+SharedItem FunctionCollection::createCollectionItem(const Identifier& identifier)
 {
-    PSharedItem function(new Function(identifier));
+    SharedItem function(new Function(identifier));
     function->setParent(shared_from_this());
     return function;
 }
@@ -72,7 +72,7 @@ void FunctionCollection::loadChildren()
     Database* db = getDatabase();
     wxCHECK_RET(db,
         wxT("FunctionCollection::loadChildren() called without parent database"));
-    DatabaseConnection* dbc = db->getMetadataConnection();
+    SharedDatabaseConnection dbc = db->getMetadataConnection();
     if (dbc)
     {
         setLoadChildrenState(lcsLoading);

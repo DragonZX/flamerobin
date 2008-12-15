@@ -38,14 +38,14 @@ class wxAuiNotebook;
 class wxFrame;
 
 class ItemCommands;
-typedef boost::shared_ptr<ItemCommands> PSharedItemCommands;
+typedef boost::shared_ptr<ItemCommands> SharedItemCommands;
 //-----------------------------------------------------------------------------
 class ItemCommandsFactory
 {
 protected:
     virtual ~ItemCommandsFactory() {};
 public:
-    virtual PSharedItemCommands createItemCommands(PSharedItem item) = 0;
+    virtual SharedItemCommands createItemCommands(SharedItem item) = 0;
 };
 //-----------------------------------------------------------------------------
 class ItemCommandsGUIAccessor
@@ -65,9 +65,9 @@ private:
     static TypeInfoFactoryMap& getFactories();
 
     ItemCommandsGUIAccessor* accessorM;
-    PSharedItem itemM;
+    SharedItem itemM;
 protected:
-    ItemCommands(PSharedItem item);
+    ItemCommands(SharedItem item);
 
     virtual bool hasChildItems();
 
@@ -79,10 +79,10 @@ public:
         ItemCommandsFactory* factory);
     static bool unregisterFactory(const std::type_info& info,
         ItemCommandsFactory* factory);
-    static PSharedItemCommands createItemCommands(PSharedItem item);
+    static SharedItemCommands createItemCommands(SharedItem item);
 
     virtual void addCommandsTo(wxMenu* menu, bool isContextMenu);
-    PSharedItem getItem();
+    SharedItem getItem();
 
     ItemCommandsGUIAccessor* getGUIAccessor() const;
     void setGUIAccessor(ItemCommandsGUIAccessor* accessor);
@@ -100,9 +100,9 @@ public:
     {
         ItemCommands::unregisterFactory(typeid(T), this);
     };
-    virtual PSharedItemCommands createItemCommands(PSharedItem item)
+    virtual SharedItemCommands createItemCommands(SharedItem item)
     {
-        return PSharedItemCommands(new TC(item));
+        return SharedItemCommands(new TC(item));
     };
 };
 //-----------------------------------------------------------------------------

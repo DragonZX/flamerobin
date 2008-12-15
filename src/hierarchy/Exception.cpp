@@ -60,9 +60,9 @@ void Exception::accept(ItemVisitor* visitor)
 }
 //-----------------------------------------------------------------------------
 // ExceptionCollection class
-PSharedItem ExceptionCollection::createCollectionItem(const Identifier& identifier)
+SharedItem ExceptionCollection::createCollectionItem(const Identifier& identifier)
 {
-    PSharedItem exception(new Exception(identifier));
+    SharedItem exception(new Exception(identifier));
     exception->setParent(shared_from_this());
     return exception;
 }
@@ -72,7 +72,7 @@ void ExceptionCollection::loadChildren()
     Database* db = getDatabase();
     wxCHECK_RET(db,
         wxT("ExceptionCollection::loadChildren() called without parent database"));
-    DatabaseConnection* dbc = db->getMetadataConnection();
+    SharedDatabaseConnection dbc = db->getMetadataConnection();
     if (dbc)
     {
         setLoadChildrenState(lcsLoading);

@@ -60,17 +60,17 @@ public:
 public:
     ~Item();
 
-    PSharedItem getParent() const;
-    void setParent(PSharedItem parent);
+    SharedItem getParent() const;
+    void setParent(SharedItem parent);
 
     virtual Database* getDatabase();
     virtual Relation* getRelation();
 
     // access to child items (Composite pattern)
-    virtual bool containsChild(PSharedItem item) const = 0;
+    virtual bool containsChild(SharedItem item) const = 0;
     virtual bool hasChildren() const;
     virtual unsigned getChildrenCount() const = 0;
-    virtual PSharedItem getChild(unsigned index) const = 0;
+    virtual SharedItem getChild(unsigned index) const = 0;
 
     enum LoadChildrenState { lcsNotLoaded, lcsLoading, lcsLoaded };
     virtual LoadChildrenState getLoadChildrenState() const = 0;
@@ -102,8 +102,8 @@ public:
 protected:
     Item();
 
-    virtual bool addChild(PSharedItem child) = 0;
-    virtual bool removeChild(PSharedItem child) = 0;
+    virtual bool addChild(SharedItem child) = 0;
+    virtual bool removeChild(SharedItem child) = 0;
 private:
     Handle handleM;
     boost::weak_ptr<Item> parentM;
@@ -118,14 +118,14 @@ class ItemTemplate : public Item,
     public ItemHasChildrenPolicy, public ItemHasIdentifierPolicy
 {
 protected:
-    bool addChild(PSharedItem child)
+    bool addChild(SharedItem child)
     {
         if (!ItemHasChildrenPolicy::addChildImpl(child))
             return false;
         notifyObservers();
         return true;
     }
-    bool removeChild(PSharedItem child)
+    bool removeChild(SharedItem child)
     {
         if (!ItemHasChildrenPolicy::removeChildImpl(child))
             return false;
@@ -154,16 +154,16 @@ public:
         ItemHasChildrenPolicy::unlockChildrenImpl();
     };
 
-    virtual bool containsChild(PSharedItem child) const
+    virtual bool containsChild(SharedItem child) const
         { return ItemHasChildrenPolicy::containsChildImpl(child); };
 
     virtual unsigned getChildrenCount() const
         { return ItemHasChildrenPolicy::getChildrenCountImpl(); };
 
-    virtual PSharedItem getChild(unsigned index) const
+    virtual SharedItem getChild(unsigned index) const
         { return ItemHasChildrenPolicy::getChildImpl(index); };
 
-    virtual PSharedItem getChild(const wxString& name) const
+    virtual SharedItem getChild(const wxString& name) const
         { return ItemHasChildrenPolicy::getChildImpl(name); };
 
     virtual LoadChildrenState getLoadChildrenState() const
@@ -204,15 +204,15 @@ private:
 class ItemHasNoChildren
 {
 protected:
-    bool containsChildImpl(PSharedItem child) const;
+    bool containsChildImpl(SharedItem child) const;
     unsigned getChildrenCountImpl() const;
-    PSharedItem getChildImpl(unsigned index) const;
-    PSharedItem getChildImpl(const wxString& name) const;
+    SharedItem getChildImpl(unsigned index) const;
+    SharedItem getChildImpl(const wxString& name) const;
     Item::LoadChildrenState getLoadChildrenStateImpl() const;
     void setLoadChildrenStateImpl(Item::LoadChildrenState state);
 
-    bool addChildImpl(PSharedItem child);
-    bool removeChildImpl(PSharedItem child);
+    bool addChildImpl(SharedItem child);
+    bool removeChildImpl(SharedItem child);
 
     void lockChildrenImpl();
     void unlockChildrenImpl();
@@ -225,20 +225,20 @@ public:
 protected:
     ItemHasChildren();
 
-    bool containsChildImpl(PSharedItem child) const;
+    bool containsChildImpl(SharedItem child) const;
     unsigned getChildrenCountImpl() const;
-    PSharedItem getChildImpl(unsigned index) const;
-    PSharedItem getChildImpl(const wxString& name) const;
+    SharedItem getChildImpl(unsigned index) const;
+    SharedItem getChildImpl(const wxString& name) const;
     Item::LoadChildrenState getLoadChildrenStateImpl() const;
     void setLoadChildrenStateImpl(Item::LoadChildrenState state);
 
-    bool addChildImpl(PSharedItem child);
-    bool removeChildImpl(PSharedItem child);
+    bool addChildImpl(SharedItem child);
+    bool removeChildImpl(SharedItem child);
 
     void lockChildrenImpl();
     void unlockChildrenImpl();
 private:
-    std::vector<PSharedItem> childrenM;
+    std::vector<SharedItem> childrenM;
     Item::LoadChildrenState loadChildrenStateM;
 };
 //-----------------------------------------------------------------------------
@@ -257,8 +257,8 @@ public:
         VectorOfAny data;
     };
 protected:
-    virtual PSharedItem createCollectionItem(const Identifier& identifier) = 0;
-    virtual void setCollectionItemData(PSharedItem item,
+    virtual SharedItem createCollectionItem(const Identifier& identifier) = 0;
+    virtual void setCollectionItemData(SharedItem item,
         const VectorOfAny& data);
     void setLoadedWithoutChildren();
 public:

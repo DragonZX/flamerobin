@@ -63,8 +63,8 @@ public:
 class ColumnCollection: public MetadataItemCollection
 {
 protected:
-    virtual PSharedItem createCollectionItem(const Identifier& identifier);
-    virtual void setCollectionItemData(PSharedItem item,
+    virtual SharedItem createCollectionItem(const Identifier& identifier);
+    virtual void setCollectionItemData(SharedItem item,
         const VectorOfAny& data);
 public:
     virtual void loadChildren();

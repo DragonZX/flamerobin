@@ -293,9 +293,9 @@ void Database::setStoreEncryptedPassword(bool encrypted)
     encryptedPasswordM = encrypted;
 }
 //-----------------------------------------------------------------------------
-DatabaseConnection* Database::getMetadataConnection()
+SharedDatabaseConnection Database::getMetadataConnection()
 {
-    return metadataConnectionM.get();
+    return metadataConnectionM;
 }
 //-----------------------------------------------------------------------------
 void Database::accept(ItemVisitor* visitor)
@@ -379,51 +379,51 @@ void Database::setServerVersion(const wxString& versionString)
 //-----------------------------------------------------------------------------
 void Database::createCollections()
 {
-    PSharedItem me(shared_from_this());
+    SharedItem me(shared_from_this());
     // create shared pointers to collections
     // setParent() will add these to the list of child items
     // create (and load) them in order of importance, because captions
     // may be different in other languages and need to be reordered anyway
-    tablesM = PSharedTableCollection(new TableCollection());
+    tablesM = SharedTableCollection(new TableCollection());
     tablesM->setParent(me);
     tablesM->loadChildren();
 
-    viewsM = PSharedViewCollection(new ViewCollection());
+    viewsM = SharedViewCollection(new ViewCollection());
     viewsM->setParent(me);
     viewsM->loadChildren();
 
-    proceduresM = PSharedProcedureCollection(new ProcedureCollection());
+    proceduresM = SharedProcedureCollection(new ProcedureCollection());
     proceduresM->setParent(me);
     proceduresM->loadChildren();
 
     if (serverVersionM.supportsDatabaseTriggers())
     {
-        triggersM = PSharedTriggerCollection(new TriggerCollection());
+        triggersM = SharedTriggerCollection(new TriggerCollection());
         triggersM->setParent(me);
         triggersM->loadChildren();
     }
 
-    functionsM = PSharedFunctionCollection(new FunctionCollection());
+    functionsM = SharedFunctionCollection(new FunctionCollection());
     functionsM->setParent(me);
     functionsM->loadChildren();
 
-    generatorsM = PSharedGeneratorCollection(new GeneratorCollection());
+    generatorsM = SharedGeneratorCollection(new GeneratorCollection());
     generatorsM->setParent(me);
     generatorsM->loadChildren();
 
-    domainsM = PSharedDomainCollection(new DomainCollection());
+    domainsM = SharedDomainCollection(new DomainCollection());
     domainsM->setParent(me);
     domainsM->loadChildren();
 
-    exceptionsM = PSharedExceptionCollection(new ExceptionCollection());
+    exceptionsM = SharedExceptionCollection(new ExceptionCollection());
     exceptionsM->setParent(me);
     exceptionsM->loadChildren();
 
-    systemTablesM = PSharedSystemTableCollection(new SystemTableCollection());
+    systemTablesM = SharedSystemTableCollection(new SystemTableCollection());
     systemTablesM->setParent(me);
     systemTablesM->loadChildren();
 
-    systemDomainsM = PSharedSystemDomainCollection(new SystemDomainCollection());
+    systemDomainsM = SharedSystemDomainCollection(new SystemDomainCollection());
     systemDomainsM->setParent(me);
     systemDomainsM->loadChildren();
 }

@@ -39,8 +39,8 @@ public:
     virtual void loadChildren();
     virtual void accept(ItemVisitor* visitor);
 private:
-    PSharedColumnCollection columnsM;
-    PSharedTriggerCollection triggersM;
+    SharedColumnCollection columnsM;
+    SharedTriggerCollection triggersM;
 };
 //-----------------------------------------------------------------------------
 #endif // FR_RELATION_H

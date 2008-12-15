@@ -42,7 +42,7 @@ public:
     // the treeRootItem parameter could be used to open secondary instances
     // of MainFrame for working with only a part of the hierarchy (like a
     // single database)
-    MainFrame(wxWindow* parent, int id, PSharedItem treeRootItem);
+    MainFrame(wxWindow* parent, int id, SharedItem treeRootItem);
     ~MainFrame();
 
     bool openUnregisteredDatabase(const wxString& dbpath);
@@ -63,8 +63,8 @@ private:
     DBHTreeControl* treeUnregisteredDatabasesM;
     wxAuiNotebook* auiNotebookM;
 
-    PSharedItemCommands selectedItemCommandsM;
-    void setSelectedItem(PSharedItem selectedItem);
+    SharedItemCommands selectedItemCommandsM;
+    void setSelectedItem(SharedItem selectedItem);
     Database* getSelectedDatabase();
     bool isMainFrameM;
 

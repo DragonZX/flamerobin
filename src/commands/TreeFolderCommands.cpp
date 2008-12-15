@@ -59,12 +59,12 @@ private:
 
     DECLARE_EVENT_TABLE()
 public:
-    TreeFolderCommands(PSharedItem item);
+    TreeFolderCommands(SharedItem item);
 
     virtual void addCommandsTo(wxMenu* menu, bool isContextMenu);
 };
 //-----------------------------------------------------------------------------
-TreeFolderCommands::TreeFolderCommands(PSharedItem item)
+TreeFolderCommands::TreeFolderCommands(SharedItem item)
     : ItemCommands(item), folderM(0)
 {
     folderM = dynamic_cast<TreeFolder*>(item.get());
@@ -129,7 +129,7 @@ void TreeFolderCommands::OnConnectAllDatabases(wxCommandEvent& /*event*/)
 {
     for (unsigned i = 0; i < folderM->getChildrenCount(); ++i)
     {
-        PSharedItem item = folderM->getChild(i);
+        SharedItem item = folderM->getChild(i);
         Database* database = dynamic_cast<Database*>(item.get());
         if (database && database->canConnect())
             database->connect();
@@ -140,7 +140,7 @@ void TreeFolderCommands::OnUpdateConnectAllDatabases(wxUpdateUIEvent& event)
 {
     for (unsigned i = 0; i < folderM->getChildrenCount(); ++i)
     {
-        PSharedItem item = folderM->getChild(i);
+        SharedItem item = folderM->getChild(i);
         Database* database = dynamic_cast<Database*>(item.get());
         if (database && database->canConnect())
         {
@@ -155,7 +155,7 @@ void TreeFolderCommands::OnDisconnectAllDatabases(wxCommandEvent& /*event*/)
 {
     for (unsigned i = 0; i < folderM->getChildrenCount(); ++i)
     {
-        PSharedItem item = folderM->getChild(i);
+        SharedItem item = folderM->getChild(i);
         Database* database = dynamic_cast<Database*>(item.get());
         if (database && database->isConnected())
             database->disconnect();
@@ -166,7 +166,7 @@ void TreeFolderCommands::OnUpdateDisconnectAllDatabases(wxUpdateUIEvent& event)
 {
     for (unsigned i = 0; i < folderM->getChildrenCount(); ++i)
     {
-        PSharedItem item = folderM->getChild(i);
+        SharedItem item = folderM->getChild(i);
         Database* database = dynamic_cast<Database*>(item.get());
         if (database && database->isConnected())
         {

@@ -46,10 +46,10 @@ class ProcedureCommands : public ItemCommands
 private:
     Procedure* procedureM;
 public:
-    ProcedureCommands(PSharedItem item);
+    ProcedureCommands(SharedItem item);
 };
 //-----------------------------------------------------------------------------
-ProcedureCommands::ProcedureCommands(PSharedItem item)
+ProcedureCommands::ProcedureCommands(SharedItem item)
     : ItemCommands(item), procedureM(0)
 {
     procedureM = dynamic_cast<Procedure*>(item.get());
@@ -69,12 +69,12 @@ private:
 protected:
     virtual bool hasChildItems();
 public:
-    ProcedureCollectionCommands(PSharedItem item);
+    ProcedureCollectionCommands(SharedItem item);
 
     virtual void addCommandsTo(wxMenu* menu, bool isContextMenu);
 };
 //-----------------------------------------------------------------------------
-ProcedureCollectionCommands::ProcedureCollectionCommands(PSharedItem item)
+ProcedureCollectionCommands::ProcedureCollectionCommands(SharedItem item)
     : ItemCommands(item), proceduresM(0)
 {
     proceduresM = dynamic_cast<ProcedureCollection*>(item.get());

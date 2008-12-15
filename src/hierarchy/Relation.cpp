@@ -51,12 +51,12 @@ void Relation::loadChildren()
 {
     if (getLoadChildrenState() != lcsLoaded)
     {
-        PSharedItem me(shared_from_this());
+        SharedItem me(shared_from_this());
 
-        columnsM = PSharedColumnCollection(new ColumnCollection());
+        columnsM = SharedColumnCollection(new ColumnCollection());
         columnsM->setParent(me);
 
-        triggersM = PSharedTriggerCollection(new TriggerCollection());
+        triggersM = SharedTriggerCollection(new TriggerCollection());
         triggersM->setParent(me);
 
         setLoadChildrenState(lcsLoaded);
