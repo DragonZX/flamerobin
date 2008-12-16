@@ -57,21 +57,21 @@ private:
 protected:
     virtual void executeJob(DatabaseConnectionThread* thread);
 public:
-    GeneratorLoadValueJob(Database& database,
+    GeneratorLoadValueJob(SharedDatabase database,
         const ItemHandleAndName& generator);
-    GeneratorLoadValueJob(Database& database,
+    GeneratorLoadValueJob(SharedDatabase database,
         const std::list<ItemHandleAndName>& generators);
     virtual void processResults();
 };
 //-----------------------------------------------------------------------------
-GeneratorLoadValueJob::GeneratorLoadValueJob(Database& database,
+GeneratorLoadValueJob::GeneratorLoadValueJob(SharedDatabase database,
         const ItemHandleAndName& generator)
     : DatabaseConnectionThreadJob(database)
 {
     generatorsM.push_back(generator);
 }
 //-----------------------------------------------------------------------------
-GeneratorLoadValueJob::GeneratorLoadValueJob(Database& database,
+GeneratorLoadValueJob::GeneratorLoadValueJob(SharedDatabase database,
         const std::list<ItemHandleAndName>& generators)
     : DatabaseConnectionThreadJob(database), generatorsM(generators)
 {
@@ -169,7 +169,7 @@ void Generator::loadValue()
         me.handle = getHandle();
         me.name = wx2std(getIdentifier().getQuoted());
 
-        SharedDBCThreadJob job(new GeneratorLoadValueJob(*db, me));
+        SharedDBCThreadJob job(new GeneratorLoadValueJob(db->asShared(), me));
         dbc->executeJob(job);
     }
 }
@@ -239,7 +239,8 @@ void GeneratorCollection::loadValues()
             }
         }
 
-        SharedDBCThreadJob job(new GeneratorLoadValueJob(*db, generators));
+        SharedDBCThreadJob job(new GeneratorLoadValueJob(db->asShared(),
+            generators));
         dbc->executeJob(job);
     }
 }

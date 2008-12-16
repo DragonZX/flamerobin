@@ -45,24 +45,22 @@ class DatabaseConnectionThread: public WorkerThread<SharedDBCThreadJob>
 {
 private:
     IBPP::Database databaseM;
-    IBPP::Transaction transactionM;
 public:
     DatabaseConnectionThread(ThreadJobManager<SharedDBCThreadJob>& manager);
     IBPP::Database& getDatabase(); 
-    IBPP::Transaction& getTransaction();
     void setDatabase(IBPP::Database& database);
 };
 //-----------------------------------------------------------------------------
 class DatabaseConnectionThreadJob
 {
 private:
-    Database& databaseM;
+    SharedDatabase databaseM;
 protected:
     std::string exceptionWhatM;
     bool systemErrorM;
     bool hasError();
 
-    Database& getDatabase();
+    SharedDatabase getDatabase();
     // This is called in the context of the background thread.
     // Override this method and implement "workload" there.
     // Make sure that all exceptions are handled and information is stored
@@ -71,7 +69,7 @@ protected:
     virtual void executeJob(DatabaseConnectionThread* thread) = 0;
     void reportError(const wxString& primaryMsg);
 public:
-    DatabaseConnectionThreadJob(Database& database);
+    DatabaseConnectionThreadJob(SharedDatabase database);
 
     // Override these methods to implement interuptible jobs.
     virtual bool canCancelExecution();
@@ -89,7 +87,8 @@ public:
 class DatabaseConnection: public WorkerThreadEngine<SharedDBCThreadJob>
 {
 private:
-    Database& databaseM;
+    boost::weak_ptr<Database> databaseM;
+//    Database& databaseM;
     DatabaseConnection(Database& database);
     friend class Database;
 protected:

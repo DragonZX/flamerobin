@@ -86,6 +86,8 @@ public:
     Database();
     ~Database();
 
+    SharedDatabase asShared();
+
     virtual Database* getDatabase();
     virtual bool hasChildren();
 

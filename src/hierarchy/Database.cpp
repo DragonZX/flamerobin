@@ -184,6 +184,11 @@ Database::~Database()
     resetTemporaryCredentials();
 }
 //-----------------------------------------------------------------------------
+SharedDatabase Database::asShared()
+{
+    return boost::dynamic_pointer_cast<Database>(shared_from_this());
+}
+//-----------------------------------------------------------------------------
 Database* Database::getDatabase()
 {
     return this;

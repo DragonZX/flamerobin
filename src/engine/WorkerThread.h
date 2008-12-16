@@ -31,6 +31,7 @@
 #include <wx/thread.h>
 
 #include <list>
+#include <memory>
 
 #include <boost/shared_ptr.hpp>
 //-----------------------------------------------------------------------------
@@ -95,7 +96,7 @@ private:
     wxCondition conditionM;
     bool shutdownRequestM;
 
-    WorkerThread<ThreadJob>* threadM;
+    std::auto_ptr<WorkerThread<ThreadJob> > threadM;
 
     typedef std::list<ThreadJob> ThreadJobList;
     ThreadJobList pendingJobsM;
@@ -182,6 +183,14 @@ private:
         conditionM.Signal();
     };
 
+    // used by QueueJob() to create thread or wake it up if sleeping
+    inline void wakeupThread()
+    {
+        if (0 == threadM.get())
+            threadM.reset(createWorkerThread());
+        conditionM.Signal();
+    };
+
 protected:
     virtual WorkerThread<ThreadJob>* createWorkerThread() = 0
     {
@@ -195,10 +204,7 @@ protected:
         if (shutdownRequestM || !job.get())
             return false;
         pendingJobsM.push_back(job);
-
-        if (!threadM)
-            threadM = createWorkerThread();
-        conditionM.Signal();
+        wakeupThread();
         return true;
     };
 
@@ -220,10 +226,7 @@ protected:
         }
         if (!added)
             return false;
-
-        if (!threadM)
-            threadM = createWorkerThread();
-        conditionM.Signal();
+        wakeupThread();
         return true;
     };
 
@@ -240,13 +243,12 @@ public:
     {
         Disconnect(EVT_JobCompleted,
             wxCommandEventHandler(WorkerThreadEngine::OnJobCompleted));
-
-        if (threadM)
+        if (threadM.get())
         {
+            // make sure that even a sleeping thread is properly shut down
             shutdownThread();
             threadM->Wait();
-            delete threadM;
-            threadM = 0;
+            threadM.reset();
         }
     };
 };

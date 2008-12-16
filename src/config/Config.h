@@ -34,6 +34,7 @@
 #include <wx/stdpaths.h>
 
 #include <map>
+#include <memory>
 #include <vector>
 
 #include "core/Observer.h"
@@ -60,7 +61,7 @@ class wxFileConfig;
 class Config: public Subject
 {
 private:
-    mutable wxFileConfig* configM;
+    mutable std::auto_ptr<wxFileConfig> configM;
     bool needsFlushM;
     // performs lazy initialization of configM.
     wxFileConfig* getConfig() const;

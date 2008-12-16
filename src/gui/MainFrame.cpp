@@ -84,6 +84,9 @@ MainFrame::MainFrame(wxWindow* parent, int id, SharedItem treeRootItem)
     updateStatusBar();
 
 //    treeUnregisteredDatabasesM->createRootNode(SharedItem());
+
+    if (treeRegisteredDatabasesM->IsShown())
+        treeRegisteredDatabasesM->SetFocus();
 }
 //-----------------------------------------------------------------------------
 MainFrame::~MainFrame()

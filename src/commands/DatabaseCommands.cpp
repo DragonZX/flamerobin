@@ -140,8 +140,8 @@ void DatabaseCommands::OnBackupDatabase(wxCommandEvent& /*event*/)
     if (BaseViewPanel::activateViewPanel(id))
         return;
 
-    DatabaseBackupPanel::createViewPanel(id,
-        boost::dynamic_pointer_cast<Database>(getItem()), getGUIAccessor());
+    DatabaseBackupPanel::createViewPanel(id, databaseM->asShared(),
+        getGUIAccessor());
 }
 //-----------------------------------------------------------------------------
 void DatabaseCommands::DatabaseCanBackup(wxUpdateUIEvent& event)
@@ -186,8 +186,8 @@ void DatabaseCommands::OnRestoreDatabase(wxCommandEvent& /*event*/)
     if (BaseViewPanel::activateViewPanel(id))
         return;
 
-    DatabaseRestorePanel::createViewPanel(id,
-        boost::dynamic_pointer_cast<Database>(getItem()), getGUIAccessor());
+    DatabaseRestorePanel::createViewPanel(id, databaseM->asShared(),
+        getGUIAccessor());
 }
 //-----------------------------------------------------------------------------
 void DatabaseCommands::DatabaseCanRestore(wxUpdateUIEvent& event)

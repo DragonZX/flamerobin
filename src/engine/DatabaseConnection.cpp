@@ -56,13 +56,6 @@ IBPP::Database& DatabaseConnectionThread::getDatabase()
     return databaseM;
 }; 
 //-----------------------------------------------------------------------------
-IBPP::Transaction& DatabaseConnectionThread::getTransaction()
-{
-    // all access to IBPP objects has to happen in this thread
-    wxASSERT(!wxIsMainThread());
-    return transactionM;
-};
-//-----------------------------------------------------------------------------
 void DatabaseConnectionThread::setDatabase(IBPP::Database& database)
 {
     // all access to IBPP objects has to happen in this thread
@@ -71,12 +64,13 @@ void DatabaseConnectionThread::setDatabase(IBPP::Database& database)
 };
 //-----------------------------------------------------------------------------
 // DatabaseConnectionThreadJob base class
-DatabaseConnectionThreadJob::DatabaseConnectionThreadJob(Database& database)
+DatabaseConnectionThreadJob::DatabaseConnectionThreadJob(
+        SharedDatabase database)
     : databaseM(database), exceptionWhatM(), systemErrorM(false)
 {
 }
 //-----------------------------------------------------------------------------
-Database& DatabaseConnectionThreadJob::getDatabase()
+SharedDatabase DatabaseConnectionThreadJob::getDatabase()
 {
     // all access to database has to happen in main thread
     wxASSERT(wxIsMainThread());
@@ -147,18 +141,18 @@ private:
 protected:
     virtual void executeJob(DatabaseConnectionThread* thread);
 public:
-    DatabaseConnectJob(Database& database);
+    DatabaseConnectJob(SharedDatabase database);
     virtual void processResults();
 };
 //-----------------------------------------------------------------------------
-DatabaseConnectJob::DatabaseConnectJob(Database& database)
+DatabaseConnectJob::DatabaseConnectJob(SharedDatabase database)
     : DatabaseConnectionThreadJob(database), connectedM(false)
 {
     wxASSERT(wxIsMainThread());
 
-    const DatabaseCredentials& dbc = database.getCredentials();
+    const DatabaseCredentials& dbc = database->getCredentials();
     charsetM = wx2std(dbc.getCharset());
-    connectionStringM = wx2std(getDatabase().getConnectionString());
+    connectionStringM = wx2std(database->getConnectionString());
     passwordM = wx2std(dbc.getRawPassword());
     roleNameM = wx2std(dbc.getRole());
     userNameM = wx2std(dbc.getUsername());
@@ -196,14 +190,14 @@ void DatabaseConnectJob::processResults()
 
     if (connectedM)
     {
-        getDatabase().setServerVersion(std2wx(serverVersionM));
-        getDatabase().setConnectionState(Database::csConnected);
+        getDatabase()->setServerVersion(std2wx(serverVersionM));
+        getDatabase()->setConnectionState(Database::csConnected);
     }
     else
     {
-        getDatabase().setConnectionState(Database::csConnectionFailed);
+        getDatabase()->setConnectionState(Database::csConnectionFailed);
         wxString primaryMsg(wxString::Format(_("An error occurred while connecting to the database \"%s\"!"),
-            getDatabase().getName().c_str()));
+            getDatabase()->getName().c_str()));
         reportError(primaryMsg);
     }
 }
@@ -216,11 +210,11 @@ private:
 protected:
     virtual void executeJob(DatabaseConnectionThread* thread);
 public:
-    DatabaseDisconnectJob(Database& database);
+    DatabaseDisconnectJob(SharedDatabase database);
     virtual void processResults();
 };
 //-----------------------------------------------------------------------------
-DatabaseDisconnectJob::DatabaseDisconnectJob(Database& database)
+DatabaseDisconnectJob::DatabaseDisconnectJob(SharedDatabase database)
     : DatabaseConnectionThreadJob(database), disconnectedM(false)
 {
     wxASSERT(wxIsMainThread());
@@ -244,7 +238,7 @@ void DatabaseDisconnectJob::processResults()
     wxASSERT(wxIsMainThread());
 
     if (disconnectedM)
-        getDatabase().setConnectionState(Database::csDisconnected);
+        getDatabase()->setConnectionState(Database::csDisconnected);
     else
         reportError(_("An error occurred while disconnecting from the database!"));
 }
@@ -261,14 +255,14 @@ private:
 protected:
     virtual void executeJob(DatabaseConnectionThread* thread);
 public:
-    FetchIdentifiersJob(Database& database, Item::Handle itemHandle,
+    FetchIdentifiersJob(SharedDatabase database, Item::Handle itemHandle,
         const std::string& statement);
-    FetchIdentifiersJob(Database& database, Item::Handle itemHandle,
+    FetchIdentifiersJob(SharedDatabase database, Item::Handle itemHandle,
         const std::string& statement, const std::vector<std::string>& params);
     virtual void processResults();
 };
 //-----------------------------------------------------------------------------
-FetchIdentifiersJob::FetchIdentifiersJob(Database& database,
+FetchIdentifiersJob::FetchIdentifiersJob(SharedDatabase database,
         Item::Handle itemHandle, const std::string& statement)
     : DatabaseConnectionThreadJob(database), itemHandleM(itemHandle),
         statementM(statement), paramsM()
@@ -276,7 +270,7 @@ FetchIdentifiersJob::FetchIdentifiersJob(Database& database,
     wxASSERT(wxIsMainThread());
 }
 //-----------------------------------------------------------------------------
-FetchIdentifiersJob::FetchIdentifiersJob(Database& database,
+FetchIdentifiersJob::FetchIdentifiersJob(SharedDatabase database,
         Item::Handle itemHandle, const std::string& statement,
         const std::vector<std::string>& params)
     : DatabaseConnectionThreadJob(database), itemHandleM(itemHandle),
@@ -396,8 +390,9 @@ void FetchIdentifiersJob::processResults()
 //-----------------------------------------------------------------------------
 // DatabaseConnection class
 DatabaseConnection::DatabaseConnection(Database& database)
-    : WorkerThreadEngine<SharedDBCThreadJob>(), databaseM(database)
+    : WorkerThreadEngine<SharedDBCThreadJob>()
 {
+    databaseM = database.asShared();
 }
 //-----------------------------------------------------------------------------
 WorkerThread<SharedDBCThreadJob>* DatabaseConnection::createWorkerThread()
@@ -407,12 +402,16 @@ WorkerThread<SharedDBCThreadJob>* DatabaseConnection::createWorkerThread()
 //-----------------------------------------------------------------------------
 void DatabaseConnection::connect()
 {
-    queueJob(SharedDBCThreadJob(new DatabaseConnectJob(databaseM)));
+    SharedDatabase db = databaseM.lock();
+    if (db)
+        queueJob(SharedDBCThreadJob(new DatabaseConnectJob(db)));
 }
 //-----------------------------------------------------------------------------
 void DatabaseConnection::disconnect()
 {
-    queueJob(SharedDBCThreadJob(new DatabaseDisconnectJob(databaseM)));
+    SharedDatabase db = databaseM.lock();
+    if (db)
+        queueJob(SharedDBCThreadJob(new DatabaseDisconnectJob(db)));
 }
 //-----------------------------------------------------------------------------
 void DatabaseConnection::executeJob(SharedDBCThreadJob job)
@@ -425,14 +424,22 @@ void DatabaseConnection::executeJob(SharedDBCThreadJob job)
 void DatabaseConnection::loadCollection(Item::Handle itemHandle,
     const std::string& sql)
 {
-    queueJob(SharedDBCThreadJob(
-        new FetchIdentifiersJob(databaseM, itemHandle, sql)));
+    SharedDatabase db = databaseM.lock();
+    if (db)
+    {
+        queueJob(SharedDBCThreadJob(
+            new FetchIdentifiersJob(db, itemHandle, sql)));
+    }
 }
 //-----------------------------------------------------------------------------
 void DatabaseConnection::loadCollection(Item::Handle itemHandle,
     const std::string& sql, const std::vector<std::string>& params)
 {
-    queueJob(SharedDBCThreadJob(
-        new FetchIdentifiersJob(databaseM, itemHandle, sql, params)));
+    SharedDatabase db = databaseM.lock();
+    if (db)
+    {
+        queueJob(SharedDBCThreadJob(
+            new FetchIdentifiersJob(db, itemHandle, sql, params)));
+    }
 }
 //-----------------------------------------------------------------------------

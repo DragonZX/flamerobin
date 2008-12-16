@@ -70,21 +70,20 @@ Config::Config()
 //-----------------------------------------------------------------------------
 Config::~Config()
 {
-    delete configM;
 }
 //-----------------------------------------------------------------------------
 wxFileConfig* Config::getConfig() const
 {
-    if (!configM)
+    if (0 == configM.get())
     {
         wxFileName configFileName = getConfigFileName();
         if (!wxDirExists(configFileName.GetPath()))
             wxMkdir(configFileName.GetPath());
-        configM = new wxFileConfig(wxT(""), wxT(""),
-            configFileName.GetFullPath(), wxT(""), wxCONFIG_USE_LOCAL_FILE);
+        configM.reset(new wxFileConfig(wxT(""), wxT(""),
+            configFileName.GetFullPath(), wxT(""), wxCONFIG_USE_LOCAL_FILE));
         configM->SetExpandEnvVars(false);
     }
-    return configM;
+    return configM.get();
 }
 //-----------------------------------------------------------------------------
 void Config::lockedChanged(bool locked)
