@@ -54,12 +54,14 @@ public:
 class DatabaseConnectionThreadJob
 {
 private:
-    SharedDatabase databaseM;
+    boost::weak_ptr<Database> databaseM;
 protected:
     std::string exceptionWhatM;
     bool systemErrorM;
     bool hasError();
 
+    // Must only be called in the context of the main thread, and can return
+    // a SharedDatabase that is not actually assigned!
     SharedDatabase getDatabase();
     // This is called in the context of the background thread.
     // Override this method and implement "workload" there.
@@ -71,9 +73,8 @@ protected:
 public:
     DatabaseConnectionThreadJob(SharedDatabase database);
 
-    // Override these methods to implement interuptible jobs.
-    virtual bool canCancelExecution();
-    virtual void cancelExecution();
+    // Override this method to implement interuptible jobs.
+    virtual void tryCancelExecution();
     // This is called in the context of the background thread.
     // Exception handling and type-casting of thread parameter to class 
     // DatabaseConnectionThread* is taken care of.
@@ -87,10 +88,9 @@ public:
 class DatabaseConnection: public WorkerThreadEngine<SharedDBCThreadJob>
 {
 private:
-    boost::weak_ptr<Database> databaseM;
-//    Database& databaseM;
-    DatabaseConnection(Database& database);
     friend class Database;
+    boost::weak_ptr<Database> databaseM;
+    DatabaseConnection(Database& database);
 protected:
     virtual WorkerThread<SharedDBCThreadJob>* createWorkerThread();
 public:

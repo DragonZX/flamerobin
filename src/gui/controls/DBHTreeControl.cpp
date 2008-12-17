@@ -422,7 +422,7 @@ void DBHItemTreeNodeProperties::visit(Generator& generator)
     if (generator.isValueLoaded())
     {
         std::string v = boost::lexical_cast<std::string>(generator.getValue());
-        captionM += std2wx(" = " + v);
+        captionM += std2wx(" = " + v, wxConvCurrent);
     }
     imageIndexM = DBHTreeImageList::get().getImageIndex(ART_Generator);
 }

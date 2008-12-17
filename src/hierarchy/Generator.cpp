@@ -167,7 +167,8 @@ void Generator::loadValue()
     {
         ItemHandleAndName me;
         me.handle = getHandle();
-        me.name = wx2std(getIdentifier().getQuoted());
+        me.name = wx2std(getIdentifier().getQuoted(),
+            db->getCharsetConverter());
 
         SharedDBCThreadJob job(new GeneratorLoadValueJob(db->asShared(), me));
         dbc->executeJob(job);
@@ -234,7 +235,8 @@ void GeneratorCollection::loadValues()
             {
                 ItemHandleAndName han;
                 han.handle = generator->getHandle();
-                han.name = wx2std(generator->getIdentifier().getQuoted());
+                han.name = wx2std(generator->getIdentifier().getQuoted(),
+                    db->getCharsetConverter());
                 generators.push_back(han);
             }
         }

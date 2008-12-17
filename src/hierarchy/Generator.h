@@ -28,7 +28,7 @@
 #ifndef FR_GENERATOR_H
 #define FR_GENERATOR_H
 //-----------------------------------------------------------------------------
-#include <ibpp.h> // TODO: for int64_t, better use a different header file
+#include <ibpp.h> // for int64_t
 
 #include "hierarchy/Item.h"
 //-----------------------------------------------------------------------------

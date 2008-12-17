@@ -36,6 +36,7 @@
     #include "wx/wx.h"
 #endif
 
+#include <wx/fontmap.h>
 #include <wx/regex.h>
 
 #include "core/StringUtils.h"
@@ -363,6 +364,7 @@ void Database::setConnectionState(ConnectionState state)
         }
         else if (connectionStateM == csConnected)
         {
+            createCharsetConverter();
             createCollections();
             refreshData();
         }
@@ -380,6 +382,55 @@ bool Database::canRestoreFromBackup() const
 void Database::setServerVersion(const wxString& versionString)
 {
     serverVersionM.initialize(versionString);
+}
+//-----------------------------------------------------------------------------
+wxString mapConnectionCharsetToSystemCharset(const wxString& connectionCharset)
+{
+    wxString charset(connectionCharset.Upper().Trim());
+    charset.Trim(false);
+
+    // fixes hang when character set name empty (invalid encoding is returned)
+    if (charset.empty())
+        charset = wxT("NONE");
+
+    // Firebird charsets WIN125X need to be replaced with either
+    // WINDOWS125X or CP125X - we take the latter
+    if (charset.Mid(0, 5) == wxT("WIN12"))
+        return wxT("CP12") + charset.Mid(5);
+
+    // Firebird charsets ISO8859_X
+    if (charset.Mid(0, 8) == wxT("ISO8859_"))
+        return wxT("ISO-8859-") + charset.Mid(8);
+
+    // all other mappings need to be added here...
+    struct CharsetMapping { const wxChar* connCS; const wxChar* convCS; };
+    static const CharsetMapping mappings[] = {
+        { wxT("UTF8"), wxT("UTF-8") }, { wxT("UNICODE_FSS"), wxT("UTF-8") }
+    };
+    int mappingCount = sizeof(mappings) / sizeof(CharsetMapping);
+    for (int i = 0; i < mappingCount; i++)
+    {
+        if (mappings[i].connCS == charset)
+            return mappings[i].convCS;
+    }
+
+    return charset;
+}
+//-----------------------------------------------------------------------------
+void Database::createCharsetConverter()
+{
+    wxString cs(mapConnectionCharsetToSystemCharset(
+        getCredentials().getCharset()));
+    wxFontEncoding fe = wxFontMapperBase::Get()->CharsetToEncoding(cs, false);
+    charsetConverterM.reset(
+        (fe != wxFONTENCODING_SYSTEM) ?  new wxCSConv(fe) : 0);
+}
+//-----------------------------------------------------------------------------
+wxMBConv* Database::getCharsetConverter() const
+{
+    if (charsetConverterM)
+        return charsetConverterM.get();
+    return wxConvCurrent;
 }
 //-----------------------------------------------------------------------------
 void Database::createCollections()

@@ -74,7 +74,7 @@ SharedDatabase DatabaseConnectionThreadJob::getDatabase()
 {
     // all access to database has to happen in main thread
     wxASSERT(wxIsMainThread());
-    return databaseM;
+    return databaseM.lock();
 }
 //-----------------------------------------------------------------------------
 bool DatabaseConnectionThreadJob::hasError()
@@ -82,12 +82,7 @@ bool DatabaseConnectionThreadJob::hasError()
     return systemErrorM || !exceptionWhatM.empty();
 }
 //-----------------------------------------------------------------------------
-bool DatabaseConnectionThreadJob::canCancelExecution()
-{
-    return false;
-}
-//-----------------------------------------------------------------------------
-void DatabaseConnectionThreadJob::cancelExecution()
+void DatabaseConnectionThreadJob::tryCancelExecution()
 {
 }
 //-----------------------------------------------------------------------------
@@ -119,8 +114,11 @@ void DatabaseConnectionThreadJob::reportError(const wxString& primaryMsg)
     wxString msg(primaryMsg);
     if (!exceptionWhatM.empty())
     {
+        SharedDatabase db = getDatabase();
+        wxMBConv* conv = (db) ? db->getCharsetConverter() : wxConvCurrent;
+
         msg += wxT("\n\n");
-        msg += std2wx(exceptionWhatM);
+        msg += std2wx(exceptionWhatM, conv);
     }
 // TODO: show errors in a non-modal frame
     wxMessageBox(msg);
@@ -149,13 +147,15 @@ DatabaseConnectJob::DatabaseConnectJob(SharedDatabase database)
     : DatabaseConnectionThreadJob(database), connectedM(false)
 {
     wxASSERT(wxIsMainThread());
+    wxASSERT(database);
 
+    wxMBConv* conv = database->getCharsetConverter();
     const DatabaseCredentials& dbc = database->getCredentials();
-    charsetM = wx2std(dbc.getCharset());
-    connectionStringM = wx2std(database->getConnectionString());
-    passwordM = wx2std(dbc.getRawPassword());
-    roleNameM = wx2std(dbc.getRole());
-    userNameM = wx2std(dbc.getUsername());
+    charsetM = wx2std(dbc.getCharset(), conv);
+    connectionStringM = wx2std(database->getConnectionString(), conv);
+    passwordM = wx2std(dbc.getRawPassword(), conv);
+    roleNameM = wx2std(dbc.getRole(), conv);
+    userNameM = wx2std(dbc.getUsername(), conv);
 }
 //-----------------------------------------------------------------------------
 void DatabaseConnectJob::executeJob(DatabaseConnectionThread* thread)
@@ -188,16 +188,21 @@ void DatabaseConnectJob::processResults()
 {
     wxASSERT(wxIsMainThread());
 
+    SharedDatabase db = getDatabase();
+    if (!db)
+        return;
+
     if (connectedM)
     {
-        getDatabase()->setServerVersion(std2wx(serverVersionM));
-        getDatabase()->setConnectionState(Database::csConnected);
+        db->setConnectionState(Database::csConnected);
+        db->setServerVersion(std2wx(serverVersionM,
+            db->getCharsetConverter()));
     }
     else
     {
-        getDatabase()->setConnectionState(Database::csConnectionFailed);
+        db->setConnectionState(Database::csConnectionFailed);
         wxString primaryMsg(wxString::Format(_("An error occurred while connecting to the database \"%s\"!"),
-            getDatabase()->getName().c_str()));
+            db->getName().c_str()));
         reportError(primaryMsg);
     }
 }
@@ -237,10 +242,18 @@ void DatabaseDisconnectJob::processResults()
 {
     wxASSERT(wxIsMainThread());
 
+    SharedDatabase db = getDatabase();
+    if (!db)
+        return;
+
     if (disconnectedM)
-        getDatabase()->setConnectionState(Database::csDisconnected);
+        db->setConnectionState(Database::csDisconnected);
     else
-        reportError(_("An error occurred while disconnecting from the database!"));
+    {
+        wxString primaryMsg(wxString::Format(_("An error occurred while disconnecting from the database \"%s\"!"),
+            db->getName().c_str()));
+        reportError(primaryMsg);
+    }
 }
 //-----------------------------------------------------------------------------
 // FetchIdentifiersJob class
@@ -252,6 +265,8 @@ private:
     std::vector<std::string> paramsM;
     std::list<std::string> identifiersM;
     std::list<VectorOfAny> dataM;
+
+    volatile bool cancelM;
 protected:
     virtual void executeJob(DatabaseConnectionThread* thread);
 public:
@@ -260,12 +275,13 @@ public:
     FetchIdentifiersJob(SharedDatabase database, Item::Handle itemHandle,
         const std::string& statement, const std::vector<std::string>& params);
     virtual void processResults();
+    virtual void tryCancelExecution();
 };
 //-----------------------------------------------------------------------------
 FetchIdentifiersJob::FetchIdentifiersJob(SharedDatabase database,
         Item::Handle itemHandle, const std::string& statement)
     : DatabaseConnectionThreadJob(database), itemHandleM(itemHandle),
-        statementM(statement), paramsM()
+        statementM(statement), cancelM(false)
 {
     wxASSERT(wxIsMainThread());
 }
@@ -274,7 +290,7 @@ FetchIdentifiersJob::FetchIdentifiersJob(SharedDatabase database,
         Item::Handle itemHandle, const std::string& statement,
         const std::vector<std::string>& params)
     : DatabaseConnectionThreadJob(database), itemHandleM(itemHandle),
-        statementM(statement), paramsM(params)
+        statementM(statement), paramsM(params), cancelM(false)
 {
     wxASSERT(wxIsMainThread());
 }
@@ -295,7 +311,7 @@ void FetchIdentifiersJob::executeJob(DatabaseConnectionThread* thread)
         }
         st->Execute();
         int columns = st->Columns();
-        while (st->Fetch())
+        while (!cancelM && st->Fetch())
         {
             std::string name;
             // do as little as possible here
@@ -342,6 +358,9 @@ void FetchIdentifiersJob::processResults()
 {
     wxASSERT(wxIsMainThread());
 
+    if (cancelM)
+        return;
+
     if (hasError())
     {
         reportError(_("An error occurred while fetching the list of identifiers!"));
@@ -354,6 +373,9 @@ void FetchIdentifiersJob::processResults()
     wxASSERT(collection);
     if (collection)
     {
+        SharedDatabase db = getDatabase();
+        wxMBConv* conv = (db) ? db->getCharsetConverter() : wxConvCurrent;
+
         if (dataM.size() && dataM.size() == identifiersM.size())
         {
             // build a list of IdentifierAndData structs from the std::strings
@@ -365,7 +387,7 @@ void FetchIdentifiersJob::processResults()
                 it != identifiersM.end(); ++it)
             {
                 MetadataItemCollection::IdentifierAndData iaa;
-                iaa.identifier.setText(std2wx(*it));
+                iaa.identifier.setText(std2wx(*it, conv));
                 iaa.data = *itData;
                 identAndData.push_back(iaa);
                 ++itData;
@@ -380,12 +402,17 @@ void FetchIdentifiersJob::processResults()
             for (std::list<std::string>::iterator it = identifiersM.begin();
                 it != identifiersM.end(); ++it)
             {
-                Identifier id(std2wx(*it));
+                Identifier id(std2wx(*it, conv));
                 identifiers.push_back(id);
             }
             collection->setChildrenIdentifiers(identifiers);
         }
     }
+}
+//-----------------------------------------------------------------------------
+void FetchIdentifiersJob::tryCancelExecution()
+{
+    cancelM = true;
 }
 //-----------------------------------------------------------------------------
 // DatabaseConnection class

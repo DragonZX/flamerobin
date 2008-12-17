@@ -158,7 +158,6 @@ private:
     void putCompletedJob(ThreadJob job)
     {
         wxMutexLocker lock(mutexM);
-
         wxASSERT(executedJobM == job);
         executedJobM.reset();
         processedJobsM.push_back(job);
@@ -178,8 +177,8 @@ private:
     {
         wxMutexLocker lock(mutexM);
         shutdownRequestM = true;
-        if (executedJobM.get() && executedJobM->canCancelExecution())
-            executedJobM->cancelExecution();
+        if (executedJobM.get())
+            executedJobM->tryCancelExecution();
         conditionM.Signal();
     };
 

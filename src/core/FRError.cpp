@@ -43,12 +43,13 @@
 //-----------------------------------------------------------------------------
 void handleException(const std::exception& e)
 {
-    wxMessageBox(std2wx(e.what()), _("Error"), wxOK | wxICON_ERROR);
+    wxMessageBox(std2wx(e.what(), wxConvCurrent), _("Error"),
+        wxOK | wxICON_ERROR);
 }
 //-----------------------------------------------------------------------------
 FRError::FRError(const wxString& message)
 {
-    messageM = wx2std(message);
+    messageM = wx2std(message, wxConvCurrent);
 }
 //-----------------------------------------------------------------------------
 const char* FRError::what() const throw()

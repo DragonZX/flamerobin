@@ -136,8 +136,9 @@ void Application::HandleEvent(wxEvtHandler* handler, wxEventFunction func,
     }
     catch (const std::exception& e)
     {
-        wxMessageBox(std2wx(e.what()), _("Unhandled Error in FlameRobin"),
-            wxOK | wxICON_ERROR, wxGetTopLevelParent(wxGetActiveWindow()));
+        wxMessageBox(std2wx(e.what(), wxConvCurrent),
+            _("Unhandled Error in FlameRobin"), wxOK | wxICON_ERROR,
+            wxGetTopLevelParent(wxGetActiveWindow()));
     }
 }
 //-----------------------------------------------------------------------------

@@ -87,7 +87,8 @@ void TriggerCollection::loadChildren()
         {
             sql = sql + " = ? order by 1";
             std::vector<std::string> params;
-            params.push_back(wx2std(relation->getName()));
+            params.push_back(wx2std(relation->getName(),
+                db->getCharsetConverter()));
             dbc->loadCollection(getHandle(), sql, params);
         }
         else

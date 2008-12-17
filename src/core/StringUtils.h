@@ -34,8 +34,8 @@
 
 class wxMBConv;
 //-----------------------------------------------------------------------------
-std::string wx2std(const wxString& input, wxMBConv* conv = wxConvCurrent);
-wxString std2wx(const std::string& input, wxMBConv* conv = wxConvCurrent);
+std::string wx2std(const wxString& input, wxMBConv* conv);
+wxString std2wx(const std::string& input, wxMBConv* conv);
 //-----------------------------------------------------------------------------
 //! converts chars that have special meaning in HTML, so they get displayed
 wxString escapeHtmlChars(const wxString& input, bool processNewlines = true);

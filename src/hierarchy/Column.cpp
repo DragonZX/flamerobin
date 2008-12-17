@@ -146,22 +146,25 @@ void ColumnCollection::setCollectionItemData(SharedItem item,
     // for each data item there is a bool first for NULL, then the item value
     wxASSERT(data.size() == 2 * 5);
 
+    Database* db = getDatabase();
+    wxMBConv* conv = (db) ? db->getCharsetConverter() : wxConvCurrent;
+
     // isNull = boost::any_cast<bool>(data[0]);
     bool colNotNull = 0 != boost::any_cast<int>(data[1]);
     // isNull = boost::any_cast<bool>(data[2]);
     std::string s = boost::any_cast<std::string>(data[3]);
-    wxString fieldSource(std2wx(s));
+    wxString fieldSource(std2wx(s, conv));
     fieldSource.Trim();
     // isNull = boost::any_cast<bool>(data[4]);
     s = boost::any_cast<std::string>(data[5]);
-    wxString collationName(std2wx(s));
+    wxString collationName(std2wx(s, conv));
     collationName.Trim();
     // isNull = boost::any_cast<bool>(data[6]);
     s = boost::any_cast<std::string>(data[7]);
-    wxString computedSource(std2wx(s));
+    wxString computedSource(std2wx(s, conv));
     bool defaultIsNull = boost::any_cast<bool>(data[8]);
     s = boost::any_cast<std::string>(data[9]);
-    wxString defaultSource(std2wx(s));
+    wxString defaultSource(std2wx(s, conv));
 
     column->setData(colNotNull, fieldSource, collationName, computedSource,
         defaultSource, defaultIsNull);
@@ -189,7 +192,10 @@ void ColumnCollection::loadChildren()
             " order by rf.RDB$FIELD_POSITION");
         std::vector<std::string> params;
         if (Relation* relation = getRelation())
-            params.push_back(wx2std(relation->getName()));
+        {
+            params.push_back(wx2std(relation->getName(),
+                db->getCharsetConverter()));
+        }
         dbc->loadCollection(getHandle(), sql, params);
         return;
     }

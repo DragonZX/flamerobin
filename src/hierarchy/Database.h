@@ -29,6 +29,8 @@
 #define FR_DATABASE_H
 //-----------------------------------------------------------------------------
 
+#include <wx/strconv.h>
+
 #include <boost/shared_ptr.hpp>
 
 #include <ibpp.h>
@@ -123,6 +125,7 @@ public:
     void setConnectionState(ConnectionState state);
     bool canRestoreFromBackup() const;
 
+    wxMBConv* getCharsetConverter() const;
     void setServerVersion(const wxString& versionString);
 
     SharedDatabaseConnection getMetadataConnection();
@@ -140,6 +143,10 @@ private:
 
     ConnectionState connectionStateM;
     SharedDatabaseConnection metadataConnectionM;
+    boost::shared_ptr<wxMBConv> charsetConverterM;
+
+    // TODO: move server version string to DatabaseInfo
+    //       get capabilities from ODS version
     ServerVersion serverVersionM;
 
     SharedDomainCollection domainsM;
@@ -153,6 +160,7 @@ private:
     SharedTableCollection tablesM;
     SharedViewCollection viewsM;
 
+    void createCharsetConverter();
     void createCollections();
     void deleteCollections();
 };

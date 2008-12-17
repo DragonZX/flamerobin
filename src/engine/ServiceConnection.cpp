@@ -63,16 +63,16 @@ void ServiceConnectionThread::setService(IBPP::Service& service)
 };
 //-----------------------------------------------------------------------------
 // ServiceConnectionThreadJob base class
-ServiceConnectionThreadJob::ServiceConnectionThreadJob(Database& database)
+ServiceConnectionThreadJob::ServiceConnectionThreadJob(SharedDatabase database)
     : databaseM(database), exceptionWhatM(), systemErrorM(false)
 {
 }
 //-----------------------------------------------------------------------------
-Database& ServiceConnectionThreadJob::getDatabase()
+SharedDatabase ServiceConnectionThreadJob::getDatabase()
 {
     // all access to database has to happen in main thread
     wxASSERT(wxIsMainThread());
-    return databaseM;
+    return databaseM.lock();
 }
 //-----------------------------------------------------------------------------
 bool ServiceConnectionThreadJob::hasError()
@@ -80,12 +80,7 @@ bool ServiceConnectionThreadJob::hasError()
     return systemErrorM || !exceptionWhatM.empty();
 }
 //-----------------------------------------------------------------------------
-bool ServiceConnectionThreadJob::canCancelExecution()
-{
-    return false;
-}
-//-----------------------------------------------------------------------------
-void ServiceConnectionThreadJob::cancelExecution()
+void ServiceConnectionThreadJob::tryCancelExecution()
 {
 }
 //-----------------------------------------------------------------------------
@@ -117,8 +112,11 @@ void ServiceConnectionThreadJob::reportError(const wxString& primaryMsg)
     wxString msg(primaryMsg);
     if (!exceptionWhatM.empty())
     {
+        SharedDatabase db = getDatabase();
+        wxMBConv* conv = (db) ? db->getCharsetConverter() : wxConvCurrent;
+
         msg += wxT("\n\n");
-        msg += std2wx(exceptionWhatM);
+        msg += std2wx(exceptionWhatM, conv);
     }
 // TODO: show errors in a non-modal frame
     wxMessageBox(msg);
@@ -126,12 +124,20 @@ void ServiceConnectionThreadJob::reportError(const wxString& primaryMsg)
 //-----------------------------------------------------------------------------
 // ServiceConnection class
 ServiceConnection::ServiceConnection(Database& database)
-    : WorkerThreadEngine<SharedSCThreadJob>(), databaseM(database)
+    : WorkerThreadEngine<SharedSCThreadJob>()
 {
+    databaseM = database.asShared();
 }
 //-----------------------------------------------------------------------------
 WorkerThread<SharedSCThreadJob>* ServiceConnection::createWorkerThread()
 {
     return new ServiceConnectionThread(*this);
+}
+//-----------------------------------------------------------------------------
+void ServiceConnection::executeJob(SharedSCThreadJob job)
+{
+    wxCHECK_RET(job.get(),
+        wxT("job is 0 in ServiceConnection::executeJob(()"));
+    queueJob(job);
 }
 //-----------------------------------------------------------------------------
