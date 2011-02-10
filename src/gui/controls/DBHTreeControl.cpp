@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2004-2009 The FlameRobin Development Team
+  Copyright (c) 2004-2011 The FlameRobin Development Team
 
   Permission is hereby granted, free of charge, to any person obtaining
   a copy of this software and associated documentation files (the
@@ -261,6 +261,8 @@ int DBHTreeImageList::getImageIndex(NodeType type)
             id = ART_View; break;
         case ntViews:
             id = ART_Views; break;
+        default:
+            break;
     }
     return getImageIndex(id);
 }

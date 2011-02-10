@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2004-2009 The FlameRobin Development Team
+  Copyright (c) 2004-2011 The FlameRobin Development Team
 
   Permission is hereby granted, free of charge, to any person obtaining
   a copy of this software and associated documentation files (the
@@ -2749,6 +2749,7 @@ void ExecuteSqlFrame::updateViewMode()
 class DropColumnHandler: public URIHandler
 {
 public:
+    DropColumnHandler() {};
     bool handleURI(URI& uri);
 private:
     static const DropColumnHandler handlerInstance;
@@ -2806,6 +2807,7 @@ bool DropColumnHandler::handleURI(URI& uri)
 class DropColumnsHandler: public URIHandler
 {
 public:
+    DropColumnsHandler() {};
     bool handleURI(URI& uri);
 private:
     static const DropColumnsHandler handlerInstance;
@@ -2842,6 +2844,7 @@ bool DropColumnsHandler::handleURI(URI& uri)
 class DropObjectHandler: public URIHandler
 {
 public:
+    DropObjectHandler() {};
     bool handleURI(URI& uri);
 private:
     static const DropObjectHandler handlerInstance;
@@ -2878,6 +2881,7 @@ bool DropObjectHandler::handleURI(URI& uri)
 class EditDDLHandler: public URIHandler
 {
 public:
+    EditDDLHandler() {};
     bool handleURI(URI& uri);
 private:
     static const EditDDLHandler handlerInstance;
@@ -2919,6 +2923,7 @@ bool EditDDLHandler::handleURI(URI& uri)
 class EditProcedureHandler: public URIHandler
 {
 public:
+    EditProcedureHandler() {};
     bool handleURI(URI& uri);
 private:
     // singleton; registers itself on creation.
@@ -2947,6 +2952,7 @@ bool EditProcedureHandler::handleURI(URI& uri)
 class AlterViewHandler: public URIHandler
 {
 public:
+    AlterViewHandler() {};
     bool handleURI(URI& uri);
 private:
     // singleton; registers itself on creation.
@@ -2973,6 +2979,7 @@ bool AlterViewHandler::handleURI(URI& uri)
 class EditTriggerHandler: public URIHandler
 {
 public:
+    EditTriggerHandler() {};
     bool handleURI(URI& uri);
 private:
     // singleton; registers itself on creation.
@@ -2999,6 +3006,7 @@ bool EditTriggerHandler::handleURI(URI& uri)
 class EditGeneratorValueHandler: public URIHandler
 {
 public:
+    EditGeneratorValueHandler() {};
     bool handleURI(URI& uri);
 private:
     // singleton; registers itself on creation.
@@ -3041,6 +3049,7 @@ bool EditGeneratorValueHandler::handleURI(URI& uri)
 class EditExceptionHandler: public URIHandler
 {
 public:
+    EditExceptionHandler() {};
     bool handleURI(URI& uri);
 private:
     // singleton; registers itself on creation.
@@ -3067,6 +3076,7 @@ bool EditExceptionHandler::handleURI(URI& uri)
 class IndexActionHandler: public URIHandler
 {
 public:
+    IndexActionHandler() {};
     bool handleURI(URI& uri);
 private:
     // singleton; registers itself on creation.
@@ -3113,6 +3123,7 @@ bool IndexActionHandler::handleURI(URI& uri)
 class ActivateTriggersHandler: public URIHandler
 {
 public:
+    ActivateTriggersHandler() {};
     bool handleURI(URI& uri);
 private:
     static const ActivateTriggersHandler handlerInstance;
@@ -3160,6 +3171,7 @@ bool ActivateTriggersHandler::handleURI(URI& uri)
 class ActivateTriggerHandler: public URIHandler
 {
 public:
+    ActivateTriggerHandler() {};
     bool handleURI(URI& uri);
 private:
     static const ActivateTriggerHandler handlerInstance;

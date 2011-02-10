@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2004-2009 The FlameRobin Development Team
+  Copyright (c) 2004-2011 The FlameRobin Development Team
 
   Permission is hereby granted, free of charge, to any person obtaining
   a copy of this software and associated documentation files (the
@@ -360,6 +360,8 @@ void MetadataItemPropertiesPanel::processCommand(wxString cmd, MetadataItem *obj
             case ntDatabase:
             case ntRole:
                 pages.push_back(wxT("DDL"));
+            default:
+                break;
         };
         wxString page = loadEntireFile(config().getHtmlTemplatesPath()
             + wxT("header.html"));
@@ -1290,6 +1292,7 @@ void MetadataItemPropertiesPanel::OnHtmlCellHover(wxHtmlCellEvent& event)
 class PageHandler: public URIHandler
 {
 public:
+    PageHandler() {};
     bool handleURI(URI& uri);
 private:
     static const PageHandler handlerInstance;   // singleton; registers itself on creation.
@@ -1327,6 +1330,7 @@ bool PageHandler::handleURI(URI& uri)
 class PropertiesHandler: public URIHandler
 {
 public:
+    PropertiesHandler() {};
     bool handleURI(URI& uri);
 private:
     static const PropertiesHandler handlerInstance; // singleton; registers itself on creation.

@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2004-2009 The FlameRobin Development Team
+  Copyright (c) 2004-2011 The FlameRobin Development Team
 
   Permission is hereby granted, free of charge, to any person obtaining
   a copy of this software and associated documentation files (the
@@ -46,6 +46,7 @@
 class ObjectDescriptionHandler: public URIHandler
 {
 public:
+    ObjectDescriptionHandler() {};
     bool handleURI(URI& uri);
 private:
     // singleton; registers itself on creation.

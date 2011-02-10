@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2004-2009 The FlameRobin Development Team
+  Copyright (c) 2004-2011 The FlameRobin Development Team
 
   Permission is hereby granted, free of charge, to any person obtaining
   a copy of this software and associated documentation files (the
@@ -222,6 +222,7 @@ void UserDialog::OnOkButtonClick(wxCommandEvent& WXUNUSED(event))
 class UserPropertiesHandler: public URIHandler
 {
 public:
+    UserPropertiesHandler() {};
     bool handleURI(URI& uri);
 private:
     // singleton; registers itself on creation.
@@ -300,6 +301,7 @@ bool UserPropertiesHandler::handleURI(URI& uri)
 class DropUserHandler: public URIHandler
 {
 public:
+    DropUserHandler() {};
     bool handleURI(URI& uri);
 private:
     // singleton; registers itself on creation.
